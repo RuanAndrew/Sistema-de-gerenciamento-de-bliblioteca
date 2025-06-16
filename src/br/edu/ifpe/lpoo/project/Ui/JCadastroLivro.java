@@ -1,4 +1,4 @@
-package br.edu.ifpe.lpoo.project.view;
+package br.edu.ifpe.lpoo.project.Ui;
 
 import java.awt.EventQueue;
 
