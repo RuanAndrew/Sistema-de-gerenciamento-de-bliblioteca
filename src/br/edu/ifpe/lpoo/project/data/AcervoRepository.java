@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-<<<<<<< HEAD
+
 import br.edu.ifpe.lpoo.project.entities.ItemArcevo;
 import br.edu.ifpe.lpoo.project.entities.Livro;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
@@ -64,27 +64,7 @@ public class AcervoRepository implements IAcervoRepository{
 	}
 
 	@Override
-	public boolean hasItem(String indentifier) {
-		
-//		Connection conn = null;
-//		ResultSet rst = null;
-//		PreparedStatement stmt = null;
-		
-=======
-public class AcervoRepository implements IAcervoRepository {
-
-	@Override
-	public void insert(ItemArcevo item) {
-		
-		
-	}
-
-	@Override
 	public boolean existItem(String indentifier) {
->>>>>>> cd0ee23e433f7cdd6a93e415e72760b556db34e8
-		
-		return false;
+		return true;
 	}
-	
-	
 }

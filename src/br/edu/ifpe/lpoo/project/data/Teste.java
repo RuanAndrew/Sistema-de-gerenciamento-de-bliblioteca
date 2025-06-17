@@ -15,7 +15,7 @@ public class Teste {
 		String genero = "Fantasia";
 		String idioma = "Inglês";
 		
-		Livro livro = new Livro(titulo, autor, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma);
+		Livro livro = new Livro(titulo,autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
 		
 		IAcervoRepository inserindoLivro = new AcervoRepository();
 		

@@ -24,8 +24,10 @@ public class AcervoService {
         if (idioma.length == 0) {
             throw new BusinessExcepition("O campo idioma não pode ser vazio.");
         }
-
-        Livro livro = new Livro(titulo, autor, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma);
+        
+        
+        
+        //Livro livro = new Livro(titulo,autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
 
         /*boolean exist = AcervoRepository.existItem(titulo); //titulo e um identificador temporario
 
