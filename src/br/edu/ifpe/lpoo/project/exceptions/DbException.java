@@ -1,10 +1,10 @@
 package br.edu.ifpe.lpoo.project.exceptions;
 
-public class ExceptionLivroDb extends RuntimeException{
+public class DbException extends RuntimeException{
 	
 	private static final long serialVersionUID = 1L;
 
-	public ExceptionLivroDb(String message) {
+	public DbException(String message) {
 		super(message);
 	}
 }

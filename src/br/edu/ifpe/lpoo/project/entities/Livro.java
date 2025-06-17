@@ -5,12 +5,14 @@ public class Livro extends ItemArcevo{
 	private String isbn;
 	private int numeroPaginas;
 	private String genero;
+	private String idioma;
 	
-	public Livro(String titulo, String autor, String anoPublicacao, String editora, String isbn, int numeroPaginas, String genero) {
+	public Livro(String titulo, String autor, String anoPublicacao, String editora, String isbn, int numeroPaginas, String genero, String idioma) {
 		super(titulo, autor, anoPublicacao, editora);
 		this.isbn = isbn;
 		this.numeroPaginas = numeroPaginas;
 		this.genero = genero;
+		this.idioma = idioma;
 	}
 
 	public String getIsbn() {
@@ -37,6 +39,12 @@ public class Livro extends ItemArcevo{
 		this.genero = genero;
 	}
 	
-	
+	public String getIdioma() {
+		return idioma;
+	}
+
+	public void setIdioma(String idioma) {
+		this.idioma = idioma;
+	}
 	
 }
