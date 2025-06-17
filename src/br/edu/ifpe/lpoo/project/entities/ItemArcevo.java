@@ -3,16 +3,18 @@ package br.edu.ifpe.lpoo.project.entities;
 public abstract class ItemArcevo {
 	
 	private String titulo;
-	private String autor;
+	private String[] autor;
 	private String anoPublicacao;
-	private String editora;
+	private String[] editora;
+	private String[] idioma;
 	
-	public ItemArcevo(String titulo, String autor, String anoPublicacao, String editora) {
+	public ItemArcevo(String titulo, String[] autor, String anoPublicacao, String[] editora, String[] idioma) {
 		super();
 		this.titulo = titulo;
 		this.autor = autor;
 		this.anoPublicacao = anoPublicacao;
 		this.editora = editora;
+		this.idioma = idioma;
 	}
 
 	public String getTitulo() {
@@ -23,11 +25,11 @@ public abstract class ItemArcevo {
 		this.titulo = titulo;
 	}
 
-	public String getAutor() {
+	public String[] getAutor() {
 		return autor;
 	}
 
-	public void setAutor(String autor) {
+	public void setAutor(String[] autor) {
 		this.autor = autor;
 	}
 
@@ -39,14 +41,19 @@ public abstract class ItemArcevo {
 		this.anoPublicacao = anoPublicacao;
 	}
 
-	public String getEditora() {
+	public String[] getEditora() {
 		return editora;
 	}
 
-	public void setEditora(String editora) {
+	public void setEditora(String[] editora) {
 		this.editora = editora;
 	}
-	
-	
 
+	public String[] getIdioma() {
+		return idioma;
+	}
+
+	public void setIdioma(String[] idioma) {
+		this.idioma = idioma;
+	}
 }
