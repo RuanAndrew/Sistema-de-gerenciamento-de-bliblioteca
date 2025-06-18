@@ -29,7 +29,7 @@ public class AcervoRepository implements IAcervoRepository{
 			try {
 				
 				conn = ConnectionDb.getConnection();
-				stmt = conn.prepareStatement("INSERT INTO livros(isbn, numero_paginas, genero, titulo, autor, ano_publicacao, editora, idioma)"
+				stmt = conn.prepareStatement("INSERT INTO livro (isbn, numero_paginas, genero, titulo, autor, ano_publicacao, editora, idioma)"
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 				
 				stmt.setString(1, livro.getIsbn());
@@ -65,6 +65,33 @@ public class AcervoRepository implements IAcervoRepository{
 
 	@Override
 	public boolean existItem(String indentifier) {
-		return true;
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		boolean exists = false;
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			
+			stmt = conn.prepareStatement("SELECT * FROM livro WHERE isbn = ? OR titulo = ?");
+			
+			stmt.setString(1, indentifier);
+			stmt.setString(2, indentifier);
+			
+			rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				exists = true;
+			}
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection();
+		}
+		
+		return exists;
 	}
 }
