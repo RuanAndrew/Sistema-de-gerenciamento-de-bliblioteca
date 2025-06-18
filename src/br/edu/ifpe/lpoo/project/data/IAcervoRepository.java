@@ -4,11 +4,7 @@ import br.edu.ifpe.lpoo.project.entities.ItemArcevo;
 
 public interface IAcervoRepository {
 
-    public void insert(ItemArcevo item) {
+	void insert(ItemArcevo item);
 
-    }
-
-    public boolean existItem(String indentifier) {
-        return false;
-    }
+	boolean existItem(String indentifier);
 }

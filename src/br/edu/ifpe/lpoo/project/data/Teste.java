@@ -1,7 +1,5 @@
 package br.edu.ifpe.lpoo.project.data;
 
-import br.edu.ifpe.lpoo.project.entities.Livro;
-
 public class Teste {
 
 	public static void main(String[] args) {
