@@ -1,16 +1,19 @@
 package br.edu.ifpe.lpoo.project.entities;
 
+import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
+
 public class Exemplar {
-	
+
 	private int idLivro;
 	private String registro;
-	private boolean disponivel;
+	private StatusExemplar status;
+
 	
-	public Exemplar(int idLivro, String registro, boolean disponivel) {
+	public Exemplar(int idLivro, String registro, StatusExemplar status) {
 		super();
 		this.idLivro = idLivro;
 		this.registro = registro;
-		this.disponivel = disponivel;
+		this.status = status;
 	}
 
 	public int getIdLivro() {
@@ -29,12 +32,12 @@ public class Exemplar {
 		this.registro = registro;
 	}
 
-	public boolean isDisponivel() {
-		return disponivel;
+	public StatusExemplar isDisponivel() {
+		return status;
 	}
 
-	public void setDisponivel(boolean disponivel) {
-		this.disponivel = disponivel;
+	public void setDisponivel(StatusExemplar status) {
+		this.status = status;
 	}
 	
 }

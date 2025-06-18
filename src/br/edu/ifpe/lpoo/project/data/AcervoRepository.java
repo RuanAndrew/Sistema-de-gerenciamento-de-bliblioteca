@@ -37,7 +37,7 @@ public class AcervoRepository implements IAcervoRepository{
 				stmt.setString(3, livro.getGenero());
 				stmt.setString(4, livro.getTitulo());
 				stmt.setString(5, livro.getAutor());
-				stmt.setString(6, livro.getAnoPublicacao());
+				stmt.setInt(6, livro.getAnoPublicacao());
 				stmt.setString(7, livro.getEditora());
 				stmt.setString(8, livro.getIdioma());
 				

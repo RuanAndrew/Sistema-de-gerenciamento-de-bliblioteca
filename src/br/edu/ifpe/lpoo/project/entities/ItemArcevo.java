@@ -4,12 +4,11 @@ public abstract class ItemArcevo {
 	
 	private String titulo;
 	private String autor;
-	private String anoPublicacao;
+	private int anoPublicacao;
 	private String editora;
 	private String idioma;
 	
-	
-	public ItemArcevo(String titulo, String autor, String anoPublicacao, String editora, String idioma) {
+	public ItemArcevo(String titulo, String autor, int anoPublicacao, String editora, String idioma) {
 		this.titulo = titulo;
 		this.autor = autor;
 		this.anoPublicacao = anoPublicacao;
@@ -33,11 +32,11 @@ public abstract class ItemArcevo {
 		this.autor = autor;
 	}
 
-	public String getAnoPublicacao() {
+	public int getAnoPublicacao() {
 		return anoPublicacao;
 	}
 
-	public void setAnoPublicacao(String anoPublicacao) {
+	public void setAnoPublicacao(int anoPublicacao) {
 		this.anoPublicacao = anoPublicacao;
 	}
 

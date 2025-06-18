@@ -6,7 +6,7 @@ public class Livro extends ItemArcevo{
 	private int numeroPaginas;
 	private String genero;
 	
-	public Livro(String titulo, String autor, String anoPublicacao, String editora, String idioma, String isbn,
+	public Livro(String titulo, String autor, int anoPublicacao, String editora, String idioma, String isbn,
 			int numeroPaginas, String genero) {
 		super(titulo, autor, anoPublicacao, editora, idioma);
 		this.isbn = isbn;
