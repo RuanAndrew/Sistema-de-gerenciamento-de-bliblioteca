@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
+import br.edu.ifpe.lpoo.project.entities.Exemplar;
 import br.edu.ifpe.lpoo.project.entities.ItemArcevo;
 import br.edu.ifpe.lpoo.project.entities.Livro;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
@@ -14,14 +14,14 @@ import br.edu.ifpe.lpoo.project.exceptions.DbException;
 public class AcervoRepository implements IAcervoRepository{
 
 	@Override
-	public void insert(ItemArcevo item) {
+	public int insert(ItemArcevo item) {
 //		if(!(item instanceof Livro)) {
 //			throw new IllegalArgumentException("Item não é livro");
 //		}
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
-		//int idItem = -1;
+		int idItem = -1;
 		
 		if(item instanceof Livro) {
 			Livro livro = (Livro) item;
@@ -45,10 +45,10 @@ public class AcervoRepository implements IAcervoRepository{
 				
 //				int colunasAfetadas = stmt.executeUpdate();
 				
-//				rst = stmt.getGeneratedKeys();
-//				while(rst.next()) {
-//					idItem = rst.getInt(1);
-//				}
+				rst = stmt.getGeneratedKeys();
+				while(rst.next()) {
+					idItem = rst.getInt(1);
+				}
 				
 			}catch(SQLException e) {
 				throw new DbException(e.getMessage());
@@ -60,7 +60,7 @@ public class AcervoRepository implements IAcervoRepository{
 			}
 		}
 		
-		//return idItem;
+		return idItem;
 	}
 
 	@Override
@@ -93,5 +93,27 @@ public class AcervoRepository implements IAcervoRepository{
 		}
 		
 		return exists;
+	}
+	
+	public void insertExemplar(Exemplar exemplar, int idLivro) {
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement("INSERT INTO exemplar (id_livro, registro, status_exemplar)"
+										+ "VALUES (?, ?, ?)");
+			
+			stmt.setInt(1, idLivro);
+			stmt.setString(2, exemplar.getRegistro());
+			stmt.setString(3, exemplar.isDisponivel().name());
+			
+			stmt.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		
 	}
 }
