@@ -17,7 +17,7 @@ public class ConnectionDb {
 	public static Connection getConnection() {
 		if(conn == null) {
 			try {
-				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/testelivro", "root", "root123");
+				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/testelivro", "root", "root");
 			}catch(SQLException e) {
 				throw new DbException(e.getMessage());
 			}
