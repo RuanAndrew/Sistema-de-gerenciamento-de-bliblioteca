@@ -5,9 +5,10 @@ public class Livro extends ItemArcevo{
 	private String isbn;
 	private int numeroPaginas;
 	private String genero;
-	
+	private int id;
+
 	public Livro(String titulo, String autor, int anoPublicacao, String editora, String idioma, String isbn,
-			int numeroPaginas, String genero) {
+				 int numeroPaginas, String genero) {
 		super(titulo, autor, anoPublicacao, editora, idioma);
 		this.isbn = isbn;
 		this.numeroPaginas = numeroPaginas;
@@ -37,7 +38,13 @@ public class Livro extends ItemArcevo{
 	public void setGenero(String genero) {
 		this.genero = genero;
 	}
-	
-	
-	
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 }
+
