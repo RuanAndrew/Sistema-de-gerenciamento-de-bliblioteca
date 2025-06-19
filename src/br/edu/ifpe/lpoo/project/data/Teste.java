@@ -1,9 +1,8 @@
 package br.edu.ifpe.lpoo.project.data;
 
+import br.edu.ifpe.lpoo.project.business.AcervoService;
 import br.edu.ifpe.lpoo.project.entities.Exemplar;
 import br.edu.ifpe.lpoo.project.entities.Livro;
-import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
-import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class Teste {
 
@@ -27,30 +26,12 @@ public class Teste {
 		String genero = "Fantasia";
 		String idioma = "Inglês";
 		
-		Livro livro = new Livro(titulo,autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
+		AcervoService acervo = new AcervoService();
+		acervo.CadastrarLivro(titulo, autor, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma, 3);
 		
-		Exemplar exemplar;
 		
-		IAcervoRepository inserindoLivro = new AcervoRepository();
-		IAcervoRepository inserindoExemplar = new AcervoRepository();
 		
-		try {
-//			Teste insert
-			int id_livro = inserindoLivro.insert(livro);
-			
-//			Teste exists
-			boolean exists = inserindoLivro.existItem("O Senhor dos Anéio");
-			
-			for(int i = 0; i < 3; i++) {
-				String registro = id_livro + "EX" + (i+1);
-				exemplar = new Exemplar(id_livro, registro, StatusExemplar.DISPONIVEL);
-				inserindoExemplar.insertExemplar(exemplar, id_livro);
-			}
-			
-			System.out.println(exists);
-		}catch(DbException e ) {
-			System.out.println(e.getMessage());
-		}
+		
 	}
 
 }

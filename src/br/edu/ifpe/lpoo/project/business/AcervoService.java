@@ -27,15 +27,17 @@ public class AcervoService {
             throw new BusinessExcepition("O campo idioma não pode ser vazio.");
         }
 
-        Livro livro = new Livro(titulo,autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
-        IAcervoRepository inserindoLivro = new AcervoRepository();
-
-        boolean exist = inserindoLivro.existItem(titulo);
-
-        if (exist) {
-            throw new BusinessExcepition("Esse livro ja esta cadastrado no sistema");
-        }
-        inserindoLivro.insert(livro);
+        
+        //O que você implementou até agora	
+//        Livro livro = new Livro(titulo,autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
+//        IAcervoRepository inserindoLivro = new AcervoRepository();
+//
+//        boolean exist = inserindoLivro.existItem(titulo);
+//
+//        if (exist) {
+//            throw new BusinessExcepition("Esse livro ja esta cadastrado no sistema");
+//        }
+//        inserindoLivro.insert(livro);
 
         /*for (int i = 0; i < quantidadeExemplares; i++) {
             Exemplar exemplar = new Exemplar(StatusExemplar.DISPONIVEL,);
@@ -47,5 +49,41 @@ public class AcervoService {
                 throw new BusinessExcepition("Erro ao salvar exemplar no banco: " + e.getMessage());
             }
         }*/
+        
+        
+        
+        
+        
+        //Uma sugestão para testar
+        /*
+         Livro livro = new Livro(titulo,autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
+        ILivroRepository livroRepository = new LivroRepository();
+        IExemplarRepository exemplarRepository = new ExemplarRepository();
+        
+        boolean exist = livroRepository.existItem(titulo);
+        
+        if(!exist) {
+        	int idLivro = -1;
+        	try {
+        		idLivro = livroRepository.insert(livro);
+        	}catch(DbException e) {
+        		throw new BusinessExcepition(e.getMessage());
+        	}
+        	
+        	for (int i = 1; i <= quantidadeExemplares; i++) {
+        		
+        		try {
+        			String registro = idLivro + "EXP" + i;
+            		Exemplar exemplar = new Exemplar(idLivro, registro, StatusExemplar.DISPONIVEL);
+            		exemplarRepository.insert(exemplar, idLivro);
+        		}catch (DbException e) {
+        			throw new BusinessExcepition(e.getMessage());
+        		}
+        	}
+        	
+        }else {
+        	throw new BusinessExcepition("Esse livro ja esta cadastrado no sistema");
+        }
+         */
     }
 }
