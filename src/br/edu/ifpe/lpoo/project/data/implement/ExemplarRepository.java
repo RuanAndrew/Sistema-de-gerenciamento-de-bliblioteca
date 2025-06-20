@@ -30,6 +30,8 @@ public class ExemplarRepository implements IExemplarRepository{
 			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeStatement(stmt);
 		}
 		
 	}

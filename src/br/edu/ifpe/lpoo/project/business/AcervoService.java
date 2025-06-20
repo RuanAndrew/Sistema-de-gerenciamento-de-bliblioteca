@@ -1,7 +1,5 @@
 package br.edu.ifpe.lpoo.project.business;
 
-import br.edu.ifpe.lpoo.project.data.AcervoRepository;
-import br.edu.ifpe.lpoo.project.data.IAcervoRepository;
 import br.edu.ifpe.lpoo.project.data.IExemplarRepository;
 import br.edu.ifpe.lpoo.project.data.ILivroRepository;
 import br.edu.ifpe.lpoo.project.data.implement.ExemplarRepository;
@@ -45,7 +43,8 @@ public class AcervoService {
         if(!exist) {
         	int idLivro = -1;
         	try {
-        		idLivro = livroRepository.insert(livro);
+        		livroRepository.insert(livro);
+        		idLivro = livro.getId();
         	}catch(DbException e) {
         		throw new BusinessExcepition(e.getMessage());
         	}

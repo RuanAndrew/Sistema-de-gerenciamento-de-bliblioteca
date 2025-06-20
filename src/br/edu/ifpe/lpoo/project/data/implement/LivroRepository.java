@@ -15,7 +15,7 @@ import br.edu.ifpe.lpoo.project.exceptions.DbException;
 public class LivroRepository implements ILivroRepository{
 	
 	@Override
-	public int insert(ItemArcevo item) {
+	public void insert(ItemArcevo item) {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
@@ -45,17 +45,16 @@ public class LivroRepository implements ILivroRepository{
 			while(rst.next()) {
 				idItem = rst.getInt(1);
 			}
+			livro.setId(idItem);
 			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
 		}finally {
-			
 			ConnectionDb.closeResultSet(rst);
 			ConnectionDb.closeStatement(stmt);
-			ConnectionDb.closeConnection();
 		}
 		
-		return idItem;
+		//return idItem;
 	}
 
 	@Override
@@ -84,7 +83,6 @@ public class LivroRepository implements ILivroRepository{
 		}finally {
 			ConnectionDb.closeResultSet(rst);
 			ConnectionDb.closeStatement(stmt);
-			ConnectionDb.closeConnection();
 		}
 		
 		return exists;

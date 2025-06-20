@@ -3,7 +3,8 @@ package br.edu.ifpe.lpoo.project.entities;
 import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
 
 public class Exemplar {
-
+	
+	private int idExemplar;
 	private int idLivro;
 	private String registro;
 	private StatusExemplar status;
@@ -39,5 +40,15 @@ public class Exemplar {
 	public void setDisponivel(StatusExemplar status) {
 		this.status = status;
 	}
+
+	public int getIdExemplar() {
+		return idExemplar;
+	}
+
+	public void setIdExemplar(int idExemplar) {
+		this.idExemplar = idExemplar;
+	}
+	
+	
 	
 }
