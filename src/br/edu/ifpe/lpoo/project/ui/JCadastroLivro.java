@@ -1,15 +1,14 @@
 package br.edu.ifpe.lpoo.project.ui;
 
 import br.edu.ifpe.lpoo.project.business.AcervoService;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
+
 
 
 public class JCadastroLivro {
@@ -144,9 +143,9 @@ public class JCadastroLivro {
 
 		// --- Botão Cadastrar ---
 		JButton btnCadastrar = new JButton("Cadastrar Livro");
-		btnCadastrar.setBackground(new Color(60, 179, 113)); // MediumSeaGreen
+		btnCadastrar.setBackground(new Color(60, 179, 113));
 		btnCadastrar.setForeground(Color.WHITE);
-		btnCadastrar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Padding no botão
+		btnCadastrar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		btnCadastrar.setBounds(225, 430, 200, 40);
 		frame.getContentPane().add(btnCadastrar);
 		btnCadastrar.addActionListener(new ActionListener() {
@@ -161,9 +160,15 @@ public class JCadastroLivro {
 				String idioma = txtIdioma.getText();
 				String quantidade = txtQuantidade.getText();
 
-				AcervoService controller = new AcervoService();
-				controller.CadastrarLivro(titulo,autor,anoPublicacao,editora,isbn,numeroPaginas,genero,idioma,quantidade);
-				JOptionPane.showMessageDialog(JCadastroLivro.this.frame,"O livro foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
+				try {
+					AcervoService controller = new AcervoService();
+					controller.CadastrarLivro(titulo, autor, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma, quantidade);
+					JOptionPane.showMessageDialog(JCadastroLivro.this.frame, "O livro foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
+				}catch (NumberFormatException ne){
+					JOptionPane.showMessageDialog(JCadastroLivro.this.frame, ne.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+				}catch (BusinessExcepition be){
+					JOptionPane.showMessageDialog(JCadastroLivro.this.frame, be.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 	}
