@@ -10,9 +10,15 @@ import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
+import java.time.LocalDate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class AcervoService {
-    public void CadastrarLivro (String titulo, String autor, Integer anoPublicacao, String editora, String isbn, Integer numeroPaginas, String genero, String idioma, int quantidadeExemplares) {
+    Pattern pattern;
+    Matcher matcher;
+    public void CadastrarLivro (String titulo, String autor, String anoPublicacao, String editora, String isbn, String numeroPaginas, String genero, String idioma, String quantidadeExemplares) {
         if (titulo.isBlank()) {
             throw new BusinessExcepition("O campo titulo não pode ser vazio.");
         }
@@ -31,38 +37,50 @@ public class AcervoService {
         if (idioma.isBlank()) {
             throw new BusinessExcepition("O campo idioma não pode ser vazio.");
         }
-
-        //Uma sugestão para testar
-
-         Livro livro = new Livro(titulo,autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
-        ILivroRepository livroRepository = new LivroRepository();
-        IExemplarRepository exemplarRepository = new ExemplarRepository();
-        
-        boolean exist = livroRepository.existItem(titulo);
-        
-        if(!exist) {
-        	int idLivro = -1;
-        	try {
-        		livroRepository.insert(livro);
-        		idLivro = livro.getId();
-        	}catch(DbException e) {
-        		throw new BusinessExcepition(e.getMessage());
-        	}
-        	
-        	for (int i = 1; i <= quantidadeExemplares; i++) {
-        		
-        		try {
-        			String registro = idLivro + "EXP" + i;
-            		Exemplar exemplar = new Exemplar(idLivro, registro, StatusExemplar.DISPONIVEL);
-            		exemplarRepository.insert(exemplar, idLivro);
-        		}catch (DbException e) {
-        			throw new BusinessExcepition(e.getMessage());
-        		}
-        	}
-        	
-        }else {
-        	throw new BusinessExcepition("Esse livro ja esta cadastrado no sistema");
+        if (Integer.parseInt(numeroPaginas) < 1) {
+            throw new BusinessExcepition("O numero de paginas não pode ser menor que 1.");
+        }
+        if (Integer.parseInt(quantidadeExemplares) < 0) {
+            throw new BusinessExcepition("O numero de exemplares não pode ser negativo.");
         }
 
+        LocalDate currentDate = LocalDate.now();
+        int anoAtual = currentDate.getYear();
+        if (Integer.parseInt(anoPublicacao) > anoAtual) {
+            throw new BusinessExcepition("O ano de publicação não pode ser maior que o ano atual.");
+        }
+
+        pattern = Pattern.compile("\\d{1,4}");
+        matcher = pattern.matcher(anoPublicacao);
+        if (!matcher.find()) {
+            throw new BusinessExcepition("O ano deve ter de 1 a quatro digitos.");
+        }
+
+        Livro livro = new Livro(titulo,autor, Integer.parseInt(anoPublicacao), editora, idioma, isbn, Integer.parseInt(numeroPaginas), genero);
+        ILivroRepository livroRepository = new LivroRepository();
+        IExemplarRepository exemplarRepository = new ExemplarRepository();
+
+        boolean exist = livroRepository.existItem(titulo);
+
+        if(!exist) {
+            try {
+                livroRepository.insert(livro);
+            }catch(DbException e) {
+                throw new BusinessExcepition(e.getMessage());
+            }
+
+            for (int i = 1; i <= Integer.parseInt(quantidadeExemplares); i++) {
+
+                try {
+                    String registro = livro.getId() + "EXP" + i;
+                    Exemplar exemplar = new Exemplar(livro.getId(), registro, StatusExemplar.DISPONIVEL);
+                    exemplarRepository.insert(exemplar, livro.getId());
+                }catch (DbException e) {
+                    throw new BusinessExcepition(e.getMessage());
+                }
+            }
+        }else {
+            throw new BusinessExcepition("Esse livro ja esta cadastrado no sistema");
+        }
     }
 }

@@ -17,15 +17,15 @@ public class Teste {
 		
 		String titulo = "O Hobbit";
 		String autor = "J.R.R. Tolkien";
-		int anoPublicacao = 1937;
+		String anoPublicacao = "1937";
 		String editora = "HarperCollins";
 		String isbn = "9780547928227"; // ISBN de uma edição comum em inglês
-		int numeroPaginas = 310;
+		String numeroPaginas = "310";
 		String genero = "Fantasia";
 		String idioma = "Inglês";
 		
 		AcervoService acervo = new AcervoService();
-		acervo.CadastrarLivro(titulo, autor, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma, 3);
+		acervo.CadastrarLivro(titulo, autor, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma, "3");
 		
 		
 		

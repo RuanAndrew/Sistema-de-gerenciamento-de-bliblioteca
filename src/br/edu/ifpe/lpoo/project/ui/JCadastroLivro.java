@@ -154,12 +154,12 @@ public class JCadastroLivro {
 				String isbn = txtIsbn.getText();
 				String titulo = txtTitulo.getText();
 				String autor = txtAutor.getText();
-				int anoPublicacao = Integer.parseInt(txtAnoPublicacao.getText());
+				String anoPublicacao = txtAnoPublicacao.getText();
 				String editora = txtEditora.getText();
-				int numeroPaginas = Integer.parseInt(txtNumeroPaginas.getText());
+				String numeroPaginas = txtNumeroPaginas.getText();
 				String genero = txtGenero.getText();
 				String idioma = txtIdioma.getText();
-				int quantidade = Integer.parseInt(txtQuantidade.getText());
+				String quantidade = txtQuantidade.getText();
 
 				AcervoService controller = new AcervoService();
 				controller.CadastrarLivro(titulo,autor,anoPublicacao,editora,isbn,numeroPaginas,genero,idioma,quantidade);
