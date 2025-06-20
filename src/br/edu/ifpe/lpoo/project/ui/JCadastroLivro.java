@@ -7,6 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 
 
 public class JCadastroLivro {
@@ -51,94 +54,100 @@ public class JCadastroLivro {
 	 */
 	private void initialize() {
 		frame = new JFrame("Cadastro de Livro");
-		frame.setSize(600, 500);
+		frame.setSize(650, 550);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setLocationRelativeTo(null);
+		frame.getContentPane().setBackground(new Color(248, 248, 255));
 
-		// ISBN
-		JLabel isbnLabel = new JLabel("ISBN");
-		isbnLabel.setBounds(105, 98, 80, 13);
+
+		// --- ISBN ---
+		JLabel isbnLabel = new JLabel("ISBN:");
+		isbnLabel.setBounds(80, 95, 120, 25);
+		isbnLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		frame.getContentPane().add(isbnLabel);
 		txtIsbn = new JTextField();
-		txtIsbn.setBounds(250, 95, 300, 19);
+		txtIsbn.setBounds(250, 95, 300, 30);
 		frame.getContentPane().add(txtIsbn);
-		txtIsbn.setColumns(10);
-		// Titulo
-		JLabel tituloLabel = new JLabel("Titulo");
-		tituloLabel.setBounds(105, 128, 80, 13);
+
+		// --- Titulo ---
+		JLabel tituloLabel = new JLabel("Título:");
+		tituloLabel.setBounds(80, 130, 120, 25);
+		tituloLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		frame.getContentPane().add(tituloLabel);
 		txtTitulo = new JTextField();
-		txtTitulo.setBounds(250, 125, 300, 19);
+		txtTitulo.setBounds(250, 130, 300, 30);
 		frame.getContentPane().add(txtTitulo);
-		txtTitulo.setColumns(10);
 
-		// Autor
+		// --- Autor ---
 		JLabel autorLabel = new JLabel("Autor:");
-		autorLabel.setBounds(105, 158, 80, 13);
+		autorLabel.setBounds(80, 165, 120, 25);
+		autorLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		frame.getContentPane().add(autorLabel);
 		txtAutor = new JTextField();
-		txtAutor.setBounds(250, 155, 300, 19);
+		txtAutor.setBounds(250, 165, 300, 30);
 		frame.getContentPane().add(txtAutor);
-		txtAutor.setColumns(10);
 
-		// Ano de Publicação
+		// --- Ano de Publicação ---
 		JLabel anoPublicacaoLabel = new JLabel("Ano Publicação:");
-		anoPublicacaoLabel.setBounds(105, 188, 120, 13);
+		anoPublicacaoLabel.setBounds(80, 200, 130, 25);
+		anoPublicacaoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		frame.getContentPane().add(anoPublicacaoLabel);
 		txtAnoPublicacao = new JTextField();
-		txtAnoPublicacao.setBounds(250, 185, 300, 19);
+		txtAnoPublicacao.setBounds(250, 200, 300, 30);
 		frame.getContentPane().add(txtAnoPublicacao);
-		txtAnoPublicacao.setColumns(10);
 
-		// Editora
+		// --- Editora ---
 		JLabel editoraLabel = new JLabel("Editora:");
-		editoraLabel.setBounds(105, 218, 80, 13);
+		editoraLabel.setBounds(80, 235, 120, 25);
+		editoraLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		frame.getContentPane().add(editoraLabel);
 		txtEditora = new JTextField();
-		txtEditora.setBounds(250, 215, 300, 19);
+		txtEditora.setBounds(250, 235, 300, 30);
 		frame.getContentPane().add(txtEditora);
-		txtEditora.setColumns(10);
 
-		// Número de Páginas
+		// --- Número de Páginas ---
 		JLabel numeroPaginasLabel = new JLabel("Número Páginas:");
-		numeroPaginasLabel.setBounds(105, 248, 120, 13);
+		numeroPaginasLabel.setBounds(80, 270, 140, 25);
+		numeroPaginasLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		frame.getContentPane().add(numeroPaginasLabel);
 		txtNumeroPaginas = new JTextField();
-		txtNumeroPaginas.setBounds(250, 245, 300, 19);
+		txtNumeroPaginas.setBounds(250, 270, 300, 30);
 		frame.getContentPane().add(txtNumeroPaginas);
-		txtNumeroPaginas.setColumns(10);
 
-		// Gênero
+		// --- Gênero ---
 		JLabel generoLabel = new JLabel("Gênero:");
-		generoLabel.setBounds(105, 278, 80, 13);
+		generoLabel.setBounds(80, 305, 120, 25);
+		generoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		frame.getContentPane().add(generoLabel);
 		txtGenero = new JTextField();
-		txtGenero.setBounds(250, 275, 300, 19);
+		txtGenero.setBounds(250, 305, 300, 30);
 		frame.getContentPane().add(txtGenero);
-		txtGenero.setColumns(10);
 
-		// Idioma
+		// --- Idioma ---
 		JLabel idiomaLabel = new JLabel("Idioma:");
-		idiomaLabel.setBounds(105, 308, 80, 13);
+		idiomaLabel.setBounds(80, 340, 120, 25);
+		idiomaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		frame.getContentPane().add(idiomaLabel);
 		txtIdioma = new JTextField();
-		txtIdioma.setBounds(250, 305, 300, 19);
+		txtIdioma.setBounds(250, 340, 300, 30);
 		frame.getContentPane().add(txtIdioma);
-		txtIdioma.setColumns(10);
 
-		// Quantidade
+		// --- Quantidade ---
 		JLabel quantidadeLabel = new JLabel("Quantidade:");
-		quantidadeLabel.setBounds(105, 338, 80, 13);
+		quantidadeLabel.setBounds(80, 375, 120, 25);
+		quantidadeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		frame.getContentPane().add(quantidadeLabel);
 		txtQuantidade = new JTextField();
-		txtQuantidade.setBounds(250, 335, 300, 19);
+		txtQuantidade.setBounds(250, 375, 300, 30);
 		frame.getContentPane().add(txtQuantidade);
-		txtQuantidade.setColumns(10);
 
-		// Botão Cadastrar
-		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.setBounds(300, 380, 200, 25); // Posição e tamanho do botão
+		// --- Botão Cadastrar ---
+		JButton btnCadastrar = new JButton("Cadastrar Livro");
+		btnCadastrar.setBackground(new Color(60, 179, 113)); // MediumSeaGreen
+		btnCadastrar.setForeground(Color.WHITE);
+		btnCadastrar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Padding no botão
+		btnCadastrar.setBounds(225, 430, 200, 40);
 		frame.getContentPane().add(btnCadastrar);
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -154,6 +163,7 @@ public class JCadastroLivro {
 
 				AcervoService controller = new AcervoService();
 				controller.CadastrarLivro(titulo,autor,anoPublicacao,editora,isbn,numeroPaginas,genero,idioma,quantidade);
+				JOptionPane.showMessageDialog(JCadastroLivro.this.frame,"O livro foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 	}
