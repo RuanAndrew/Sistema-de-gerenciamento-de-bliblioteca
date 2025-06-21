@@ -8,14 +8,14 @@ import java.sql.Statement;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.ILivroRepository;
-import br.edu.ifpe.lpoo.project.entities.acervo.ItemArcevo;
+import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
 import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class LivroRepository implements ILivroRepository{
 	
 	@Override
-	public void insert(ItemArcevo item) {
+	public void insert(ItemAcervo item) {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;

@@ -7,7 +7,7 @@ import br.edu.ifpe.lpoo.project.data.implement.ExemplarRepository;
 import br.edu.ifpe.lpoo.project.data.implement.LivroRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.Ebook;
 import br.edu.ifpe.lpoo.project.entities.acervo.Exemplar;
-import br.edu.ifpe.lpoo.project.entities.acervo.ItemArcevo;
+import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
 import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
 import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
@@ -59,7 +59,7 @@ public class AcervoService {
             throw new BusinessExcepition("O ano deve ter de 1 a quatro digitos.");
         }
 
-        ItemArcevo livro = new Livro(titulo,autor, Integer.parseInt(anoPublicacao), editora, idioma, isbn, Integer.parseInt(numeroPaginas), genero);
+        ItemAcervo livro = new Livro(titulo,autor, Integer.parseInt(anoPublicacao), editora, idioma, isbn, Integer.parseInt(numeroPaginas), genero);
         ILivroRepository livroRepository = new LivroRepository();
         IExemplarRepository exemplarRepository = new ExemplarRepository();
 
@@ -137,7 +137,7 @@ public class AcervoService {
             throw new BusinessExcepition("Formato digital invalido.");
             }
 
-        ItemArcevo ebook = new Ebook(titulo,autor,Integer.parseInt(anoPublicacao),editora,idioma,isbn,Integer.parseInt(numeroPaginas),genero, formatodigitalnovo,url);
+        ItemAcervo ebook = new Ebook(titulo,autor,Integer.parseInt(anoPublicacao),editora,idioma,isbn,Integer.parseInt(numeroPaginas),genero, formatodigitalnovo,url);
         /*IAcervoRepository ebookRepository = new EbookRepository();
 
         boolean exist = EbookRepository.existItem(ebook);  // todos os metodos dos repositorio deveriam receber objetos

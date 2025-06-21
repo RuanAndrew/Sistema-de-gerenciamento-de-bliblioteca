@@ -1,6 +1,6 @@
 package br.edu.ifpe.lpoo.project.entities.acervo;
 
-public class Livro extends ItemArcevo {
+public class Livro extends ItemAcervo {
 	
 	private String isbn;
 	private int numeroPaginas;

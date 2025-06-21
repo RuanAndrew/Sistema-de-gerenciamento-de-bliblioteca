@@ -2,7 +2,7 @@ package br.edu.ifpe.lpoo.project.entities.acervo;
 
 import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 
-public class Ebook extends ItemArcevo{
+public class Ebook extends ItemAcervo{
     private String isbn;
     private int numeroPaginas;
     private String genero;
