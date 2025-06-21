@@ -21,3 +21,17 @@ CREATE TABLE exemplar(
     status_exemplar VARCHAR(20),
     FOREIGN KEY (id_livro) REFERENCES livro (id_livro)
 );
+
+CREATE TABLE ebook(
+	id_ebook INT AUTO_INCREMENT PRIMARY KEY,
+    isbn VARCHAR(20) UNIQUE,
+    numero_paginas INT,
+    genero VARCHAR(255),
+    titulo VARCHAR(255),
+    autor VARCHAR(255),
+    ano_publicacao INT,
+    editora VARCHAR(255),
+    idioma VARCHAR(255),
+	formato_digital VARCHAR(255),
+    url_ebook VARCHAR(255)
+);
