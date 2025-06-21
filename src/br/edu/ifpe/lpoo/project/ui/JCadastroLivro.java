@@ -162,7 +162,7 @@ public class JCadastroLivro {
 
 				try {
 					AcervoService controller = new AcervoService();
-					controller.CadastrarLivro(titulo, autor, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma, quantidade);
+					controller.cadastrarLivro(titulo, autor, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma, quantidade);
 					JOptionPane.showMessageDialog(JCadastroLivro.this.frame, "O livro foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
 				}catch (NumberFormatException ne){
 					JOptionPane.showMessageDialog(JCadastroLivro.this.frame, ne.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);

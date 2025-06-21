@@ -25,7 +25,7 @@ public class Teste {
 		String idioma = "Inglês";
 		
 		AcervoService acervo = new AcervoService();
-		acervo.CadastrarLivro(titulo, autor, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma, "3");
+		acervo.cadastrarLivro(titulo, autor, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma, "3");
 		
 		
 		

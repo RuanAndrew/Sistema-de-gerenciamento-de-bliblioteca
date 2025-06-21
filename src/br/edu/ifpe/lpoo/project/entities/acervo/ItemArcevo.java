@@ -1,4 +1,4 @@
-package br.edu.ifpe.lpoo.project.entities;
+package br.edu.ifpe.lpoo.project.entities.acervo;
 
 public abstract class ItemArcevo {
 	
@@ -7,7 +7,9 @@ public abstract class ItemArcevo {
 	private int anoPublicacao;
 	private String editora;
 	private String idioma;
-	
+	private int id;
+
+
 	public ItemArcevo(String titulo, String autor, int anoPublicacao, String editora, String idioma) {
 		this.titulo = titulo;
 		this.autor = autor;
@@ -54,5 +56,13 @@ public abstract class ItemArcevo {
 
 	public void setIdioma(String idioma) {
 		this.idioma = idioma;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

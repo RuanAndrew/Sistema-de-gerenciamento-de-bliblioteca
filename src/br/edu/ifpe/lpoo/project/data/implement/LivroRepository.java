@@ -8,8 +8,8 @@ import java.sql.Statement;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.ILivroRepository;
-import br.edu.ifpe.lpoo.project.entities.ItemArcevo;
-import br.edu.ifpe.lpoo.project.entities.Livro;
+import br.edu.ifpe.lpoo.project.entities.acervo.ItemArcevo;
+import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class LivroRepository implements ILivroRepository{

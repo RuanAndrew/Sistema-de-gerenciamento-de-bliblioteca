@@ -1,6 +1,6 @@
 package br.edu.ifpe.lpoo.project.data;
 
-import br.edu.ifpe.lpoo.project.entities.ItemArcevo;
+import br.edu.ifpe.lpoo.project.entities.acervo.ItemArcevo;
 
 public interface ILivroRepository {
 	void insert(ItemArcevo item);

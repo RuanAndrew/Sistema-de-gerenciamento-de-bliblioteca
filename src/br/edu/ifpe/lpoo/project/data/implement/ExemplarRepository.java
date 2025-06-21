@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IExemplarRepository;
-import br.edu.ifpe.lpoo.project.entities.Exemplar;
+import br.edu.ifpe.lpoo.project.entities.acervo.Exemplar;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class ExemplarRepository implements IExemplarRepository{

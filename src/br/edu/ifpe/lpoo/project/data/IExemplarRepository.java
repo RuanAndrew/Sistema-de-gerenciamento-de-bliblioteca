@@ -1,6 +1,6 @@
 package br.edu.ifpe.lpoo.project.data;
 
-import br.edu.ifpe.lpoo.project.entities.Exemplar;
+import br.edu.ifpe.lpoo.project.entities.acervo.Exemplar;
 
 public interface IExemplarRepository {
 
