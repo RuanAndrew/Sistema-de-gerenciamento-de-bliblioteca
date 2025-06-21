@@ -12,8 +12,6 @@ import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class ConnectionDb {
 	
-	//private static Connection conn = null;
-	
 	public static Connection getConnection() {
 		
 		try {
