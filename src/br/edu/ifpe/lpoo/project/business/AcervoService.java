@@ -1,8 +1,10 @@
 package br.edu.ifpe.lpoo.project.business;
 
 import br.edu.ifpe.lpoo.project.data.IAcervoRepository;
+import br.edu.ifpe.lpoo.project.data.IEbookRepository;
 import br.edu.ifpe.lpoo.project.data.IExemplarRepository;
 import br.edu.ifpe.lpoo.project.data.ILivroRepository;
+import br.edu.ifpe.lpoo.project.data.implement.EbookRepository;
 import br.edu.ifpe.lpoo.project.data.implement.ExemplarRepository;
 import br.edu.ifpe.lpoo.project.data.implement.LivroRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.Ebook;
@@ -129,29 +131,32 @@ public class AcervoService {
         }
 
         FormatoDigital formatodigitalnovo = null;
-        for(FormatoDigital c : FormatoDigital.values())
+        for(FormatoDigital c : FormatoDigital.values()) {
             if (formatoDigital.equals(String.valueOf(c))) {
                 formatodigitalnovo = c;
+                break;
             }
-        else {
+        }
+        if(formatodigitalnovo == null) {
             throw new BusinessExcepition("Formato digital invalido.");
-            }
+        }
 
         ItemAcervo ebook = new Ebook(titulo,autor,Integer.parseInt(anoPublicacao),editora,idioma,isbn,Integer.parseInt(numeroPaginas),genero, formatodigitalnovo,url);
-        /*IAcervoRepository ebookRepository = new EbookRepository();
+        IEbookRepository ebookRepository = new EbookRepository();
 
-        boolean exist = EbookRepository.existItem(ebook);  // todos os metodos dos repositorio deveriam receber objetos
+        boolean exist = ebookRepository.exist(ebook);  // todos os metodos dos repositorio deveriam receber objetos
 
         if(!exist) {
             try {
-                EbookRepository.insert(ebook);
+            	ebookRepository.insert(ebook);
             }catch(DbException e) {
                 throw new BusinessExcepition(e.getMessage());
             }
 
         }else {
+        	System.out.println("Esse ebook ja esta cadastrado no sistema");
             throw new BusinessExcepition("Esse ebook ja esta cadastrado no sistema");
-        }*/
+        }
     }
 }
 

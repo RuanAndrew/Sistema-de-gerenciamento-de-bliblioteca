@@ -29,7 +29,7 @@ public class Teste {
 //		String genero = "Fantasia";
 //		String idioma = "Inglês";
 //		
-//		AcervoService acervo = new AcervoService();
+		AcervoService acervo = new AcervoService();
 //		acervo.cadastrarLivro(titulo, autor, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma, "3");
 		
 //		---------------------------Teste ebook----------------------------------------------
@@ -44,25 +44,27 @@ public class Teste {
 		FormatoDigital formatoDigital = FormatoDigital.PDF; 
 		String url = "https://www.exemplo.com/contos-inacabados.pdf";
 		
-		Ebook ebook = new Ebook(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero, formatoDigital, url);
+//		Ebook ebook = new Ebook(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero, formatoDigital, url);
 		
-		Ebook ebook1 = new Ebook("O Hobbit", "J.R.R. Tolkien", 1937, "HarperCollins", "Inglês", "9780547928227", 310, "Fantasia", FormatoDigital.PDF,
-				"https://www.exemplo.com/o-hobbit.pdf"
-			);
+//		Ebook ebook1 = new Ebook("O Hobbit", "J.R.R. Tolkien", 1937, "HarperCollins", "Inglês", "9780547928227", 310, "Fantasia", FormatoDigital.PDF,
+//				"https://www.exemplo.com/o-hobbit.pdf"
+//			);
 		IEbookRepository ebookRepository = new EbookRepository();
 		
-		boolean teste = ebookRepository.exist(ebook1);
-		System.out.println(teste);
-		if(!teste) {
-			try {
-				ebookRepository.insert(ebook1);
-				System.out.println("Ebook cadastrado");
-			}catch(DbException e) {
-				System.out.println(e.getMessage());
-			}
-		}else {
-			System.out.println("Livro já existe!");
-		}
+		acervo.cadastrarEbook("O Senhor dos Anéis", "J.R.R. Tolkien", "1954", "HarperCollins", "9780544003415", "1216", "Fantasia", "Inglês", "PDF", "https://www.exemplo.com/o-hobbit.pdf");
+		
+//		boolean teste = ebookRepository.exist(ebook1);
+//		System.out.println(teste);
+//		if(!teste) {
+//			try {
+//				ebookRepository.insert(ebook1);
+//				System.out.println("Ebook cadastrado");
+//			}catch(DbException e) {
+//				System.out.println(e.getMessage());
+//			}
+//		}else {
+//			System.out.println("Livro já existe!");
+//		}
 
 		
 	}
