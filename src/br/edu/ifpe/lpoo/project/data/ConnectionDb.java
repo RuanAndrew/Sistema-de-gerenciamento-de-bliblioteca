@@ -12,25 +12,22 @@ import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class ConnectionDb {
 	
-	private static Connection conn = null;
+	//private static Connection conn = null;
 	
 	public static Connection getConnection() {
-		if(conn == null) {
-			try {
-				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/testelivro", "root", "root");
-			}catch(SQLException e) {
-				throw new DbException(e.getMessage());
-			}
+		
+		try {
+			return DriverManager.getConnection("jdbc:mysql://localhost:3306/testelivro", "root", "root");
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
 		}
 		
-		return conn;
 	}
 	
-	public static void closeConnection() {
+	public static void closeConnection(Connection conn) {
 		if(conn != null) {
 			try {
 				conn.close();
-				conn = null;
 			}catch(SQLException e) {
 				throw new DbException(e.getMessage());
 			}
