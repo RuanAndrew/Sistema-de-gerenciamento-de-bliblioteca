@@ -9,7 +9,6 @@ public abstract class ItemAcervo {
 	private String idioma;
 	private int id;
 
-
 	public ItemAcervo(String titulo, String autor, int anoPublicacao, String editora, String idioma) {
 		this.titulo = titulo;
 		this.autor = autor;
