@@ -239,7 +239,20 @@ public class AcervoService {
 
     // Deletar itens do acervo
 
-    public void deletarItem () {}
+    /*
+    public void deletarItem (int id) {
+        if (id != null) {
+            try {
+                livroRepository.delete(id); // deve deletar também os exemplares
+                ebookRepository.delete(id);
+                periodicoRepository.delete(id);
+            } catch (SQLException e) {
+                throw new BusinessExcepition("Erro ao deletar item de acervo: " + e.getMessage(), e);
+            }
+        }
+    }
+
+     */
 
     // Vizualizar itens do acervo
 
