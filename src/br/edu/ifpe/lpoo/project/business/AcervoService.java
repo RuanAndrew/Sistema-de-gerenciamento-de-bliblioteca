@@ -10,13 +10,20 @@ import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
+
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class AcervoService {
+    LivroRepository livroRepository;
+    ExemplarRepository exemplarRepository;
+    EbookRepository ebookRepository;
+    //PeriodicoRepository periodicoRepository;
     LocalDate currentDate = LocalDate.now();
     int anoAtual = currentDate.getYear();
 
@@ -59,8 +66,8 @@ public class AcervoService {
         }
 
         ItemAcervo livro = new Livro(titulo,autor, Integer.parseInt(anoPublicacao), editora, idioma, isbn, Integer.parseInt(numeroPaginas), genero);
-        ILivroRepository livroRepository = new LivroRepository();
-        IExemplarRepository exemplarRepository = new ExemplarRepository();
+        livroRepository = new LivroRepository();
+        exemplarRepository = new ExemplarRepository();
 
         boolean exist = livroRepository.existItem(titulo);
 
@@ -138,7 +145,7 @@ public class AcervoService {
         }
 
         ItemAcervo ebook = new Ebook(titulo,autor,Integer.parseInt(anoPublicacao),editora,idioma,isbn,Integer.parseInt(numeroPaginas),genero, formatoDigitalNovo,url);
-        IEbookRepository ebookRepository = new EbookRepository();
+        ebookRepository = new EbookRepository();
 
         boolean exist = ebookRepository.exist(ebook);
 
@@ -207,7 +214,7 @@ public class AcervoService {
         /*
 
         ItemAcervo periodico = new Periodico (titulo, autor, Integer.parseInt(anoPublicacao), editora, idioma, issn, Integer.parseInt(numeroEdicao), Integer.parseInt(volume), genero);
-        IPeriodicoRepository periodicoRepository = new PeriodicoRepository();
+        periodicoRepository = new PeriodicoRepository();
 
         boolean exist = periodicoRepository.exist(periodico);
 
@@ -236,15 +243,50 @@ public class AcervoService {
 
     // Vizualizar itens do acervo
 
-    public ItemAcervo buscarItemPorCodigo (String codigo) {
-        return null;
+    /*
+    public ItemAcervo buscarItemPorId (int id) {
+        try {
+            ItemAcervo item = livroRepository.buscarPorId(id);
+            if (item != null) {return item;}
+
+            item = ebookRepository.buscarPorId(id);
+            if (item != null) {return item;}
+
+            item = periodicoRepository.buscarPorId(id);
+            if (item != null) return item;
+
+            return null;
+        } catch (SQLException e) {
+            throw new BusinessExcepition("Erro ao buscar item de acervo por ID: " + e.getMessage());
+        }
     }
+
     public List<ItemAcervo> listarTodosItens () {
-        return null;
+        List<ItemAcervo> todosItens = new ArrayList<>();
+        try {
+            todosItens.addAll(livroRepository.buscarTodos());
+            todosItens.addAll(ebookRepository.buscarTodos());
+            todosItens.addAll(periodicoRepository.buscarTodos());
+        } catch (SQLException e) {
+            throw new BusinessExcepition("Erro ao listar todos os itens do acervo: " + e.getMessage());
+        }
+        return todosItens;
     }
+
     public List<ItemAcervo> buscarItensPorTermo (String termoBusca) {
-        return null;
+        List<ItemAcervo> resultados = new ArrayList<>();
+        try {
+            resultados.addAll(livroRepository.buscarPorTermo(termoBusca));
+            resultados.addAll(ebookRepository.buscarPorTermo(termoBusca));
+            resultados.addAll(periodicoRepository.buscarPorTermo(termoBusca));
+        } catch (SQLException e) {
+            throw new BusinessExcepition("Erro ao buscar itens de acervo por termo: " + e.getMessage(), e);
+        }
+        return resultados;
     }
+
+     */
+
 
     // Gerenciar exemplares de itens do acervo
 
