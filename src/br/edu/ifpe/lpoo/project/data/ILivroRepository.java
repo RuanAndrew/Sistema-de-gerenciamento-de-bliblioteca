@@ -12,6 +12,8 @@ public interface ILivroRepository {
 	
 	Livro buscarPorId(int idItem);
 	
+	void delete(Livro livro);
+	
 	List<Livro> buscarTodos();
 	
 	List<Livro> buscarPorTermo(String termo);

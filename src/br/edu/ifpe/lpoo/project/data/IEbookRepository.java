@@ -13,6 +13,8 @@ public interface IEbookRepository {
 	
 	Ebook buscarPorId(int idItem);
 	
+	void delete(Ebook ebook);
+	
 	List<Ebook> buscarTodos();
 	
 	List<Ebook> buscarPorTermo(String termo);

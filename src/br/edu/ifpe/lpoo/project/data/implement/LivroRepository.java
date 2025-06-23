@@ -217,4 +217,28 @@ public class LivroRepository implements ILivroRepository{
 		return livros;
 	}
 	
+public void delete(Livro livro) {
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		String consulta = "DELETE FROM livro WHERE id_livro = ?";
+		
+		try {
+			
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setInt(1, livro.getId());
+			
+			stmt.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+	}
+	
 }

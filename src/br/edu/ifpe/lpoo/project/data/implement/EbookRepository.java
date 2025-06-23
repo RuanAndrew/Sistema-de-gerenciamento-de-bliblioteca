@@ -219,4 +219,29 @@ public class EbookRepository implements IEbookRepository{
 		
 		return ebooks;
 	}
+	
+	@Override
+	public void delete(Ebook ebook) {
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		String consulta = "DELETE FROM ebook WHERE id_ebook = ?";
+		
+		try {
+			
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setInt(1, ebook.getId());
+			
+			stmt.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+	}
 }

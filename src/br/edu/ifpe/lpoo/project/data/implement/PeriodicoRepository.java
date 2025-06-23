@@ -219,4 +219,28 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 		
 		return periodicos;
 	}
+	
+	@Override
+	public void delete(Periodico periodico) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		String consulta = "DELETE FROM periodico WHERE id_periodico = ?";
+		
+		try {
+			
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setInt(1, periodico.getId());
+			
+			stmt.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+	}
 }
