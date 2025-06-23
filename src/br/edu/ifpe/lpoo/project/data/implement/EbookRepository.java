@@ -15,7 +15,28 @@ import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class EbookRepository implements IEbookRepository{
-
+	
+	private Ebook instanciarEbook(ResultSet rst) throws SQLException{
+		
+		int idEbook = rst.getInt("id_ebook");
+		String titulo = rst.getString("titulo");
+		String autor = rst.getString("autor");
+		int anoPublicacao = rst.getInt("ano_publicacao");
+		String editora = rst.getString("editora");
+		String idioma = rst.getString("idioma");
+		String isbn = rst.getString("isbn");
+		int numeroPaginas = rst.getInt("numero_paginas");
+		String genero = rst.getString("genero");
+		String formato = rst.getString("formato_digital").toUpperCase();
+		FormatoDigital formatodigital = FormatoDigital.valueOf(formato);
+		String urlEbook = rst.getString("url_ebook");
+		
+		Ebook ebook = new Ebook(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero, formatodigital, urlEbook);
+		ebook.setId(idEbook);
+		
+		return ebook;
+	}
+	
 	@Override
 	public void insert(ItemAcervo item) {
 		Connection conn = null;
@@ -111,20 +132,7 @@ public class EbookRepository implements IEbookRepository{
 			
 			if(rst.next()) {
 
-				String titulo = rst.getString("titulo");
-				String autor = rst.getString("autor");
-				int anoPublicacao = rst.getInt("ano_publicacao");
-				String editora = rst.getString("editora");
-				String idioma = rst.getString("idioma");
-				String isbn = rst.getString("isbn");
-				int numeroPaginas = rst.getInt("numero_paginas");
-				String genero = rst.getString("genero");
-				String formato = rst.getString("formato_digital").toUpperCase();
-				FormatoDigital formatodigital = FormatoDigital.valueOf(formato);
-				String urlEbook = rst.getString("url_ebook");
-				
-				ebook = new Ebook(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero, formatodigital, urlEbook);
-				ebook.setId(idItem);
+				ebook = instanciarEbook(rst);
 			}
 			
 		}catch(SQLException e) {
@@ -156,23 +164,7 @@ public class EbookRepository implements IEbookRepository{
 			
 			while(rst.next()) {
 				
-				int idEbook = rst.getInt("id_ebook");
-				String titulo = rst.getString("titulo");
-				String autor = rst.getString("autor");
-				int anoPublicacao = rst.getInt("ano_publicacao");
-				String editora = rst.getString("editora");
-				String idioma = rst.getString("idioma");
-				String isbn = rst.getString("isbn");
-				int numeroPaginas = rst.getInt("numero_paginas");
-				String genero = rst.getString("genero");
-				String formato = rst.getString("formato_digital").toUpperCase();
-				FormatoDigital formatodigital = FormatoDigital.valueOf(formato);
-				String urlEbook = rst.getString("url_ebook");
-				
-				Ebook ebook = new Ebook(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero, formatodigital, urlEbook);
-				ebook.setId(idEbook);
-				
-				ebooks.add(ebook);
+				ebooks.add(instanciarEbook(rst));
 			}
 			
 		}catch(SQLException e) {
@@ -214,23 +206,7 @@ public class EbookRepository implements IEbookRepository{
 			
 			while(rst.next()) {
 				
-				int idEbook = rst.getInt("id_ebook");
-				String titulo = rst.getString("titulo");
-				String autor = rst.getString("autor");
-				int anoPublicacao = rst.getInt("ano_publicacao");
-				String editora = rst.getString("editora");
-				String idioma = rst.getString("idioma");
-				String isbn = rst.getString("isbn");
-				int numeroPaginas = rst.getInt("numero_paginas");
-				String genero = rst.getString("genero");
-				String formato = rst.getString("formato_digital").toUpperCase();
-				FormatoDigital formatodigital = FormatoDigital.valueOf(formato);
-				String urlEbook = rst.getString("url_ebook");
-				
-				Ebook ebook = new Ebook(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero, formatodigital, urlEbook);
-				ebook.setId(idEbook);
-				
-				ebooks.add(ebook);
+				ebooks.add(instanciarEbook(rst));
 			}
 			
 		}catch(SQLException e) {

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IPeriodicoRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
@@ -14,7 +15,27 @@ import br.edu.ifpe.lpoo.project.entities.acervo.Periodico;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class PeriodicoRepository implements IPeriodicoRepository{
-
+	
+	
+	private Periodico instanciarPeriodico(ResultSet rst) throws SQLException {
+		
+		int idPeriodico = rst.getInt("id_periodico");
+		String titulo = rst.getString("titulo");
+		String autor = rst.getString("autor");
+		int anoPublicacao = rst.getInt("ano_publicacao");
+		String editora = rst.getString("editora");
+		String idioma = rst.getString("idioma");
+		String issn = rst.getString("issn");
+		int numeroEdicao = rst.getInt("numero_edicao");
+		int volume = rst.getInt("volume");
+		String genero = rst.getString("genero");
+		
+		Periodico periodico = new Periodico(titulo, autor, anoPublicacao, editora, idioma, issn, numeroEdicao, volume, genero);
+		periodico.setId(idPeriodico);
+		
+		return periodico;
+	}
+	
 	@Override
 	public void insert(ItemAcervo item) {
 		
@@ -108,17 +129,7 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 			
 			if(rst.next()) {
 				
-				String titulo = rst.getString("titulo");
-				String autor = rst.getString("autor");
-				int anoPublicacao = rst.getInt("ano_publicacao");
-				String editora = rst.getString("editora");
-				String idioma = rst.getString("idioma");
-				String issn = rst.getString("issn");
-				int numeroEdicao = rst.getInt("numero_edicao");
-				int volume = rst.getInt("volume");
-				String genero = rst.getString("genero");
-				periodico = new Periodico(titulo, autor, anoPublicacao, editora, idioma, issn, numeroEdicao, volume, genero);
-				periodico.setId(idItem);
+				periodico = instanciarPeriodico(rst);
 			}
 			
 		}catch(SQLException e) {
@@ -150,21 +161,7 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 			
 			while(rst.next()) {
 				
-				int idPeriodico = rst.getInt("id_periodico");
-				String titulo = rst.getString("titulo");
-				String autor = rst.getString("autor");
-				int anoPublicacao = rst.getInt("ano_publicacao");
-				String editora = rst.getString("editora");
-				String idioma = rst.getString("idioma");
-				String issn = rst.getString("issn");
-				int numeroEdicao = rst.getInt("numero_edicao");
-				int volume = rst.getInt("volume");
-				String genero = rst.getString("genero");
-				
-				Periodico periodico = new Periodico(titulo, autor, anoPublicacao, editora, idioma, issn, numeroEdicao, volume, genero);
-				periodico.setId(idPeriodico);
-				
-				periodicos.add(periodico);
+				periodicos.add(instanciarPeriodico(rst));
 			}
 			
 		}catch(SQLException e) {
@@ -207,21 +204,8 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 			rst = stmt.executeQuery();
 			
 			while(rst.next()) {
-				int idPeriodico = rst.getInt("id_periodico");
-				String titulo = rst.getString("titulo");
-				String autor = rst.getString("autor");
-				int anoPublicacao = rst.getInt("ano_publicacao");
-				String editora = rst.getString("editora");
-				String idioma = rst.getString("idioma");
-				String issn = rst.getString("issn");
-				int numeroEdicao = rst.getInt("numero_edicao");
-				int volume = rst.getInt("volume");
-				String genero = rst.getString("genero");
 				
-				Periodico periodico = new Periodico(titulo, autor, anoPublicacao, editora, idioma, issn, numeroEdicao, volume, genero);
-				periodico.setId(idPeriodico);
-				
-				periodicos.add(periodico);
+				periodicos.add(instanciarPeriodico(rst));
 			}
 			
 			

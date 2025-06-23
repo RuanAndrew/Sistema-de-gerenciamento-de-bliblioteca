@@ -16,6 +16,24 @@ import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class LivroRepository implements ILivroRepository{
 	
+	private Livro instanciarLivro(ResultSet rst) throws SQLException{
+		
+		int idLivro = rst.getInt("id_livro");
+		String titulo = rst.getString("titulo");
+		String autor = rst.getString("autor");
+		int anoPublicacao = rst.getInt("ano_publicacao");
+		String editora = rst.getString("editora");
+		String idioma = rst.getString("idioma");
+		String isbn = rst.getString("isbn");
+		int numeroPaginas = rst.getInt("numero_paginas");
+		String genero = rst.getString("genero");
+		
+		Livro livro = new Livro(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
+		livro.setId(idLivro);
+		
+		return livro;
+	}
+	
 	@Override
 	public void insert(ItemAcervo item) {
 		Connection conn = null;
@@ -113,17 +131,7 @@ public class LivroRepository implements ILivroRepository{
 			
 			if(rst.next()) {
 				
-				String titulo = rst.getString("titulo");
-				String autor = rst.getString("autor");
-				int anoPublicacao = rst.getInt("ano_publicacao");
-				String editora = rst.getString("editora");
-				String idioma = rst.getString("idioma");
-				String isbn = rst.getString("isbn");
-				int numeroPaginas = rst.getInt("numero_paginas");
-				String genero = rst.getString("genero");
-				
-				livro = new Livro(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
-				livro.setId(idItem);
+				livro = instanciarLivro(rst);
 			}
 			
 		}catch(SQLException e) {
@@ -154,21 +162,7 @@ public class LivroRepository implements ILivroRepository{
 			rst = stmt.executeQuery();
 			
 			while(rst.next()) {
-				
-				int idLivro = rst.getInt("id_livro");
-				String titulo = rst.getString("titulo");
-				String autor = rst.getString("autor");
-				int anoPublicacao = rst.getInt("ano_publicacao");
-				String editora = rst.getString("editora");
-				String idioma = rst.getString("idioma");
-				String isbn = rst.getString("isbn");
-				int numeroPaginas = rst.getInt("numero_paginas");
-				String genero = rst.getString("genero");
-				
-				Livro livro = new Livro(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
-				livro.setId(idLivro);
-				
-				livros.add(livro);
+				livros.add(instanciarLivro(rst));
 			}
 			
 		}catch(SQLException e) {
@@ -209,20 +203,8 @@ public class LivroRepository implements ILivroRepository{
 			rst = stmt.executeQuery();
 			
 			while(rst.next()) {
-				int idLivro = rst.getInt("id_livro");
-				String titulo = rst.getString("titulo");
-				String autor = rst.getString("autor");
-				int anoPublicacao = rst.getInt("ano_publicacao");
-				String editora = rst.getString("editora");
-				String idioma = rst.getString("idioma");
-				String isbn = rst.getString("isbn");
-				int numeroPaginas = rst.getInt("numero_paginas");
-				String genero = rst.getString("genero");
 				
-				Livro livro = new Livro(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
-				livro.setId(idLivro);
-				
-				livros.add(livro);
+				livros.add(instanciarLivro(rst));
 			}
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
