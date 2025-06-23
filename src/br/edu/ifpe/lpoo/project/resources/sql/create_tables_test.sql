@@ -35,3 +35,16 @@ CREATE TABLE ebook(
 	formato_digital VARCHAR(255),
     url_ebook VARCHAR(255)
 );
+
+CREATE TABLE periodico (
+	id_periodico INT AUTO_INCREMENT PRIMARY KEY,
+    issn VARCHAR(255) UNIQUE, 
+    titulo VARCHAR(255), 
+    autor VARCHAR(255), 
+    numero_edicao INT, 
+    volume INT, 
+    editora VARCHAR(255),
+    idioma VARCHAR(255), 
+    ano_publicacao INT,
+    genero VARCHAR(255)
+);
