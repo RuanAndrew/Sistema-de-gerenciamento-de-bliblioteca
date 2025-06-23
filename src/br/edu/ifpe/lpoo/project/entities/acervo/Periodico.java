@@ -16,11 +16,11 @@ public class Periodico extends ItemAcervo{
         this.genero = genero;
     }
 
-    public String getIssn() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setIssn(String isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
@@ -47,13 +47,5 @@ public class Periodico extends ItemAcervo{
     public void setGenero(String genero) {
         this.genero = genero;
     }
-    
-    public String getDataPublicacao() {
-		return dataPublicacao;
-	}
-
-	public void setDataPublicacao(String dataPublicacao) {
-		this.dataPublicacao = dataPublicacao;
-	}
 
 }
