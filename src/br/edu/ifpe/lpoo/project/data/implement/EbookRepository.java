@@ -129,6 +129,10 @@ public class EbookRepository implements IEbookRepository{
 			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
 		}
 		
 		return ebook;
@@ -173,6 +177,10 @@ public class EbookRepository implements IEbookRepository{
 			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
 		}
 		
 		return ebooks;
@@ -227,6 +235,10 @@ public class EbookRepository implements IEbookRepository{
 			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
 		}
 		
 		return ebooks;

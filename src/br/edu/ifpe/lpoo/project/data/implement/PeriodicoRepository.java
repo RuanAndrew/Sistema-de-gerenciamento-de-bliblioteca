@@ -78,6 +78,10 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
 		}
 		
 		return exist;
@@ -119,6 +123,10 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
 		}
 		
 		return periodico;
@@ -161,6 +169,10 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
 		}
 		
 		return periodicos;
@@ -214,7 +226,11 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 			
 			
 		}catch(SQLException e) {
-			
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
 		}
 		
 		return periodicos;

@@ -54,6 +54,7 @@ public class LivroRepository implements ILivroRepository{
 		}finally {
 			ConnectionDb.closeResultSet(rst);
 			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
 		}
 		
 		//return idItem;
@@ -85,6 +86,7 @@ public class LivroRepository implements ILivroRepository{
 		}finally {
 			ConnectionDb.closeResultSet(rst);
 			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
 		}
 		
 		return exists;
@@ -126,6 +128,10 @@ public class LivroRepository implements ILivroRepository{
 			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
 		}
 		
 		return livro;
@@ -167,6 +173,10 @@ public class LivroRepository implements ILivroRepository{
 			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
 		}
 		
 		return livros;
