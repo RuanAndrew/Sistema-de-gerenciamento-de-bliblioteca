@@ -88,4 +88,45 @@ public class LivroRepository implements ILivroRepository{
 		return exists;
 	}
 	
+	@Override
+	public Livro buscarPorId(int idItem) {
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		Livro livro = null;
+		
+		String consulta = "SELECT * FROM livro WHERE id_livro = ?";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setInt(1, idItem);
+			
+			rst = stmt.executeQuery();
+			
+			if(rst.next()) {
+				
+				String titulo = rst.getString("titulo");
+				String autor = rst.getString("autor");
+				int anoPublicacao = rst.getInt("ano_publicacao");
+				String editora = rst.getString("editora");
+				String idioma = rst.getString("idioma");
+				String isbn = rst.getString("isbn");
+				int numeroPaginas = rst.getInt("numero_paginas");
+				String genero = rst.getString("genero");
+				
+				livro = new Livro(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
+				livro.setId(idItem);
+			}
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		
+		return livro;
+	}
+	
 }

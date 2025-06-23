@@ -2,8 +2,10 @@ package br.edu.ifpe.lpoo.project.data;
 
 import br.edu.ifpe.lpoo.project.business.AcervoService;
 import br.edu.ifpe.lpoo.project.data.implement.EbookRepository;
+import br.edu.ifpe.lpoo.project.data.implement.LivroRepository;
 import br.edu.ifpe.lpoo.project.data.implement.PeriodicoRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.Ebook;
+import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
 import br.edu.ifpe.lpoo.project.entities.acervo.Periodico;
 import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
@@ -72,19 +74,19 @@ public class Teste {
 		
 //		---------------------Periodico-------------------------------------------------------
 		
-		String titulo = "Revista Ciência Hoje";
-		String autor = "Vários Autores";
-		String anoPublicacao = "2023";
-		String editora = "Sociedade Brasileira";
-		String idioma = "Português";
-		String isbn = "1234-5678";
-		String numeroEdicao = "42";
-		String volume = "7";
-		String genero = "Divulgação Científica";
+//		String titulo = "Revista Ciência Hoje";
+//		String autor = "Vários Autores";
+//		String anoPublicacao = "2023";
+//		String editora = "Sociedade Brasileira";
+//		String idioma = "Português";
+//		String isbn = "1234-5678";
+//		String numeroEdicao = "42";
+//		String volume = "7";
+//		String genero = "Divulgação Científica";
 		
 		//Periodico periodico = new Periodico(titulo, autor, 2023, editora, idioma, isbn, 42, 7, genero); 
 		
-		IPeriodicoRepository periodicoRepository = new PeriodicoRepository();
+//		IPeriodicoRepository periodicoRepository = new PeriodicoRepository();
 		//Chamado método insert
 		//periodicoRepository.insert(periodico);
 		
@@ -93,17 +95,35 @@ public class Teste {
 		//System.out.println(existe);
 		
 		//Testando regra
-		AcervoService acervo = new AcervoService();
+//		AcervoService acervo = new AcervoService();
+//		
+//		try {
+//			acervo.cadastrarPeriodico(titulo, autor, anoPublicacao, isbn, editora, numeroEdicao, volume, genero, idioma);
+//		}catch(BusinessExcepition e) {
+//			System.out.println(e.getMessage());
+//		}catch(DbException i) {
+//			System.out.println(i.getMessage());
+//		}
 		
-		try {
-			acervo.cadastrarPeriodico(titulo, autor, anoPublicacao, isbn, editora, numeroEdicao, volume, genero, idioma);
-		}catch(BusinessExcepition e) {
-			System.out.println(e.getMessage());
-		}catch(DbException i) {
-			System.out.println(i.getMessage());
+//		-------------------- Encontar por id----------------------------
+		ILivroRepository livroRepository = new LivroRepository();
+		
+		Livro livro = livroRepository.buscarPorId(4);
+		
+		if(livro == null) {
+			System.out.println("Livro não encontrado");
+		}else {
+			System.out.println(livro.getId());
+			System.out.println(livro.getIsbn());
+			System.out.println(livro.getNumeroPaginas());
+			System.out.println(livro.getGenero());
+			System.out.println(livro.getTitulo());
+			System.out.println(livro.getAutor());
+			System.out.println(livro.getAnoPublicacao());
+			System.out.println(livro.getEditora());
+			System.out.println(livro.getIdioma());
+			
 		}
-		
-		
 	}
 
 }
