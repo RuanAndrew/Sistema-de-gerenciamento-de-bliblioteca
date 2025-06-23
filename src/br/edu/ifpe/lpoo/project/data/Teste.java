@@ -33,10 +33,10 @@ public class Teste {
 		
 		IPeriodicoRepository periodicoRepository = new PeriodicoRepository();
 		
-		Periodico periodico = periodicoRepository.buscarPorId(5);
+		Periodico periodico = periodicoRepository.buscarPorId(1);
 		
 		if(periodico == null) {
-			System.out.println("Livro não existe ou já foi deletado");
+			System.out.println("Periódico não existe ou já foi deletado");
 		}else {
 			periodicoRepository.delete(periodico);
 			System.out.println("Livro " + periodico.getTitulo() + " deletado com sucesso");

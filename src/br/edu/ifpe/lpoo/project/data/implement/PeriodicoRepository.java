@@ -74,10 +74,15 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 	@Override
 	public boolean exist(ItemAcervo item) {
 		
+		boolean exist = false;
+		
+		if(item == null) {
+			return exist;
+		}
+		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
-		boolean exist = false;
 		
 		Periodico periodico = (Periodico) item; 
 		

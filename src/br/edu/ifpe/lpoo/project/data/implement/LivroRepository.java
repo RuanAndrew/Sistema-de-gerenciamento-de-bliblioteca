@@ -81,10 +81,15 @@ public class LivroRepository implements ILivroRepository{
 	@Override
 	public boolean existItem(String indentifier) {
 		
+		boolean exists = false;
+		
+		if(indentifier == null) {
+			return exists;
+		}
+		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
-		boolean exists = false;
 		
 		try {
 			conn = ConnectionDb.getConnection();

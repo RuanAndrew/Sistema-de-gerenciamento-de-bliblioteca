@@ -76,11 +76,16 @@ public class EbookRepository implements IEbookRepository{
 
 	@Override
 	public boolean exist(ItemAcervo item) {
+		
+		boolean exists = false;
+		
+		if(item == null) {
+			return exists;
+		}
+		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
-		
-		boolean exists = false;
 		
 		Ebook ebook = (Ebook) item;
 		
