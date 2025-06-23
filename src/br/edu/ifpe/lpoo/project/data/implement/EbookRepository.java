@@ -9,6 +9,7 @@ import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IEbookRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.Ebook;
 import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
+import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class EbookRepository implements IEbookRepository{
@@ -85,6 +86,50 @@ public class EbookRepository implements IEbookRepository{
 			ConnectionDb.closeConnection(conn);
 		}
 		return exists;
+	}
+	
+	@Override
+	public Ebook buscarPorId(int idItem) {
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		Ebook ebook = null;
+		
+		String consulta = "SELECT * FROM ebook WHERE id_ebook = ?";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setInt(1, idItem);
+			
+			rst = stmt.executeQuery();
+			
+			if(rst.next()) {
+
+				String titulo = rst.getString("titulo");
+				String autor = rst.getString("autor");
+				int anoPublicacao = rst.getInt("ano_publicacao");
+				String editora = rst.getString("editora");
+				String idioma = rst.getString("idioma");
+				String isbn = rst.getString("isbn");
+				int numeroPaginas = rst.getInt("numero_paginas");
+				String genero = rst.getString("genero");
+				String formato = rst.getString("formato_digital").toUpperCase();
+				FormatoDigital formatodigital = FormatoDigital.valueOf(formato);
+				String urlEbook = rst.getString("url_ebook");
+				
+				ebook = new Ebook(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero, formatodigital, urlEbook);
+				ebook.setId(idItem);
+			}
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		
+		return ebook;
 	}
 	
 }

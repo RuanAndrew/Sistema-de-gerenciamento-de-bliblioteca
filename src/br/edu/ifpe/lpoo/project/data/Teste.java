@@ -106,24 +106,52 @@ public class Teste {
 //		}
 		
 //		-------------------- Encontar por id----------------------------
-		ILivroRepository livroRepository = new LivroRepository();
+//		ILivroRepository livroRepository = new LivroRepository();
+//		
+//		Livro livro = livroRepository.buscarPorId(4);
+//		
+//		if(livro == null) {
+//			System.out.println("Livro não encontrado");
+//		}else {
+//			System.out.println(livro.getId());
+//			System.out.println(livro.getIsbn());
+//			System.out.println(livro.getNumeroPaginas());
+//			System.out.println(livro.getGenero());
+//			System.out.println(livro.getTitulo());
+//			System.out.println(livro.getAutor());
+//			System.out.println(livro.getAnoPublicacao());
+//			System.out.println(livro.getEditora());
+//			System.out.println(livro.getIdioma());
+//			
+//		}
 		
-		Livro livro = livroRepository.buscarPorId(4);
+//		IEbookRepository ebookRepository = new EbookRepository();
+//		
+//		Ebook ebook = ebookRepository.buscarPorId(3);
+//		
+//		if(ebook == null) {
+//			System.out.println("Ebook não encontrado");
+//		}else {
+//			System.out.println(ebook.getId());
+//			System.out.println(ebook.getIsbn());
+//			System.out.println(ebook.getNumeroPaginas());
+//			System.out.println(ebook.getGenero());
+//			System.out.println(ebook.getTitulo());
+//			System.out.println(ebook.getAutor());
+//			System.out.println(ebook.getAnoPublicacao());
+//			System.out.println(ebook.getEditora());
+//			System.out.println(ebook.getIdioma());
+//			System.out.println(ebook.getFormatoDigital().name());
+//			System.out.println(ebook.getUrl());
+//		}	
 		
-		if(livro == null) {
-			System.out.println("Livro não encontrado");
-		}else {
-			System.out.println(livro.getId());
-			System.out.println(livro.getIsbn());
-			System.out.println(livro.getNumeroPaginas());
-			System.out.println(livro.getGenero());
-			System.out.println(livro.getTitulo());
-			System.out.println(livro.getAutor());
-			System.out.println(livro.getAnoPublicacao());
-			System.out.println(livro.getEditora());
-			System.out.println(livro.getIdioma());
-			
-		}
+//		IPeriodicoRepository periodicoRepository = new PeriodicoRepository();
+//		
+//		Periodico periodico = periodicoRepository.buscarPorId(1);
+//		if(periodico == null) {
+//			System.out.println("Periodico não encontrado");
+//		}else {
+//			System.out.println(periodico);
+//		}
 	}
-
 }

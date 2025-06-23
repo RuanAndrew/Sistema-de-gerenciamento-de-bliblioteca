@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IPeriodicoRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
+import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
 import br.edu.ifpe.lpoo.project.entities.acervo.Periodico;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
@@ -81,5 +82,44 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 		return exist;
 	}
 	
-	
+	@Override
+	public Periodico buscarPorId(int idItem) {
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		Periodico periodico = null;
+		
+		String consulta = "SELECT * FROM periodico WHERE id_periodico = ?";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setInt(1, idItem);
+			
+			rst = stmt.executeQuery();
+			
+			if(rst.next()) {
+				
+				String titulo = rst.getString("titulo");
+				String autor = rst.getString("autor");
+				int anoPublicacao = rst.getInt("ano_publicacao");
+				String editora = rst.getString("editora");
+				String idioma = rst.getString("idioma");
+				String isbn = rst.getString("isbn");
+				int numeroEdicao = rst.getInt("numero_edicao");
+				int volume = rst.getInt("volume");
+				String genero = rst.getString("genero");
+				periodico = new Periodico(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroEdicao, volume, genero);
+				periodico.setId(idItem);
+			}
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		
+		return periodico;
+	}
 }
