@@ -2,26 +2,26 @@ package br.edu.ifpe.lpoo.project.entities.acervo;
 
 public class Periodico extends ItemAcervo{
 
-    private String isbn;
+    private String issn;
     private int numeroEdicao;
     private int volume;
     private String dataPublicacao;
     private String genero;
 
-    public Periodico(String titulo, String autor, int anoPublicacao, String editora, String idioma, String isbn, int numeroEdicao, int volume, String genero) {
+    public Periodico(String titulo, String autor, int anoPublicacao, String editora, String idioma, String issn, int numeroEdicao, int volume, String genero) {
         super(titulo, autor, anoPublicacao, editora, idioma);
-        this.isbn = isbn;
+        this.issn = issn;
         this.numeroEdicao = numeroEdicao;
         this.volume = volume;
         this.genero = genero;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public String getIssn() {
+        return issn;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setIssn(String issn) {
+        this.issn = issn;
     }
 
     public int getNumeroEdicao() {
