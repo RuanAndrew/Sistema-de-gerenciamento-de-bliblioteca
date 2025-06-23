@@ -1,5 +1,7 @@
 package br.edu.ifpe.lpoo.project.data;
 
+import java.util.List;
+
 import br.edu.ifpe.lpoo.project.entities.acervo.Ebook;
 import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
 
@@ -10,4 +12,6 @@ public interface IEbookRepository {
 	boolean exist(ItemAcervo item);
 	
 	Ebook buscarPorId(int idItem);
+	
+	List<Ebook> buscarTodos();
 }

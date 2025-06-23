@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.ILivroRepository;
@@ -127,6 +129,47 @@ public class LivroRepository implements ILivroRepository{
 		}
 		
 		return livro;
+	}
+	
+	@Override
+	public List<Livro> buscarTodos(){
+		
+		List<Livro> livros = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		String consulta = "SELECT * FROM livro";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				
+				int idLivro = rst.getInt("id_livro");
+				String titulo = rst.getString("titulo");
+				String autor = rst.getString("autor");
+				int anoPublicacao = rst.getInt("ano_publicacao");
+				String editora = rst.getString("editora");
+				String idioma = rst.getString("idioma");
+				String isbn = rst.getString("isbn");
+				int numeroPaginas = rst.getInt("numero_paginas");
+				String genero = rst.getString("genero");
+				
+				Livro livro = new Livro(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
+				livro.setId(idLivro);
+				
+				livros.add(livro);
+			}
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		
+		return livros;
 	}
 	
 }

@@ -1,5 +1,8 @@
 package br.edu.ifpe.lpoo.project.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.edu.ifpe.lpoo.project.business.AcervoService;
 import br.edu.ifpe.lpoo.project.data.implement.EbookRepository;
 import br.edu.ifpe.lpoo.project.data.implement.LivroRepository;
@@ -153,5 +156,32 @@ public class Teste {
 //		}else {
 //			System.out.println(periodico);
 //		}
+		
+//		-------------------- Buscar todos----------------------------
+//		IPeriodicoRepository periodicoRepository = new PeriodicoRepository();
+//		
+//		List<Periodico> periodicos = periodicoRepository.buscarTodos();
+//		
+//		for(Periodico item : periodicos) {
+//			System.out.println(item);
+//		}
+		
+//		ILivroRepository livroRepository = new LivroRepository();
+//		
+//		List<Livro> livros = livroRepository.buscarTodos();
+//		
+//		for(Livro item : livros) {
+//			System.out.println(item);
+//		}
+		
+		IEbookRepository ebookRepository = new EbookRepository();
+		
+		List<Ebook> ebooks = ebookRepository.buscarTodos();
+		
+		for(Ebook item : ebooks) {
+			System.out.println(item);
+		}
+		
+		
 	}
 }

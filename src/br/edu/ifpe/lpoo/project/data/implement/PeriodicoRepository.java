@@ -4,11 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IPeriodicoRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
-import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
 import br.edu.ifpe.lpoo.project.entities.acervo.Periodico;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
@@ -121,5 +122,47 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 		}
 		
 		return periodico;
+	}
+	
+	@Override
+	public List<Periodico> buscarTodos(){
+		
+		List<Periodico> periodicos = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		String consulta = "SELECT * FROM periodico";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				
+				int idPeriodico = rst.getInt("id_periodico");
+				String titulo = rst.getString("titulo");
+				String autor = rst.getString("autor");
+				int anoPublicacao = rst.getInt("ano_publicacao");
+				String editora = rst.getString("editora");
+				String idioma = rst.getString("idioma");
+				String isbn = rst.getString("isbn");
+				int numeroEdicao = rst.getInt("numero_edicao");
+				int volume = rst.getInt("volume");
+				String genero = rst.getString("genero");
+				
+				Periodico periodico = new Periodico(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroEdicao, volume, genero);
+				periodico.setId(idPeriodico);
+				
+				periodicos.add(periodico);
+			}
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		
+		return periodicos;
 	}
 }
