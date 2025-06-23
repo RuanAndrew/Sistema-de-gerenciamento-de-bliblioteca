@@ -13,4 +13,6 @@ public interface ILivroRepository {
 	Livro buscarPorId(int idItem);
 	
 	List<Livro> buscarTodos();
+	
+	List<Livro> buscarPorTermo(String termo);
 }

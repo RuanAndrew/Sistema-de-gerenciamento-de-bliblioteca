@@ -23,14 +23,14 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 		
 		Periodico periodico = (Periodico) item; 
 		
-		String consulta = "INSERT INTO periodico (isbn, titulo, autor, numero_edicao, volume, editora, idioma, ano_publicacao, genero) "
+		String consulta = "INSERT INTO periodico (issn, titulo, autor, numero_edicao, volume, editora, idioma, ano_publicacao, genero) "
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		try {
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 			
-			stmt.setString(1, periodico.getIsbn());
+			stmt.setString(1, periodico.getIssn());
 			stmt.setString(2,  periodico.getTitulo());
 			stmt.setString(3, periodico.getAutor());
 			stmt.setInt(4, periodico.getNumeroEdicao());
@@ -61,13 +61,13 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 		Periodico periodico = (Periodico) item; 
 		
 		String consulta = "SELECT * FROM periodico WHERE "
-						+"isbn = ? OR (titulo = ? AND numero_edicao = ? AND volume = ?)";
+						+"issn = ? OR (titulo = ? AND numero_edicao = ? AND volume = ?)";
 		
 		try {
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 			
-			stmt.setString(1, periodico.getIsbn());
+			stmt.setString(1, periodico.getIssn());
 			stmt.setString(2, periodico.getTitulo());
 			stmt.setInt(3, periodico.getNumeroEdicao());
 			stmt.setInt(4, periodico.getVolume());
@@ -109,11 +109,11 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 				int anoPublicacao = rst.getInt("ano_publicacao");
 				String editora = rst.getString("editora");
 				String idioma = rst.getString("idioma");
-				String isbn = rst.getString("isbn");
+				String issn = rst.getString("issn");
 				int numeroEdicao = rst.getInt("numero_edicao");
 				int volume = rst.getInt("volume");
 				String genero = rst.getString("genero");
-				periodico = new Periodico(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroEdicao, volume, genero);
+				periodico = new Periodico(titulo, autor, anoPublicacao, editora, idioma, issn, numeroEdicao, volume, genero);
 				periodico.setId(idItem);
 			}
 			
@@ -148,12 +148,12 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 				int anoPublicacao = rst.getInt("ano_publicacao");
 				String editora = rst.getString("editora");
 				String idioma = rst.getString("idioma");
-				String isbn = rst.getString("isbn");
+				String issn = rst.getString("issn");
 				int numeroEdicao = rst.getInt("numero_edicao");
 				int volume = rst.getInt("volume");
 				String genero = rst.getString("genero");
 				
-				Periodico periodico = new Periodico(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroEdicao, volume, genero);
+				Periodico periodico = new Periodico(titulo, autor, anoPublicacao, editora, idioma, issn, numeroEdicao, volume, genero);
 				periodico.setId(idPeriodico);
 				
 				periodicos.add(periodico);
@@ -161,6 +161,60 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
+		}
+		
+		return periodicos;
+	}
+	
+	@Override
+	public List<Periodico> buscarPorTermo(String termo){
+		
+		List<Periodico> periodicos = new ArrayList<>();
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		String buscaTermo = "%" + termo.toLowerCase() + "%";
+		
+		String consulta = "SELECT * FROM periodico WHERE "
+							+ "LOWER(issn) LIKE ?" 
+							+ "OR LOWER(titulo) LIKE ? "
+							+ "OR LOWER(autor) LIKE ?"
+							+ "ORDER BY titulo";
+		
+		try {
+			
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setString(1, buscaTermo);
+			stmt.setString(2, buscaTermo);
+			stmt.setString(3, buscaTermo);
+			
+			rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				int idPeriodico = rst.getInt("id_periodico");
+				String titulo = rst.getString("titulo");
+				String autor = rst.getString("autor");
+				int anoPublicacao = rst.getInt("ano_publicacao");
+				String editora = rst.getString("editora");
+				String idioma = rst.getString("idioma");
+				String issn = rst.getString("issn");
+				int numeroEdicao = rst.getInt("numero_edicao");
+				int volume = rst.getInt("volume");
+				String genero = rst.getString("genero");
+				
+				Periodico periodico = new Periodico(titulo, autor, anoPublicacao, editora, idioma, issn, numeroEdicao, volume, genero);
+				periodico.setId(idPeriodico);
+				
+				periodicos.add(periodico);
+			}
+			
+			
+		}catch(SQLException e) {
+			
 		}
 		
 		return periodicos;

@@ -14,4 +14,6 @@ public interface IEbookRepository {
 	Ebook buscarPorId(int idItem);
 	
 	List<Ebook> buscarTodos();
+	
+	List<Ebook> buscarPorTermo(String termo);
 }

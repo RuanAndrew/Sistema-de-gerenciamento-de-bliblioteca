@@ -172,4 +172,57 @@ public class LivroRepository implements ILivroRepository{
 		return livros;
 	}
 	
+	public List<Livro> buscarPorTermo(String termo){
+		
+		List<Livro> livros = new ArrayList<>();
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		String termoBusca = "%" + termo.toLowerCase() + "%";
+		
+		String consulta = "SELECT * FROM livro WHERE "
+						+ "LOWER(titulo) LIKE ? "
+						+ "OR LOWER(isbn) LIKE ? "
+						+ "OR LOWER(autor) LIKE ? "
+						+ "ORDER BY titulo";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setString(1, termoBusca);
+			stmt.setString(2, termoBusca);
+			stmt.setString(3, termoBusca);
+			
+			rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				int idLivro = rst.getInt("id_livro");
+				String titulo = rst.getString("titulo");
+				String autor = rst.getString("autor");
+				int anoPublicacao = rst.getInt("ano_publicacao");
+				String editora = rst.getString("editora");
+				String idioma = rst.getString("idioma");
+				String isbn = rst.getString("isbn");
+				int numeroPaginas = rst.getInt("numero_paginas");
+				String genero = rst.getString("genero");
+				
+				Livro livro = new Livro(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero);
+				livro.setId(idLivro);
+				
+				livros.add(livro);
+			}
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeConnection(conn);
+		}
+		
+		return livros;
+	}
+	
 }

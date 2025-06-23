@@ -11,7 +11,6 @@ import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IEbookRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.Ebook;
 import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
-import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
 import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
@@ -179,4 +178,57 @@ public class EbookRepository implements IEbookRepository{
 		return ebooks;
 	}
 	
+	
+	@Override
+	public List<Ebook> buscarPorTermo(String termo){
+		
+		List<Ebook> ebooks = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		String termoBusca = "%" + termo.toLowerCase() + "%";
+		
+		String consulta = "SELECT * FROM ebook "
+							+ "WHERE LOWER(titulo) LIKE ?"
+							+ "OR LOWER(autor) LIKE ? "
+							+ "OR LOWER(editora) LIKE ? "
+							+ "ORDER BY titulo";
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setString(1, termoBusca);
+			stmt.setString(2, termoBusca);
+			stmt.setString(3, termoBusca);
+			
+			rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				
+				int idEbook = rst.getInt("id_ebook");
+				String titulo = rst.getString("titulo");
+				String autor = rst.getString("autor");
+				int anoPublicacao = rst.getInt("ano_publicacao");
+				String editora = rst.getString("editora");
+				String idioma = rst.getString("idioma");
+				String isbn = rst.getString("isbn");
+				int numeroPaginas = rst.getInt("numero_paginas");
+				String genero = rst.getString("genero");
+				String formato = rst.getString("formato_digital").toUpperCase();
+				FormatoDigital formatodigital = FormatoDigital.valueOf(formato);
+				String urlEbook = rst.getString("url_ebook");
+				
+				Ebook ebook = new Ebook(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero, formatodigital, urlEbook);
+				ebook.setId(idEbook);
+				
+				ebooks.add(ebook);
+			}
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		
+		return ebooks;
+	}
 }

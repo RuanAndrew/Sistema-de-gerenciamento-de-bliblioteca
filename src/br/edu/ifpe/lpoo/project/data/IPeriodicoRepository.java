@@ -15,4 +15,6 @@ public interface IPeriodicoRepository {
 	Periodico buscarPorId(int idItem);
 	
 	List<Periodico> buscarTodos();
+	
+	List<Periodico> buscarPorTermo(String termo);
 }
