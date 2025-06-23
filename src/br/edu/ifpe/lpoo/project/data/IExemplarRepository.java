@@ -7,4 +7,6 @@ public interface IExemplarRepository {
 	boolean existItem(String indentifier);
 	
 	void insert(Exemplar exemplar, int idLivro);
+	
+	void deleteParaLivros(int idLivro);
 }
