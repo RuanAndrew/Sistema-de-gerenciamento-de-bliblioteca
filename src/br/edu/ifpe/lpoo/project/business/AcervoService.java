@@ -2,9 +2,11 @@ package br.edu.ifpe.lpoo.project.business;
 import br.edu.ifpe.lpoo.project.data.IEbookRepository;
 import br.edu.ifpe.lpoo.project.data.IExemplarRepository;
 import br.edu.ifpe.lpoo.project.data.ILivroRepository;
+import br.edu.ifpe.lpoo.project.data.IPeriodicoRepository;
 import br.edu.ifpe.lpoo.project.data.implement.EbookRepository;
 import br.edu.ifpe.lpoo.project.data.implement.ExemplarRepository;
 import br.edu.ifpe.lpoo.project.data.implement.LivroRepository;
+import br.edu.ifpe.lpoo.project.data.implement.PeriodicoRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.*;
 import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
@@ -211,10 +213,10 @@ public class AcervoService {
         if (!anoPublicacaoMatcher.matches()) {
             throw new BusinessExcepition("O ano deve ter de 1 a quatro digitos.");
         }
-        /*
+      
 
         ItemAcervo periodico = new Periodico (titulo, autor, Integer.parseInt(anoPublicacao), editora, idioma, issn, Integer.parseInt(numeroEdicao), Integer.parseInt(volume), genero);
-        periodicoRepository = new PeriodicoRepository();
+        IPeriodicoRepository periodicoRepository = new PeriodicoRepository();
 
         boolean exist = periodicoRepository.exist(periodico);
 
@@ -228,7 +230,7 @@ public class AcervoService {
         }else {
             throw new BusinessExcepition("Esse periodico ja esta cadastrado no sistema");
         }
-        */
+        
     }
 
     public void cadastrarPorCodigo () {}
