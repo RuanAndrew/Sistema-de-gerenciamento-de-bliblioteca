@@ -2,37 +2,17 @@ package br.edu.ifpe.lpoo.project.entities;
 
 import java.time.LocalDate;
 
-public class Aluno {
+public class Aluno extends Membro {
 	
-	private String cpf;
-	private String nome;
 	private String telefone;
-	private String email;
 	private LocalDate data;
+	private String curso;
 	
-	public Aluno(String cpf, String nome, String telefone, String email, LocalDate data) {
-		super();
-		this.cpf = cpf;
-		this.nome = nome;
+	public Aluno(String nome, String email, String cpf, String matricula, String tipomembro, String debitomultas, String statusmembro,String telefone, LocalDate data, String curso) {
+		super(nome, email, cpf, matricula, tipomembro, debitomultas, statusmembro);
 		this.telefone = telefone;
-		this.email = email;
 		this.data = data;
-	}
-
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
+		this.curso = curso;
 	}
 
 	public String getTelefone() {
@@ -42,15 +22,7 @@ public class Aluno {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
+	
 	public LocalDate getData() {
 		return data;
 	}
@@ -58,6 +30,13 @@ public class Aluno {
 	public void setData(LocalDate data) {
 		this.data = data;
 	}
+	public String getCurso() {
+        return curso;
+    }
+
+    public void setCurso(String curso) {
+        this.curso = curso;
+    }
 	
 	
 	
