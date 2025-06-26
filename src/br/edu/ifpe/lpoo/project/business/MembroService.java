@@ -1,312 +1,173 @@
 package br.edu.ifpe.lpoo.project.business;
 
-import br.edu.ifpe.lpoo.project.entities.Aluno;
-import br.edu.ifpe.lpoo.project.entities.Professor;
+import br.edu.ifpe.lpoo.project.entities.membros.Aluno;
+import br.edu.ifpe.lpoo.project.entities.membros.Professor;
+import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
+import br.edu.ifpe.lpoo.project.enums.StatusMembro;
+import br.edu.ifpe.lpoo.project.enums.TipoMembro;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.data.AlunoRepository;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 import br.edu.ifpe.lpoo.project.data.ProfessorRepository;
-import br.edu.ifpe.lpoo.project.entities.Pesquisador;
+import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
 import br.edu.ifpe.lpoo.project.data.PesquisadorRepository;
 
-import java.time.LocalDate;
+import java.sql.SQLException;
 
 public class MembroService {
+	AlunoRepository alunoRepository;
+	ProfessorRepository professorRepository;
+	PesquisadorRepository pesquisadorRepository;
 
-    public void cadastrarAluno(String nome, String cpf, String email, String telefone,
-                                String matricula, String tipomembro, String debitomultas,
-                                String statusmembro, String curso) {
+	public void cadastrarAluno(String nome, String cpf, String email, String matricula, String curso) {
 
-        if (nome == null || nome.isBlank()) {
-            throw new BusinessExcepition("O campo nome não pode ser vazio");
-        }
-        if (cpf == null || cpf.isBlank()) {
-            throw new BusinessExcepition("O campo CPF não pode ser vazio");
-        }
-        if (!cpf.matches("\\d{11}")) {
-		    throw new BusinessExcepition("O CPF deve conter exatamente 11 números.");
+		if (nome == null || nome.isBlank()) {
+			throw new BusinessExcepition("O nome é obrigatório");
 		}
-        if (email == null || email.isBlank()) {
-            throw new BusinessExcepition("O campo email não pode ser vazio");
-        }
-        if (telefone == null || telefone.isBlank()) {
-            throw new BusinessExcepition("O campo telefone não pode ser vazio");
-        }
-        if (!telefone.matches("\\d{10,11}")) {
-		    throw new BusinessExcepition("O telefone deve conter apenas números (10 ou 11 dígitos).");
+		if (cpf == null || cpf.isBlank()) {
+			throw new BusinessExcepition("O CPF é obrigatório");
 		}
-        if (matricula == null || matricula.isBlank()) {
-            throw new BusinessExcepition("O campo matrícula não pode ser vazio");
-        }
-        if (tipomembro == null || tipomembro.isBlank()) {
-            throw new BusinessExcepition("O campo tipo de membro não pode ser vazio");
-        }
-        if (!tipomembro.equalsIgnoreCase("Aluno") &&
-        	    !tipomembro.equalsIgnoreCase("Professor") &&
-        	    !tipomembro.equalsIgnoreCase("Pesquisador")) {
-        	    throw new BusinessExcepition("Tipo de membro inválido.");
-        	}
-        if (debitomultas == null || debitomultas.isBlank()) {
-            throw new BusinessExcepition("O campo débito de multas não pode ser vazio");
-        }
-        if (statusmembro == null || statusmembro.isBlank()) {
-            throw new BusinessExcepition("O campo status do membro não pode ser vazio");
-        }
-        if (!statusmembro.equalsIgnoreCase("Ativo") &&
-			    !statusmembro.equalsIgnoreCase("Inativo") &&
-			    !statusmembro.equalsIgnoreCase("Suspenso") &&
-			    !statusmembro.equalsIgnoreCase("Bloqueado") &&
-			    !statusmembro.equalsIgnoreCase("ativo") &&
-			    !statusmembro.equalsIgnoreCase("inativo") &&
-			    !statusmembro.equalsIgnoreCase("suspenso") &&
-			    !statusmembro.equalsIgnoreCase("bloqueado")) {
-			    throw new BusinessExcepition("Tipo de statusmembro é inválido.");
-        if (curso == null || curso.isBlank()) {
-            throw new BusinessExcepition("O campo curso não pode ser vazio");
-        }
+		if (email == null || email.isBlank()) {
+			throw new BusinessExcepition("O email é obrigatório");
+		}
+		if (matricula == null || matricula.isBlank()) {
+			throw new BusinessExcepition("A matricula é obrigatório");
+		}
+		if (curso == null || curso.isBlank()) {
+			throw new BusinessExcepition("O curso é obrigatório");
+		}
 
-        LocalDate dataCadastro = LocalDate.now();
-        Aluno aluno = new Aluno(cpf, nome, telefone, email, dataCadastro, matricula, tipomembro, debitomultas, statusmembro, curso);
 
-        IAlunoRepository alunoRepository = new AlunoRepository();
+		if (!cpf.matches("\\d{11}")) {
+			throw new BusinessExcepition("O CPF deve conter exatamente 11 números.");
+		}
 
-        boolean exist = alunoRepository.existItem(aluno);
 
-        if (!exist) {
-            try {
-                alunoRepository.insert(aluno);
-            } catch (DbException e) {
-                throw new BusinessExcepition("Erro ao cadastrar aluno: " + e.getMessage());
-            }
-        } else {
-            throw new BusinessExcepition("Esse aluno já está cadastrado no sistema.");
-        }
-        try {
-            alunoRepository.delete(cpf); 
-        } catch (DbException e) {
-            throw new BusinessExcepition("Erro ao excluir aluno: " + e.getMessage());
-        }
-        public void excluirAluno(String cpf) {
-            if (cpf == null || cpf.isBlank()) {
-                throw new BusinessExcepition("O campo CPF não pode ser vazio para exclusão.");
-            }
+		Aluno aluno = new Aluno(nome, email, cpf, matricula, TipoMembro.ALUNO, 0, StatusMembro.ATIVO, curso);
 
-            try {
-                alunoRepository.delete(cpf);
-            } catch (DbException e) {
-                throw new BusinessExcepition("Erro ao excluir aluno: " + e.getMessage());
-            }
-            public void atualizarAluno(Aluno alunoAtualizado) {
-                if (alunoAtualizado == null || alunoAtualizado.getCpf() == null || alunoAtualizado.getCpf().isBlank()) {
-                    throw new BusinessExcepition("CPF obrigatório para atualizar o aluno.");
-                }
+		alunoRepository = new AlunoRepository();
 
-                IAlunoRepository alunoRepository = new AlunoRepository();
+		boolean exist = alunoRepository.existMembro(aluno);
 
-                boolean existe = alunoRepository.existItem(alunoAtualizado);
-
-                if (existe) {
-                    try {
-                        alunoRepository.update(alunoAtualizado);
-                    } catch (DbException e) {
-                        throw new BusinessExcepition("Erro ao atualizar aluno: " + e.getMessage());
-                    }
-                } else {
-                    throw new BusinessExcepition("Aluno não encontrado para atualização.");
-                }
-            }
-
-    }
-    
-    public void cadastrarProfessor(String nome, String cpf, String email, String telefone,
-                                String matricula, String tipomembro, String debitomultas,
-                                String statusmembro) {
-				    	 if (nome == null || nome.isBlank()) {
-				             throw new BusinessExcepition("O campo nome não pode ser vazio");
-				         }
-				         if (cpf == null || cpf.isBlank()) {
-				             throw new BusinessExcepition("O campo CPF não pode ser vazio");
-				         }
-				         if (!cpf.matches("\\d{11}")) {
-							    throw new BusinessExcepition("O CPF deve conter exatamente 11 números.");
-				         }
-				         if (email == null || email.isBlank()) {
-				             throw new BusinessExcepition("O campo email não pode ser vazio");
-				         }
-				         if (telefone == null || telefone.isBlank()) {
-				             throw new BusinessExcepition("O campo telefone não pode ser vazio");
-				         }
-				         if (!telefone.matches("\\d{10,11}")) {
-							    throw new BusinessExcepition("O telefone deve conter apenas números (10 ou 11 dígitos).");
-				         }
-				         if (matricula == null || matricula.isBlank()) {
-				             throw new BusinessExcepition("O campo matrícula não pode ser vazio");
-				         }
-				         if (tipomembro == null || tipomembro.isBlank()) {
-				             throw new BusinessExcepition("O campo tipo de membro não pode ser vazio");
-				         }
-				         if (!tipomembro.equalsIgnoreCase("Aluno") &&
-				        		    !tipomembro.equalsIgnoreCase("Professor") &&
-				        		    !tipomembro.equalsIgnoreCase("Pesquisador")) {
-				        		    throw new BusinessExcepition("Tipo de membro inválido.");
-				        		}
-				         if (debitomultas == null || debitomultas.isBlank()) {
-				             throw new BusinessExcepition("O campo débito de multas não pode ser vazio");
-				         }
-				         if (statusmembro == null || statusmembro.isBlank()) {
-				             throw new BusinessExcepition("O campo status do membro não pode ser vazio");
-				         }
-				         if (!statusmembro.equalsIgnoreCase("Ativo") &&
-								    !statusmembro.equalsIgnoreCase("Inativo") &&
-								    !statusmembro.equalsIgnoreCase("Suspenso") &&
-								    !statusmembro.equalsIgnoreCase("Bloqueado") &&
-								    !statusmembro.equalsIgnoreCase("ativo") &&
-								    !statusmembro.equalsIgnoreCase("inativo") &&
-								    !statusmembro.equalsIgnoreCase("suspenso") &&
-								    !statusmembro.equalsIgnoreCase("bloqueado")) {
-								    throw new BusinessExcepition("Tipo de statusmembro é inválido.");
-				         
-				         LocalDate dataCadastro = LocalDate.now();
-				         Professor professor = new Professor(cpf, nome, telefone, email, matricula, tipomembro, debitomultas);
-				
-				         IProfessorRepository professorRepository = new ProfessorRepository();
-				
-				         boolean exist = ProfessorRepository.existItem(professor);
-				
-				         if (!exist) {
-				             try {
-				            	 ProfessorRepository.insert(professor);
-				             } catch (DbException e) {
-				                 throw new BusinessExcepition("Erro ao cadastrar professor: " + e.getMessage());
-				             }
-				         } else {
-				             throw new BusinessExcepition("Esse professor já está cadastrado no sistema.");
-				         }
-				         public void excluirProfessor(String cpf) {
-				             if (cpf == null || cpf.isBlank()) {
-				                 throw new BusinessExcepition("O campo CPF não pode ser vazio para exclusão.");
-				             }
-
-				             try {
-				                 ProfessorRepository.delete(cpf);
-				             } catch (DbException e) {
-				                 throw new BusinessExcepition("Erro ao excluir Professor: " + e.getMessage());
-				             }
-				             public void atualizarAluno(Aluno alunoAtualizado) {
-				            	    if (alunoAtualizado == null || alunoAtualizado.getCpf() == null || alunoAtualizado.getCpf().isBlank()) {
-				            	        throw new BusinessExcepition("CPF obrigatório para atualizar o aluno.");
-				            	    }
-
-				            	    IProfessorRepository professorRepository = new ProfessorRepository();
-
-				            	    boolean existe = professorRepository.existItem(professorAtualizado);
-
-				            	    if (existe) {
-				            	        try {
-				            	            professorRepository.update(professorAtualizado);
-				            	        } catch (DbException e) {
-				            	            throw new BusinessExcepition("Erro ao atualizar professor: " + e.getMessage());
-				            	        }
-				            	    } else {
-				            	        throw new BusinessExcepition("Professor não encontrado para atualização.");
-				            	    }
-				            	}
-
-				     }
-    public void CadastrarPesquisador(String nome, String cpf, String email, String telefone,
-            String matricula, String tipomembro, String debitomultas,
-            String statusmembro) {
-			if (nome == null || nome.isBlank()) {
-			throw new BusinessExcepition("O campo nome não pode ser vazio");
-			}
-			if (cpf == null || cpf.isBlank()) {
-			throw new BusinessExcepition("O campo CPF não pode ser vazio");
-			}
-			if (!cpf.matches("\\d{11}")) {
-			    throw new BusinessExcepition("O CPF deve conter exatamente 11 números.");
-			}
-			if (email == null || email.isBlank()) {
-			throw new BusinessExcepition("O campo email não pode ser vazio");
-			}
-			if (telefone == null || telefone.isBlank()) {
-			throw new BusinessExcepition("O campo telefone não pode ser vazio");
-			}
-			if (!telefone.matches("\\d{10,11}")) {
-			    throw new BusinessExcepition("O telefone deve conter apenas números (10 ou 11 dígitos).");
-			}
-			if (matricula == null || matricula.isBlank()) {
-			throw new BusinessExcepition("O campo matrícula não pode ser vazio");
-			}
-			if (tipomembro == null || tipomembro.isBlank()) {
-			throw new BusinessExcepition("O campo tipo de membro não pode ser vazio");
-			}
-			if (!tipomembro.equalsIgnoreCase("Aluno") &&
-				    !tipomembro.equalsIgnoreCase("Professor") &&
-				    !tipomembro.equalsIgnoreCase("Pesquisador")) {
-				    throw new BusinessExcepition("Tipo de membro inválido. Só pode ser: Aluno, Professor ou Pesquisador.");
-				}
-			if (debitomultas == null || debitomultas.isBlank()) {
-			throw new BusinessExcepition("O campo débito de multas não pode ser vazio");
-			}
-			if (statusmembro == null || statusmembro.isBlank()) {
-			throw new BusinessExcepition("O campo status do membro não pode ser vazio");
-			}
-			if (!statusmembro.equalsIgnoreCase("Ativo") &&
-				    !statusmembro.equalsIgnoreCase("Inativo") &&
-				    !statusmembro.equalsIgnoreCase("Suspenso") &&
-				    !statusmembro.equalsIgnoreCase("Bloqueado") &&
-				    !statusmembro.equalsIgnoreCase("ativo") &&
-				    !statusmembro.equalsIgnoreCase("inativo") &&
-				    !statusmembro.equalsIgnoreCase("suspenso") &&
-				    !statusmembro.equalsIgnoreCase("bloqueado")) {
-				    throw new BusinessExcepition("Tipo de statusmembro é inválido.");
-				}
-			
-			LocalDate dataCadastro = LocalDate.now();
-			Pesquisador pesquisador = new Pesquisador(cpf, nome, telefone, email, matricula, tipomembro, debitomultas);
-			
-			IPesquisadorRepository pesquisadorRepository = new PesquisadorRepository();
-			
-			boolean exist = PesquisadorRepository.existItem(professor);
-			
-			if (!exist) {
+		if (!exist) {
 			try {
-				PesquisadorRepository.insert(pesquisador);
+				alunoRepository.insert(aluno);
 			} catch (DbException e) {
-			throw new BusinessExcepition("Erro ao cadastrar Pesquisador: " + e.getMessage());
+				throw new BusinessExcepition("Erro ao cadastrar aluno: " + e.getMessage());
 			}
-			} else {
+		} else {
+			throw new BusinessExcepition("Esse aluno já está cadastrado no sistema.");
+		}
+	}
+
+	public void cadastrarProfessor(String nome, String cpf, String email, String matricula, String areaAtuacao, String departamento) {
+		if (nome == null || nome.isBlank()) {
+			throw new BusinessExcepition("O nome é obrigatório");
+		}
+		if (cpf == null || cpf.isBlank()) {
+			throw new BusinessExcepition("O CPF é obrigatório");
+		}
+		if (email == null || email.isBlank()) {
+			throw new BusinessExcepition("O email é obrigatório");
+		}
+		if (matricula == null || matricula.isBlank()) {
+			throw new BusinessExcepition("A matricula é obrigatória");
+		}
+		if (areaAtuacao == null || areaAtuacao.isBlank()) {
+			throw new BusinessExcepition("A area de atuação é obrigatória");
+		}
+		if (departamento == null || departamento.isBlank()) {
+			throw new BusinessExcepition("O departamento é obrigatório");
+		}
+
+		if (!cpf.matches("\\d{11}")) {
+			throw new BusinessExcepition("O CPF deve conter exatamente 11 números.");
+		}
+
+		Professor professor = new Professor(nome, email, cpf, matricula, TipoMembro.PROFESSOR, 0, StatusMembro.ATIVO, areaAtuacao, departamento);
+
+		professorRepository = new ProfessorRepository();
+
+		boolean exist = professorRepository.existMembro(professor);
+
+		if (!exist) {
+			try {
+				professorRepository.insert(professor);
+			} catch (DbException e) {
+				throw new BusinessExcepition("Erro ao cadastrar professor: " + e.getMessage());
+			}
+		} else {
+			throw new BusinessExcepition("Esse professor já está cadastrado no sistema.");
+		}
+	}
+
+	public void CadastrarPesquisador(String nome, String cpf, String email, String matricula, String instituicao) {
+		if (nome == null || nome.isBlank()) {
+			throw new BusinessExcepition("O nome é obrigatório");
+		}
+		if (cpf == null || cpf.isBlank()) {
+			throw new BusinessExcepition("O CPF é obrigatório");
+		}
+		if (email == null || email.isBlank()) {
+			throw new BusinessExcepition("O email é obrigatório");
+		}
+		if (matricula == null || matricula.isBlank()) {
+			throw new BusinessExcepition("A matricula é obrigatória");
+		}
+		if (instituicao == null || instituicao.isBlank()) {
+			throw new BusinessExcepition("A instituição é obrigatória");
+		}
+
+		if (!cpf.matches("\\d{11}")) {
+			throw new BusinessExcepition("O CPF deve conter exatamente 11 números.");
+		}
+
+		Pesquisador pesquisador = new Pesquisador(nome, email, cpf, matricula, TipoMembro.PESQUISADOR, 0, StatusMembro.ATIVO, instituicao);
+
+		pesquisadorRepository = new PesquisadorRepository();
+
+		boolean exist = pesquisadorRepository.existMembro(pesquisador);
+
+		if (!exist) {
+			try {
+				pesquisadorRepository.insert(pesquisador);
+			} catch (DbException e) {
+				throw new BusinessExcepition("Erro ao cadastrar Pesquisador: " + e.getMessage());
+			}
+		} else {
 			throw new BusinessExcepition("Esse Pesquisador já está cadastrado no sistema.");
+		}
+	}
+
+	public void excluirMembro(String id) {
+		if (id != null) {
+			try {
+				alunoRepository.delete(id);
+				professorRepository.delete(id);
+				pesquisadorRepository.delete(id);
+			} catch (SQLException e) {
+				throw new BusinessExcepition("Erro ao deletar item de acervo: " + e.getMessage());
 			}
+		}
+	}
+
+	public void atualizarMembro(Aluno alunoAtualizado) {
+		if (alunoAtualizado == null || alunoAtualizado.getCpf() == null || alunoAtualizado.getCpf().isBlank()) {
+			throw new BusinessExcepition("CPF obrigatório para atualizar o aluno.");
+		}
+
+		alunoRepository = new AlunoRepository();
+
+		boolean existe = alunoRepository.existItem(alunoAtualizado);
+
+		if (existe) {
+			try {
+				alunoRepository.atualizar(alunoAtualizado);
+			} catch (DbException e) {
+				throw new BusinessExcepition("Erro ao atualizar aluno: " + e.getMessage());
 			}
-		    public void excluirPesquisador(String cpf) {
-		        if (cpf == null || cpf.isBlank()) {
-		            throw new BusinessExcepition("O campo CPF não pode ser vazio para exclusão.");
-		        }
-		
-		        try {
-		            PesquisadorRepository.delete(cpf);
-		        } catch (DbException e) {
-		            throw new BusinessExcepition("Erro ao excluir Pesquisador: " + e.getMessage());
-		        }
-		        public void atualizarAluno(Aluno alunoAtualizado) {
-		            if (pesquisadorAtualizado == null || pesquisadorAtualizado.getCpf() == null || pesquisadorAtualizado.getCpf().isBlank()) {
-		                throw new BusinessExcepition("CPF obrigatório para atualizar o pesquisador.");
-		            }
-
-		            IPesquisadorRepository pesquisadorRepository = new PesquisadorRepository();
-
-		            boolean existe = pesquisadorRepository.existItem(pesquisadorAtualizado);
-
-		            if (existe) {
-		                try {
-		                    pesquisadoroRepository.update(pesquisadorAtualizado);
-		                } catch (DbException e) {
-		                    throw new BusinessExcepition("Erro ao atualizar pesquisador: " + e.getMessage());
-		                }
-		            } else {
-		                throw new BusinessExcepition("pesquisador não encontrado para atualização.");
-		            }
-		        }
-
-    }
+		} else {
+			throw new BusinessExcepition("Aluno não encontrado para atualização.");
+		}
+	}
+}

@@ -1,7 +1,7 @@
 package br.edu.ifpe.lpoo.project.ui;
 
 import br.edu.ifpe.lpoo.project.business.MembroService;
-import br.edu.ifpe.lpoo.project.entities.Aluno;
+import br.edu.ifpe.lpoo.project.entities.membros.Aluno;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
