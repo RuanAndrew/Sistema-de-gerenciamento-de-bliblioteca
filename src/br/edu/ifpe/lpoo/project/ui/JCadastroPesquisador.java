@@ -102,5 +102,15 @@ public class JCadastroPesquisador {
 		btnCadastrar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 		btnCadastrar.setBounds(225, 370, 200, 40);
 		frame.getContentPane().add(btnCadastrar);
+
+		btnCadastrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String nome = txtNome.getText();
+				String cpf = txtCpf.getText();
+				String email = txtEmail.getText();
+				String matricula = txtMatricula.getText();
+				String instituicao = txtInstituicao.getText();
+			}
+		});
 	}
 }
