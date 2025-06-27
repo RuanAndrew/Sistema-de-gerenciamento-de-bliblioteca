@@ -12,6 +12,7 @@ import br.edu.ifpe.lpoo.project.data.IEbookRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.Ebook;
 import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
 import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class EbookRepository implements IEbookRepository{
@@ -227,6 +228,10 @@ public class EbookRepository implements IEbookRepository{
 	
 	@Override
 	public void delete(Ebook ebook) {
+		
+		if(ebook == null) {
+			throw new BusinessExcepition("Não é possível deletar um objeto Ebook nulo");
+		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;

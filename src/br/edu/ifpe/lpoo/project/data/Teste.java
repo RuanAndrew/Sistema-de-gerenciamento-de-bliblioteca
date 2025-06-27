@@ -31,22 +31,40 @@ public class Teste {
 //		boolean exists = ebookRepository.exist(ebook);
 //		System.out.println(exists);
 		
-		IPeriodicoRepository periodicoRepository = new PeriodicoRepository();
+//		IPeriodicoRepository periodicoRepository = new PeriodicoRepository();
+//		
+//		Periodico periodico = periodicoRepository.buscarPorId(1);
+//		
+//		if(periodico == null) {
+//			System.out.println("Periódico não existe ou já foi deletado");
+//		}else {
+//			periodicoRepository.delete(periodico);
+//			System.out.println("Livro " + periodico.getTitulo() + " deletado com sucesso");
+//		}
+//		
+//		System.out.println("");
+//		System.out.println("-------------------------------------");
+//		System.out.println("");
+//		
+//		boolean exists = periodicoRepository.exist(periodico);
+//		System.out.println(exists);
 		
-		Periodico periodico = periodicoRepository.buscarPorId(1);
+		ILivroRepository livroRepository = new LivroRepository();
 		
-		if(periodico == null) {
+		Livro livro = livroRepository.buscarPorId(1);
+		
+		if(livro == null) {
 			System.out.println("Periódico não existe ou já foi deletado");
 		}else {
-			periodicoRepository.delete(periodico);
-			System.out.println("Livro " + periodico.getTitulo() + " deletado com sucesso");
+			livroRepository.delete(livro);
+			System.out.println("Livro " + livro.getTitulo() + " deletado com sucesso");
 		}
 		
 		System.out.println("");
 		System.out.println("-------------------------------------");
 		System.out.println("");
 		
-		boolean exists = periodicoRepository.exist(periodico);
+		boolean exists = livroRepository.existItem(livro.getIsbn());
 		System.out.println(exists);
 	}
 }

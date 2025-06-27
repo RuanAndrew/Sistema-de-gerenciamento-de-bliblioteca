@@ -12,6 +12,7 @@ import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IPeriodicoRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
 import br.edu.ifpe.lpoo.project.entities.acervo.Periodico;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class PeriodicoRepository implements IPeriodicoRepository{
@@ -227,6 +228,11 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 	
 	@Override
 	public void delete(Periodico periodico) {
+		
+		if(periodico == null) {
+			throw new BusinessExcepition("Não é possível deletar um objeto Periodico nulo");
+		}
+		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		

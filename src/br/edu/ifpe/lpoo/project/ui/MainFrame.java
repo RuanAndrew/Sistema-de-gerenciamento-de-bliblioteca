@@ -10,8 +10,6 @@ public class MainFrame extends JFrame {
 
     private TelaPrincipalPanel telaPrincipalPanel;
     private JCadastroLivro jCadastroLivroPanel;
-    private JCadastroEbook jCadastroEbookPanel;
-    private JCadastroPeriodico jCadastroPeriodicoPanel;
 
     public MainFrame() {
         setTitle("Sistema de Gerenciamento de Livros");
@@ -24,13 +22,9 @@ public class MainFrame extends JFrame {
 
         telaPrincipalPanel = new TelaPrincipalPanel(this);
         jCadastroLivroPanel = new JCadastroLivro(this);
-        jCadastroEbookPanel = new JCadastroEbook(this);
-        jCadastroPeriodicoPanel = new JCadastroPeriodico(this);
 
         cardPanel.add(telaPrincipalPanel, "TelaPrincipal");
         cardPanel.add(jCadastroLivroPanel, "CadastroLivro");
-        cardPanel.add(jCadastroEbookPanel,"CadastroEbook");
-        cardPanel.add(jCadastroPeriodicoPanel,"CadastroPeriodico");
 
 
         add(cardPanel);

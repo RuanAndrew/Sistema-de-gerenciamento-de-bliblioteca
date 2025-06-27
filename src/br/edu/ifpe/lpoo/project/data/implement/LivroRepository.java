@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
+import br.edu.ifpe.lpoo.project.data.IExemplarRepository;
 import br.edu.ifpe.lpoo.project.data.ILivroRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
 import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class LivroRepository implements ILivroRepository{
@@ -223,6 +225,14 @@ public class LivroRepository implements ILivroRepository{
 	}
 	
 public void delete(Livro livro) {
+		
+		if(livro == null) {
+			throw new BusinessExcepition("Não é possível deletar um objeto Livro nulo");
+		}
+		
+		IExemplarRepository exemplarRepository = new ExemplarRepository();
+		
+		exemplarRepository.deleteParaLivros(livro.getId());
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;

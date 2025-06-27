@@ -1,7 +1,4 @@
 package br.edu.ifpe.lpoo.project.business;
-import br.edu.ifpe.lpoo.project.data.IEbookRepository;
-import br.edu.ifpe.lpoo.project.data.IExemplarRepository;
-import br.edu.ifpe.lpoo.project.data.ILivroRepository;
 import br.edu.ifpe.lpoo.project.data.IPeriodicoRepository;
 import br.edu.ifpe.lpoo.project.data.implement.EbookRepository;
 import br.edu.ifpe.lpoo.project.data.implement.ExemplarRepository;
@@ -12,6 +9,9 @@ import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
+import br.edu.ifpe.lpoo.project.ui.dto.EbookDTO;
+import br.edu.ifpe.lpoo.project.ui.dto.LivroDTO;
+import br.edu.ifpe.lpoo.project.ui.dto.PeriodicoDTO;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -25,7 +25,7 @@ public class AcervoService {
     LivroRepository livroRepository;
     ExemplarRepository exemplarRepository;
     EbookRepository ebookRepository;
-    //PeriodicoRepository periodicoRepository;
+    PeriodicoRepository periodicoRepository;
     LocalDate currentDate = LocalDate.now();
     int anoAtual = currentDate.getYear();
 
@@ -237,28 +237,226 @@ public class AcervoService {
 
     // Atualizar itens do acervo
 
-    public void atualizarItem () {}
+    public void atualizarLivro (LivroDTO dto) {
+        if (dto == null) {
+            throw new BusinessExcepition("Dados de atualização de livro inválidos: ID não fornecido.");
+        }
+
+        int numeroPaginas;
+        try {
+            numeroPaginas = Integer.parseInt(dto.getNumeroPaginas());
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Número de páginas inválido: deve ser um valor numérico.");
+        }
+        int anoPublicacao;
+        try {
+            anoPublicacao = Integer.parseInt(dto.getAnoPublicacao());
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Ano de publicação inválido: deve ser um valor numérico.");
+        }
+
+        if (dto.getTitulo() == null || dto.getTitulo().isBlank()) {
+            throw new BusinessExcepition("O título do livro não pode ser vazio na atualização.");
+        }
+        if (dto.getAutor() == null || dto.getAutor().isBlank()) {
+            throw new BusinessExcepition("O autor do livro não pode ser vazio na atualização.");
+        }
+        if (dto.getAnoPublicacao() == null || dto.getAnoPublicacao().isBlank()) {
+            throw new BusinessExcepition("O ano de publicação do livro não pode ser vazio na atualização.");
+        }
+        if (dto.getNumeroPaginas() == null || dto.getNumeroPaginas().isBlank()) {
+            throw new BusinessExcepition("O numero de paginas do livro não pode ser vazio na atualização.");
+        }
+        if (dto.getGenero() == null || dto.getGenero().isBlank()) {
+            throw new BusinessExcepition("O genero do livro não pode ser vazio na atualização.");
+        }
+        if (dto.getIdioma() == null || dto.getIdioma().isBlank()) {
+            throw new BusinessExcepition("O idioma do livro não pode ser vazio na atualização.");
+        }
+
+
+        try {
+            Livro livroAtualNoDB = livroRepository.buscarPorId(dto.getId());
+
+            if (livroAtualNoDB == null) {
+                throw new BusinessExcepition("Livro com ID " + dto.getId() + " não encontrado para atualização.");
+            }
+
+            livroAtualNoDB.setTitulo(dto.getTitulo());
+            livroAtualNoDB.setAutor(dto.getAutor());
+            livroAtualNoDB.setAnoPublicacao(anoPublicacao);
+            livroAtualNoDB.setEditora(dto.getEditora());
+            livroAtualNoDB.setIsbn(dto.getIsbn());
+            livroAtualNoDB.setNumeroPaginas(numeroPaginas);
+            livroAtualNoDB.setGenero(dto.getGenero());
+            livroAtualNoDB.setIdioma(dto.getIdioma());
+
+            livroRepository.atualizar(livroAtualNoDB);
+
+        } catch (SQLException e) {
+            throw new BusinessExcepition("Erro de banco de dados ao atualizar livro: " + e.getMessage());
+        }
+    }
+
+    public void atualizarEbook (EbookDTO dto) {
+        if (dto == null) {
+            throw new BusinessExcepition("Dados de atualização do ebook inválidos: ID não fornecido.");
+        }
+
+        int numeroPaginas;
+        try {
+            numeroPaginas = Integer.parseInt(dto.getNumeroPaginas());
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Número de páginas inválido: deve ser um valor numérico.");
+        }
+        int anoPublicacao;
+        try {
+            anoPublicacao = Integer.parseInt(dto.getAnoPublicacao());
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Ano de publicação inválido: deve ser um valor numérico.");
+        }
+
+        if (dto.getTitulo() == null || dto.getTitulo().isBlank()) {
+            throw new BusinessExcepition("O título do ebook não pode ser vazio na atualização.");
+        }
+        if (dto.getAutor() == null || dto.getAutor().isBlank()) {
+            throw new BusinessExcepition("O autor do ebook não pode ser vazio na atualização.");
+        }
+        if (dto.getAnoPublicacao() == null || dto.getAnoPublicacao().isBlank()) {
+            throw new BusinessExcepition("O ano de publicação do ebook não pode ser vazio na atualização.");
+        }
+        if (dto.getNumeroPaginas() == null || dto.getNumeroPaginas().isBlank()) {
+            throw new BusinessExcepition("O numero de paginas do ebook não pode ser vazio na atualização.");
+        }
+        if (dto.getGenero() == null || dto.getGenero().isBlank()) {
+            throw new BusinessExcepition("O genero do ebook não pode ser vazio na atualização.");
+        }
+        if (dto.getIdioma() == null || dto.getIdioma().isBlank()) {
+            throw new BusinessExcepition("O idioma do ebook não pode ser vazio na atualização.");
+        }
+        if (dto.getUrl() == null || dto.getUrl().isBlank()) {
+            throw new BusinessExcepition("A url do ebook não pode ser vazio na atualização.");
+        }
+        if (dto.getFormatoDigital() == null || dto.getFormatoDigital().isBlank()) {
+            throw new BusinessExcepition("O formato digital do ebook não pode ser vazio na atualização.");
+        }
+
+        FormatoDigital formatoDigitalNovo = null;
+        for(FormatoDigital c : FormatoDigital.values()) {
+            if (dto.getFormatoDigital().equals(String.valueOf(c))) {
+                formatoDigitalNovo = c;
+                break;
+            }
+        }
+
+
+        try {
+            Ebook ebookAtualNoDB = ebookRepository.buscarPorId(dto.getId());
+
+            if (ebookAtualNoDB == null) {
+                throw new BusinessExcepition("Ebook com ID " + dto.getId() + " não encontrado para atualização.");
+            }
+
+            ebookAtualNoDB.setTitulo(dto.getTitulo());
+            ebookAtualNoDB.setAutor(dto.getAutor());
+            ebookAtualNoDB.setAnoPublicacao(anoPublicacao);
+            ebookAtualNoDB.setEditora(dto.getEditora());
+            ebookAtualNoDB.setIsbn(dto.getIsbn());
+            ebookAtualNoDB.setNumeroPaginas(numeroPaginas);
+            ebookAtualNoDB.setGenero(dto.getGenero());
+            ebookAtualNoDB.setIdioma(dto.getIdioma());
+            ebookAtualNoDB.setUrl(dto.getUrl());
+            ebookAtualNoDB.setFormatoDigital(formatoDigitalNovo);
+
+            ebookRepository.atualizar(ebookAtualNoDB);
+
+        } catch (SQLException e) {
+            throw new BusinessExcepition("Erro de banco de dados ao atualizar ebook: " + e.getMessage());
+        }
+    }
+
+    public void atualizarPeriodico (PeriodicoDTO dto) {
+        if (dto == null) {
+            throw new BusinessExcepition("Dados de atualização do periodico inválidos: ID não fornecido.");
+        }
+
+        int numeroEdicao;
+        try {
+            numeroEdicao = Integer.parseInt(dto.getNumeroEdicao());
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Número da edição inválido: deve ser um valor numérico.");
+        }
+        int anoPublicacao;
+        try {
+            anoPublicacao = Integer.parseInt(dto.getAnoPublicacao());
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Ano de publicação inválido: deve ser um valor numérico.");
+        }
+
+        if (dto.getTitulo() == null || dto.getTitulo().isBlank()) {
+            throw new BusinessExcepition("O título do periodico não pode ser vazio na atualização.");
+        }
+        if (dto.getAutor() == null || dto.getAutor().isBlank()) {
+            throw new BusinessExcepition("O autor do periodico não pode ser vazio na atualização.");
+        }
+        if (dto.getAnoPublicacao() == null || dto.getAnoPublicacao().isBlank()) {
+            throw new BusinessExcepition("O ano de publicação do periodico não pode ser vazio na atualização.");
+        }
+        if (dto.getNumeroEdicao() == null || dto.getNumeroEdicao().isBlank()) {
+            throw new BusinessExcepition("O numero da edição do periodico não pode ser vazio na atualização.");
+        }
+        if (dto.getGenero() == null || dto.getGenero().isBlank()) {
+            throw new BusinessExcepition("O genero do periodico não pode ser vazio na atualização.");
+        }
+        if (dto.getIdioma() == null || dto.getIdioma().isBlank()) {
+            throw new BusinessExcepition("O idioma do periodico não pode ser vazio na atualização.");
+        }
+        if (dto.getVolume() == null || dto.getVolume().isBlank()) {
+            throw new BusinessExcepition("O volume do periodico não pode ser vazio na atualização.");
+        }
+
+
+        try {
+            Periodico periodicoAtualNoDB = periodicoRepository.buscarPorId(dto.getId());
+
+            if (periodicoAtualNoDB == null) {
+                throw new BusinessExcepition("periodico com ID " + dto.getId() + " não encontrado para atualização.");
+            }
+
+            periodicoAtualNoDB.setTitulo(dto.getTitulo());
+            periodicoAtualNoDB.setAutor(dto.getAutor());
+            periodicoAtualNoDB.setAnoPublicacao(anoPublicacao);
+            periodicoAtualNoDB.setEditora(dto.getEditora());
+            periodicoAtualNoDB.setIssn(dto.getIssn());
+            periodicoAtualNoDB.setNumeroEdicao(numeroEdicao);
+            periodicoAtualNoDB.setGenero(dto.getGenero());
+            periodicoAtualNoDB.setIdioma(dto.getIdioma());
+
+            periodicoRepository.atualizar(periodicoAtualNoDB);
+
+        } catch (SQLException e) {
+            throw new BusinessExcepition("Erro de banco de dados ao atualizar periodico: " + e.getMessage());
+        }
+    }
 
     // Deletar itens do acervo
 
-    /*
-    public void deletarItem (int id) {
+    public void deletarItem (Integer id) {
         if (id != null) {
             try {
                 livroRepository.delete(id); // deve deletar também os exemplares
                 ebookRepository.delete(id);
                 periodicoRepository.delete(id);
             } catch (SQLException e) {
-                throw new BusinessExcepition("Erro ao deletar item de acervo: " + e.getMessage(), e);
+                throw new BusinessExcepition("Erro ao deletar item de acervo: " + e.getMessage());
             }
         }
     }
 
-     */
 
     // Vizualizar itens do acervo
 
-    /*
+
     public ItemAcervo buscarItemPorId (int id) {
         try {
             ItemAcervo item = livroRepository.buscarPorId(id);
@@ -268,10 +466,10 @@ public class AcervoService {
             if (item != null) {return item;}
 
             item = periodicoRepository.buscarPorId(id);
-            if (item != null) return item;
+            if (item != null) {return item;}
 
             return null;
-        } catch (SQLException e) {
+        } catch (DbException e) {
             throw new BusinessExcepition("Erro ao buscar item de acervo por ID: " + e.getMessage());
         }
     }
@@ -282,7 +480,7 @@ public class AcervoService {
             todosItens.addAll(livroRepository.buscarTodos());
             todosItens.addAll(ebookRepository.buscarTodos());
             todosItens.addAll(periodicoRepository.buscarTodos());
-        } catch (SQLException e) {
+        } catch (DbException e) {
             throw new BusinessExcepition("Erro ao listar todos os itens do acervo: " + e.getMessage());
         }
         return todosItens;
@@ -294,13 +492,11 @@ public class AcervoService {
             resultados.addAll(livroRepository.buscarPorTermo(termoBusca));
             resultados.addAll(ebookRepository.buscarPorTermo(termoBusca));
             resultados.addAll(periodicoRepository.buscarPorTermo(termoBusca));
-        } catch (SQLException e) {
-            throw new BusinessExcepition("Erro ao buscar itens de acervo por termo: " + e.getMessage(), e);
+        } catch (DbException e) {
+            throw new BusinessExcepition("Erro ao buscar itens de acervo por termo: " + e.getMessage());
         }
         return resultados;
     }
-
-     */
 
 
     // Gerenciar exemplares de itens do acervo
