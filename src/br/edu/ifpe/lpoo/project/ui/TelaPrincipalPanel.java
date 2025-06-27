@@ -26,10 +26,10 @@ public class TelaPrincipalPanel extends JPanel {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
         buttonPanel.setBackground(new Color(240, 248, 255));
 
-        JButton btnCadastrarLivro = new JButton("Cadastrar Novo Livro");
+        JButton btnCadastrarLivro = new JButton("Cadastrar Livro");
         btnCadastrarLivro.setPreferredSize(new Dimension(250, 60));
         btnCadastrarLivro.setFont(new Font("Arial", Font.PLAIN, 18));
-        btnCadastrarLivro.setBackground(new Color(100, 149, 237)); // Azul bonito
+        btnCadastrarLivro.setBackground(new Color(100, 149, 237)); // Azul
         btnCadastrarLivro.setForeground(Color.WHITE);
         btnCadastrarLivro.setFocusPainted(false);
         btnCadastrarLivro.addActionListener(new ActionListener() {
@@ -39,6 +39,34 @@ public class TelaPrincipalPanel extends JPanel {
             }
         });
         buttonPanel.add(btnCadastrarLivro);
+
+        JButton btnCadastrarEbook = new JButton("Cadastrar E-book");
+        btnCadastrarEbook.setPreferredSize(new Dimension(250, 60));
+        btnCadastrarEbook.setFont(new Font("Arial", Font.PLAIN, 18));
+        btnCadastrarEbook.setBackground(new Color(147, 112, 219)); // Roxo
+        btnCadastrarEbook.setForeground(Color.WHITE);
+        btnCadastrarEbook.setFocusPainted(false);
+        btnCadastrarEbook.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainFrame.showPanel("CadastroEbook");
+            }
+        });
+        buttonPanel.add(btnCadastrarEbook);
+
+        JButton btnCadastrarPeriodico = new JButton("Cadastrar Periódico");
+        btnCadastrarPeriodico.setPreferredSize(new Dimension(250, 60));
+        btnCadastrarPeriodico.setFont(new Font("Arial", Font.PLAIN, 18));
+        btnCadastrarPeriodico.setBackground(new Color(0, 139, 139)); // Ciano
+        btnCadastrarPeriodico.setForeground(Color.WHITE);
+        btnCadastrarPeriodico.setFocusPainted(false);
+        btnCadastrarPeriodico.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainFrame.showPanel("CadastroPeriodico");
+            }
+        });
+        buttonPanel.add(btnCadastrarPeriodico);
 
         JButton btnListarLivros = new JButton("Listar Livros");
         btnListarLivros.setPreferredSize(new Dimension(250, 60));
