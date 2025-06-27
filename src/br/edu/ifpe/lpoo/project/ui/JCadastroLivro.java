@@ -127,15 +127,33 @@ public class JCadastroLivro extends JPanel {
 		add(btnCadastrar);
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String isbn = txtIsbn.getText();
-				String titulo = txtTitulo.getText();
-				String autor = txtAutor.getText();
-				String anoPublicacao = txtAnoPublicacao.getText();
-				String editora = txtEditora.getText();
-				String numeroPaginas = txtNumeroPaginas.getText();
-				String genero = txtGenero.getText();
-				String idioma = txtIdioma.getText();
-				String quantidade = txtQuantidade.getText();
+
+				if (txtIsbn.getText().trim().isEmpty() ||
+						txtTitulo.getText().trim().isEmpty() ||
+						txtAutor.getText().trim().isEmpty() ||
+						txtAnoPublicacao.getText().trim().isEmpty() ||
+						txtEditora.getText().trim().isEmpty() ||
+						txtNumeroPaginas.getText().trim().isEmpty() ||
+						txtGenero.getText().trim().isEmpty() ||
+						txtIdioma.getText().trim().isEmpty() ||
+						txtQuantidade.getText().trim().isEmpty()) {
+
+					JOptionPane.showMessageDialog(JCadastroLivro.this,
+							"Por favor, preencha todos os campos antes de cadastrar.",
+							"Campos Vazios",
+							JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+
+				String isbn = txtIsbn.getText().trim();
+				String titulo = txtTitulo.getText().trim();
+				String autor = txtAutor.getText().trim();
+				String anoPublicacao = txtAnoPublicacao.getText().trim();
+				String editora = txtEditora.getText().trim();
+				String numeroPaginas = txtNumeroPaginas.getText().trim();
+				String genero = txtGenero.getText().trim();
+				String idioma = txtIdioma.getText().trim();
+				String quantidade = txtQuantidade.getText().trim();
 
 				try {
 					AcervoService controller = new AcervoService();
