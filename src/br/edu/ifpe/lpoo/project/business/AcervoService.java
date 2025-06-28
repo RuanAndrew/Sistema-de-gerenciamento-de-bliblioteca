@@ -13,7 +13,6 @@ import br.edu.ifpe.lpoo.project.ui.dto.EbookDTO;
 import br.edu.ifpe.lpoo.project.ui.dto.LivroDTO;
 import br.edu.ifpe.lpoo.project.ui.dto.PeriodicoDTO;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,13 +50,33 @@ public class AcervoService {
         if (idioma.isBlank()) {
             throw new BusinessExcepition("O idioma é obrigatório.");
         }
-        if (Integer.parseInt(numeroPaginas) < 1) {
+
+        int parsedNumeroPaginas;
+        try {
+            parsedNumeroPaginas = Integer.parseInt(numeroPaginas);
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Número de páginas inválido: deve ser um valor numérico.");
+        }
+        int parsedQuantidadeExemplares;
+        try {
+            parsedQuantidadeExemplares = Integer.parseInt(quantidadeExemplares);
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Quantidade de exemplares inválida: deve ser um valor numérico.");
+        }
+        int parsedAnoPublicacao;
+        try {
+            parsedAnoPublicacao = Integer.parseInt(anoPublicacao);
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Ano de publicação inválido: deve ser um valor numérico.");
+        }
+
+        if (parsedNumeroPaginas < 1) {
             throw new BusinessExcepition("O número de páginas deve ser maior que zero.");
         }
-        if (Integer.parseInt(quantidadeExemplares) < 0) {
+        if (parsedQuantidadeExemplares < 0) {
             throw new BusinessExcepition("A quantidade de exemplares não pode ser negativa.");
         }
-        if (Integer.parseInt(anoPublicacao) > anoAtual) {
+        if (parsedAnoPublicacao > anoAtual) {
             throw new BusinessExcepition("O ano de publicação não pode ser futuro.");
         }
 
@@ -67,7 +86,7 @@ public class AcervoService {
             throw new BusinessExcepition("O ano deve ter de 1 a quatro digitos.");
         }
 
-        ItemAcervo livro = new Livro(titulo,autor, Integer.parseInt(anoPublicacao), editora, idioma, isbn, Integer.parseInt(numeroPaginas), genero);
+        ItemAcervo livro = new Livro(titulo,autor, parsedAnoPublicacao, editora, idioma, isbn, parsedNumeroPaginas, genero);
         livroRepository = new LivroRepository();
         exemplarRepository = new ExemplarRepository();
 
@@ -80,7 +99,7 @@ public class AcervoService {
                 throw new BusinessExcepition(e.getMessage());
             }
 
-            for (int i = 1; i <= Integer.parseInt(quantidadeExemplares); i++) {
+            for (int i = 1; i <= parsedQuantidadeExemplares; i++) {
 
                 try {
                     String registro = livro.getId() + "EXP" + i;
@@ -121,11 +140,24 @@ public class AcervoService {
             throw new BusinessExcepition("A URL e obrigatória.");
         }
 
-        if (Integer.parseInt(numeroPaginas) < 1) {
+        int parsedNumeroPaginas;
+        try {
+            parsedNumeroPaginas = Integer.parseInt(numeroPaginas);
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Número de páginas inválido: deve ser um valor numérico.");
+        }
+        int parsedAnoPublicacao;
+        try {
+            parsedAnoPublicacao = Integer.parseInt(anoPublicacao);
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Ano de publicação inválido: deve ser um valor numérico.");
+        }
+
+        if (parsedNumeroPaginas < 1) {
             throw new BusinessExcepition("O número de páginas deve ser maior que zero.");
         }
 
-        if (Integer.parseInt(anoPublicacao) > anoAtual) {
+        if (parsedAnoPublicacao > anoAtual) {
             throw new BusinessExcepition("O ano de publicação não pode ser futuro.");
         }
 
@@ -146,7 +178,7 @@ public class AcervoService {
             throw new BusinessExcepition("Formato digital invalido.");
         }
 
-        ItemAcervo ebook = new Ebook(titulo,autor,Integer.parseInt(anoPublicacao),editora,idioma,isbn,Integer.parseInt(numeroPaginas),genero, formatoDigitalNovo,url);
+        ItemAcervo ebook = new Ebook(titulo,autor,parsedAnoPublicacao,editora,idioma,isbn,parsedNumeroPaginas,genero, formatoDigitalNovo,url);
         ebookRepository = new EbookRepository();
 
         boolean exist = ebookRepository.exist(ebook);
@@ -186,6 +218,30 @@ public class AcervoService {
             throw new BusinessExcepition("O idioma e obrigatório");
         }
 
+        int parsedAnoPublicacao;
+        try {
+            parsedAnoPublicacao = Integer.parseInt(anoPublicacao);
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Ano de publicação inválido: deve ser um valor numérico.");
+        }
+        int parsedNumeroEdicao;
+        try {
+            parsedNumeroEdicao = Integer.parseInt(numeroEdicao);
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Numero de edição inválido: deve ser um valor numérico.");
+        }
+        int parsedVolume;
+        try {
+            parsedVolume = Integer.parseInt(volume);
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Volume inválido: deve ser um valor numérico.");
+        }
+
+        if (parsedAnoPublicacao > anoAtual) {
+            throw new BusinessExcepition("O ano de publicação não pode ser futuro.");
+        }
+
+
         Pattern issnPattern = Pattern.compile("^\\d{4}[ -]?\\d{3}[\\dxORX]$");
         Matcher issnMatcher = issnPattern.matcher(issn);
         if (!issnMatcher.matches()) {
@@ -204,10 +260,6 @@ public class AcervoService {
             throw new BusinessExcepition("O volume deve conter somente numeros");
         }
 
-        if (Integer.parseInt(anoPublicacao) > anoAtual) {
-            throw new BusinessExcepition("O ano de publicação não pode ser futuro.");
-        }
-
         Pattern anoPublicacaoPattern = Pattern.compile("\\d{1,4}");
         Matcher anoPublicacaoMatcher = anoPublicacaoPattern.matcher(anoPublicacao);
         if (!anoPublicacaoMatcher.matches()) {
@@ -215,7 +267,7 @@ public class AcervoService {
         }
       
 
-        ItemAcervo periodico = new Periodico (titulo, autor, Integer.parseInt(anoPublicacao), editora, idioma, issn, Integer.parseInt(numeroEdicao), Integer.parseInt(volume), genero);
+        ItemAcervo periodico = new Periodico (titulo, autor, parsedAnoPublicacao, editora, idioma, issn, parsedNumeroEdicao, parsedVolume, genero);
         IPeriodicoRepository periodicoRepository = new PeriodicoRepository();
 
         boolean exist = periodicoRepository.exist(periodico);
