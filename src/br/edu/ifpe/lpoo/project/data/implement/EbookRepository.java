@@ -65,8 +65,6 @@ public class EbookRepository implements IEbookRepository{
 			
 			stmt.executeUpdate();
 			
-			
-			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
 		}finally {
@@ -253,5 +251,43 @@ public class EbookRepository implements IEbookRepository{
 			ConnectionDb.closeStatement(stmt);
 			ConnectionDb.closeConnection(conn);
 		}
+	}
+	
+	@Override
+	public void atualizar(Ebook ebook) {
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		String consulta = " UPDATE ebook "
+				+ "SET isbn = ?, numero_paginas = ?, genero = ?, titulo = ?, autor = ?, ano_publicacao = ?, "
+				+ "editora = ?, idioma = ?, formato_digital  = ?, url_ebook = ? "
+				+ "WHERE id_ebook = ?";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setString(1, ebook.getIsbn());
+			stmt.setInt(2, ebook.getNumeroPaginas());
+			stmt.setString(3, ebook.getGenero());
+			stmt.setString(4, ebook.getTitulo());
+			stmt.setString(5, ebook.getAutor());
+			stmt.setInt(6, ebook.getAnoPublicacao());
+			stmt.setString(7, ebook.getEditora());
+			stmt.setString(8, ebook.getIdioma());
+			stmt.setString(9, ebook.getFormatoDigital().name());
+			stmt.setString(10, ebook.getUrl());
+			stmt.setInt(11, ebook.getId());
+			
+			stmt.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+		
 	}
 }

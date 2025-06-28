@@ -293,7 +293,7 @@ public class AcervoService {
 
             livroRepository.atualizar(livroAtualNoDB);
 
-        } catch (SQLException e) {
+        } catch (DbException e) {
             throw new BusinessExcepition("Erro de banco de dados ao atualizar livro: " + e.getMessage());
         }
     }
@@ -370,7 +370,7 @@ public class AcervoService {
 
             ebookRepository.atualizar(ebookAtualNoDB);
 
-        } catch (SQLException e) {
+        } catch (DbException e) {
             throw new BusinessExcepition("Erro de banco de dados ao atualizar ebook: " + e.getMessage());
         }
     }
@@ -434,7 +434,7 @@ public class AcervoService {
 
             periodicoRepository.atualizar(periodicoAtualNoDB);
 
-        } catch (SQLException e) {
+        } catch (DbException e) {
             throw new BusinessExcepition("Erro de banco de dados ao atualizar periodico: " + e.getMessage());
         }
     }
@@ -447,7 +447,7 @@ public class AcervoService {
                 livroRepository.delete(id); // deve deletar também os exemplares
                 ebookRepository.delete(id);
                 periodicoRepository.delete(id);
-            } catch (SQLException e) {
+            } catch (DbException e) {
                 throw new BusinessExcepition("Erro ao deletar item de acervo: " + e.getMessage());
             }
         }

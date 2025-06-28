@@ -17,4 +17,6 @@ public interface ILivroRepository {
 	List<Livro> buscarTodos();
 	
 	List<Livro> buscarPorTermo(String termo);
+	
+	void atualizar(Livro livro);
 }

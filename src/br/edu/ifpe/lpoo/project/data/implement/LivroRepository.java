@@ -255,5 +255,39 @@ public void delete(int idItem) {
 			ConnectionDb.closeConnection(conn);
 		}
 	}
+
+	@Override
+	public void atualizar(Livro livro) {
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		String consulta = "UPDATE livro "
+						+ "SET isbn = ?, numero_paginas = ?, genero = ?, titulo = ?, autor = ?, ano_publicacao = ?, editora = ?, idioma = ? "
+						+ "WHERE id_livro = ?";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setString(1, livro.getIsbn());
+			stmt.setInt(2, livro.getNumeroPaginas());
+			stmt.setString(3, livro.getGenero());
+			stmt.setString(4, livro.getTitulo());
+			stmt.setString(5, livro.getAutor());
+			stmt.setInt(6, livro.getAnoPublicacao());
+			stmt.setString(7, livro.getEditora());
+			stmt.setString(8, livro.getIdioma());
+			stmt.setInt(9, livro.getId());
+			
+			stmt.executeUpdate();
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}	
+		
+	}
 	
 }

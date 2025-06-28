@@ -18,4 +18,6 @@ public interface IEbookRepository {
 	List<Ebook> buscarTodos();
 	
 	List<Ebook> buscarPorTermo(String termo);
+	
+	void atualizar(Ebook ebook);
 }

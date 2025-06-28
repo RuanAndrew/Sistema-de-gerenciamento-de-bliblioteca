@@ -254,4 +254,38 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 			ConnectionDb.closeConnection(conn);
 		}
 	}
+	
+	@Override
+	public void atualizar(Periodico periodico) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		String consulta = "UPDATE periodico "
+							+ "SET issn = ?, titulo = ?, autor = ?, numero_edicao = ?, volume = ?, editora = ?, idioma = ?, ano_publicacao = ?, genero = ? "
+							+ "WHERE id_periodico = ?";
+						
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setString(1, periodico.getIssn());
+			stmt.setString(2,  periodico.getTitulo());
+			stmt.setString(3, periodico.getAutor());
+			stmt.setInt(4, periodico.getNumeroEdicao());
+			stmt.setInt(5, periodico.getVolume());
+			stmt.setString(6, periodico.getEditora());
+			stmt.setString(7, periodico.getIdioma());
+			stmt.setInt(8, periodico.getAnoPublicacao());
+			stmt.setString(9, periodico.getGenero());
+			stmt.setInt(10, periodico.getId());
+			
+			stmt.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+	}
 }
