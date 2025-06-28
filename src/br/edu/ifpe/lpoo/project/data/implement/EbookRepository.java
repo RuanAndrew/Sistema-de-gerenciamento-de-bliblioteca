@@ -227,23 +227,23 @@ public class EbookRepository implements IEbookRepository{
 	}
 	
 	@Override
-	public void delete(Ebook ebook) {
+	public void delete(int idItem) {
 		
-		if(ebook == null) {
-			throw new BusinessExcepition("Não é possível deletar um objeto Ebook nulo");
+		if(idItem <= 0) {
+			throw new BusinessExcepition("Id inválido");
 		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		
-		String consulta = "DELETE FROM ebook WHERE id_ebook = ?";
+		String consulta = "DELETE FROM ebook WHERE id_ebook= = ?";
 		
 		try {
 			
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 			
-			stmt.setInt(1, ebook.getId());
+			stmt.setInt(1, idItem);
 			
 			stmt.executeUpdate();
 			

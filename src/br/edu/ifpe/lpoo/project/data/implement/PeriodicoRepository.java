@@ -227,10 +227,10 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 	}
 	
 	@Override
-	public void delete(Periodico periodico) {
+	public void delete(int idItem) {
 		
-		if(periodico == null) {
-			throw new BusinessExcepition("Não é possível deletar um objeto Periodico nulo");
+		if(idItem <= 0) {
+			throw new BusinessExcepition("Id inválido");
 		}
 		
 		Connection conn = null;
@@ -243,7 +243,7 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 			
-			stmt.setInt(1, periodico.getId());
+			stmt.setInt(1, idItem);
 			
 			stmt.executeUpdate();
 			

@@ -1,14 +1,8 @@
 package br.edu.ifpe.lpoo.project.data;
 
-import java.util.List;
 
-import br.edu.ifpe.lpoo.project.data.implement.EbookRepository;
 import br.edu.ifpe.lpoo.project.data.implement.LivroRepository;
-import br.edu.ifpe.lpoo.project.data.implement.PeriodicoRepository;
-import br.edu.ifpe.lpoo.project.entities.acervo.Ebook;
 import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
-import br.edu.ifpe.lpoo.project.entities.acervo.Periodico;
-
 public class Teste {
 
 	public static void main(String[] args) {
@@ -51,12 +45,12 @@ public class Teste {
 		
 		ILivroRepository livroRepository = new LivroRepository();
 		
-		Livro livro = livroRepository.buscarPorId(1);
+		Livro livro = livroRepository.buscarPorId(3);
 		
 		if(livro == null) {
 			System.out.println("Periódico não existe ou já foi deletado");
 		}else {
-			livroRepository.delete(livro);
+			livroRepository.delete(livro.getId());
 			System.out.println("Livro " + livro.getTitulo() + " deletado com sucesso");
 		}
 		

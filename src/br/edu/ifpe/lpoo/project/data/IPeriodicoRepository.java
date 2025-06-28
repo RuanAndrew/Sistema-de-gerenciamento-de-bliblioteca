@@ -14,7 +14,7 @@ public interface IPeriodicoRepository {
 	
 	Periodico buscarPorId(int idItem);
 	
-	void delete(Periodico periodico);
+	void delete(int idItem);
 	
 	List<Periodico> buscarTodos();
 	

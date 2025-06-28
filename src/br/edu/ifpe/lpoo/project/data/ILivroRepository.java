@@ -12,7 +12,7 @@ public interface ILivroRepository {
 	
 	Livro buscarPorId(int idItem);
 	
-	void delete(Livro livro);
+	void delete(int idItem);
 	
 	List<Livro> buscarTodos();
 	

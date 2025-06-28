@@ -224,15 +224,15 @@ public class LivroRepository implements ILivroRepository{
 		return livros;
 	}
 	
-public void delete(Livro livro) {
+public void delete(int idItem) {
 		
-		if(livro == null) {
-			throw new BusinessExcepition("Não é possível deletar um objeto Livro nulo");
+		if(idItem <= 0) {
+			throw new BusinessExcepition("Id inválido");
 		}
 		
 		IExemplarRepository exemplarRepository = new ExemplarRepository();
 		
-		exemplarRepository.deleteParaLivros(livro.getId());
+		exemplarRepository.deleteParaLivros(idItem);
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -244,7 +244,7 @@ public void delete(Livro livro) {
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 			
-			stmt.setInt(1, livro.getId());
+			stmt.setInt(1, idItem);
 			
 			stmt.executeUpdate();
 			
