@@ -9,4 +9,6 @@ public interface IExemplarRepository {
 	void insert(Exemplar exemplar, int idLivro);
 	
 	void deleteParaLivros(int idLivro);
+	
+	void atualizarStatus(Exemplar exemplar);
 }

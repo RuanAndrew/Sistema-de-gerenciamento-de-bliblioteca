@@ -33,6 +33,7 @@ public class ExemplarRepository implements IExemplarRepository{
 			throw new DbException(e.getMessage());
 		}finally {
 			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
 		}
 		
 	}
@@ -62,6 +63,32 @@ public class ExemplarRepository implements IExemplarRepository{
 			stmt = conn.prepareStatement(consulta);
 			
 			stmt.setInt(1, idLivro);
+			
+			stmt.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+	}
+	
+	@Override
+	public void atualizarStatus(Exemplar exemplar) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		String consulta = "UPDATE exemplar "
+						+ "SET status_exemplar = ? "
+						+ "WHERE id_exemplar = ?";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setString(1, exemplar.isDisponivel().name());
+			stmt.setInt(2, exemplar.getIdExemplar());
 			
 			stmt.executeUpdate();
 			
