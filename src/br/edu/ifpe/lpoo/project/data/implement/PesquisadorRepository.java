@@ -9,6 +9,7 @@ import java.sql.Statement;
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IPesquisadorRepository;
 import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class PesquisadorRepository implements IPesquisadorRepository{
@@ -90,5 +91,33 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 		
 		return exists;
 	}
-
+	
+	@Override
+	public void delete(int idMembro) {
+		
+		if(idMembro <= 0) {
+			throw new BusinessExcepition("Id inválido");
+		}
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		String consulta = "DELETE FROM pesquisador WHERE id_pesquisador = ?";
+		
+		try {
+			
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setInt(1, idMembro);
+			
+			stmt.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+	}
 }

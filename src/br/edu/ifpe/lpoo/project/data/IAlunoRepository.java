@@ -8,4 +8,6 @@ public interface IAlunoRepository {
 	
 	boolean existMembro(Aluno aluno);
 	
+	void delete(int idMembro);
+	
 }

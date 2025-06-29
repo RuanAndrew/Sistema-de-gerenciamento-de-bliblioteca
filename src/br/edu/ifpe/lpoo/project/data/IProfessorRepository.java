@@ -7,4 +7,6 @@ public interface IProfessorRepository {
 	void insert (Professor professor);
 	
 	boolean existMembro(Professor professor);
+	
+	void delete(int idMembro);
 }

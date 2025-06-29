@@ -7,4 +7,6 @@ public interface IPesquisadorRepository {
 	void insert(Pesquisador pesquisador);
 	
 	boolean existMembro(Pesquisador pesquisador);
+	
+	void delete(int idMembro);
 }

@@ -139,13 +139,13 @@ public class MembroService {
 		}
 	}
 
-	public void excluirMembro(String id) {
+	public void excluirMembro(Integer id) {
 		if (id != null) {
 			try {
 				alunoRepository.delete(id);
 				professorRepository.delete(id);
 				pesquisadorRepository.delete(id);
-			} catch (SQLException e) {
+			} catch (DbException e) {
 				throw new BusinessExcepition("Erro ao deletar item de acervo: " + e.getMessage());
 			}
 		}
@@ -158,7 +158,7 @@ public class MembroService {
 
 		alunoRepository = new AlunoRepository();
 
-		boolean existe = alunoRepository.existItem(alunoAtualizado);
+		boolean existe = alunoRepository.existMembro(alunoAtualizado);
 
 		if (existe) {
 			try {
