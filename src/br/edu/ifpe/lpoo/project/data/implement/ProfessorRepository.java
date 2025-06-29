@@ -1,0 +1,95 @@
+package br.edu.ifpe.lpoo.project.data.implement;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import br.edu.ifpe.lpoo.project.data.ConnectionDb;
+import br.edu.ifpe.lpoo.project.data.IProfessorRepository;
+import br.edu.ifpe.lpoo.project.entities.membros.Professor;
+import br.edu.ifpe.lpoo.project.exceptions.DbException;
+
+public class ProfessorRepository implements IProfessorRepository{
+
+	@Override
+	public void insert(Professor professor) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		String consulta = "INSERT INTO professor (nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, area_atuacao, departamento) "
+							+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		
+		try {
+			
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS);
+			
+			stmt.setString(1, professor.getNome());
+			stmt.setString(2, professor.getEmail());
+			stmt.setString(3, professor.getCpf());
+			stmt.setString(4, professor.getMatricula());
+			stmt.setString(5, professor.getTipomembro().name());
+			stmt.setInt(6, professor.getDebitomultas());
+			stmt.setString(7, professor.getStatusmembro().name());
+			stmt.setString(8, professor.getAreaAtuacao());
+			stmt.setString(9, professor.getDepartamento());
+			
+			stmt.executeUpdate();
+			
+			rst = stmt.getGeneratedKeys();
+			
+			if(rst.next()) {
+				professor.setId(rst.getInt(1));
+			}
+			
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+		
+	}
+
+	@Override
+	public boolean existMembro(Professor professor) {
+		boolean exists = false;
+		
+		if(professor == null) {
+			return false;
+		}
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		String consulta = "SELECT * FROM professor WHERE cpf = ?";
+		
+		try {
+			
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setString(1, professor.getCpf());
+			
+			rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				exists = true;
+			}
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+		
+		return exists;
+	}
+
+}
