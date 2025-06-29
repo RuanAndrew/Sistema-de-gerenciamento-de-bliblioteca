@@ -10,4 +10,5 @@ public interface IAlunoRepository {
 	
 	void delete(int idMembro);
 	
+	Aluno buscarPorId(Integer idMembro);
 }

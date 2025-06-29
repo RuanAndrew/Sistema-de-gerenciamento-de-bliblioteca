@@ -9,4 +9,7 @@ public interface IPesquisadorRepository {
 	boolean existMembro(Pesquisador pesquisador);
 	
 	void delete(int idMembro);
+	
+	Pesquisador buscarPorId(Integer idMembro);
+	
 }

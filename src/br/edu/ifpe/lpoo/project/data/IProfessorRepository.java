@@ -9,4 +9,6 @@ public interface IProfessorRepository {
 	boolean existMembro(Professor professor);
 	
 	void delete(int idMembro);
+	
+	Professor buscarPorId(Integer idMembro);
 }

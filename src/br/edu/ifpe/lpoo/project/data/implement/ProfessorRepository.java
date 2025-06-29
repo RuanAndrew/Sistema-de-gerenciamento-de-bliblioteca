@@ -9,10 +9,34 @@ import java.sql.Statement;
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IProfessorRepository;
 import br.edu.ifpe.lpoo.project.entities.membros.Professor;
+import br.edu.ifpe.lpoo.project.enums.StatusMembro;
+import br.edu.ifpe.lpoo.project.enums.TipoMembro;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class ProfessorRepository implements IProfessorRepository{
+	
+private Professor instanciarProfessor(ResultSet rst) throws SQLException{
+		
+		int idProfessor = rst.getInt("id_professor");
+		String nome = rst.getString("nome");
+		String email = rst.getString("email");
+		String cpf = rst.getString("cpf");
+		String matricula = rst.getString("matricula");
+		String tipo = rst.getString("tipo_membro").toUpperCase();
+		TipoMembro tipoMembro = TipoMembro.valueOf(tipo);
+		int debitoMultas = rst.getInt("debito_multas");
+		String status = rst.getString("status_membro");
+		StatusMembro statusMembro = StatusMembro.valueOf(status);
+		String areaAtuacao = rst.getString("area_atuacao");
+		String departamento = rst.getString("departamento");
+		
+		Professor professor = new Professor(nome, email, cpf, matricula, tipoMembro, debitoMultas, statusMembro, areaAtuacao, departamento);
+		professor.setId(idProfessor);
+		
+		return professor;
+		
+	}
 
 	@Override
 	public void insert(Professor professor) {
@@ -120,5 +144,45 @@ public class ProfessorRepository implements IProfessorRepository{
 			ConnectionDb.closeStatement(stmt);
 			ConnectionDb.closeConnection(conn);
 		}
+	}
+
+	@Override
+	public Professor buscarPorId(Integer idMembro) {
+
+		if(idMembro == null) {
+			throw new DbException("Id inválido");
+		}
+		
+		Professor professor = null;
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		String consulta = "SELECT * FROM professor WHERE id_professor = ?";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setInt(1, idMembro);
+			
+			rst = stmt.executeQuery();
+			
+			if(rst.next()) {
+				professor = instanciarProfessor(rst);
+			}
+			
+			
+			
+		} catch (Exception e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+			
+		return professor;
 	}
 }

@@ -11,11 +11,8 @@ public class Teste {
 		IAlunoRepository alunoRepository = new AlunoRepository();
 		IProfessorRepository professorRepository = new ProfessorRepository();
 		IPesquisadorRepository pesquisadorRepository = new PesquisadorRepository();
-		int id = 1;
+			
 		
-//		alunoRepository.delete(id);
-//		professorRepository.delete(id);
-		pesquisadorRepository.delete(id);
 	}
 
 }
