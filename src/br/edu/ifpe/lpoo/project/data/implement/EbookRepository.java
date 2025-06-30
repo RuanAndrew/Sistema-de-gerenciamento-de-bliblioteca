@@ -10,9 +10,7 @@ import java.util.List;
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IEbookRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.Ebook;
-import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
 import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class EbookRepository implements IEbookRepository{
@@ -39,11 +37,14 @@ public class EbookRepository implements IEbookRepository{
 	}
 	
 	@Override
-	public void insert(ItemAcervo item) {
+	public void insert(Ebook ebook) {
+		
+		if(ebook == null) {
+			throw new DbException("Objeto tipo Ebook não pode ser null");
+		}
+		
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		
-		Ebook ebook = (Ebook) item;
 		
 		String consulta = "INSERT INTO ebook (isbn, numero_paginas, genero, titulo, autor, ano_publicacao, editora, idioma, formato_digital, url_ebook)"
 							+"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -74,19 +75,19 @@ public class EbookRepository implements IEbookRepository{
 	}
 
 	@Override
-	public boolean exist(ItemAcervo item) {
+	public boolean existItem(Ebook ebook) {
+		
+		if(ebook == null) {
+			throw new DbException("Objeto tipo Ebook não pode ser null");
+		}
+		
 		
 		boolean exists = false;
-		
-		if(item == null) {
-			return exists;
-		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
-		Ebook ebook = (Ebook) item;
 		
 		String consulta = "SELECT * FROM ebook "
 							+ "WHERE isbn = ? OR (titulo = ? AND autor = ? AND editora = ?)";
@@ -117,6 +118,10 @@ public class EbookRepository implements IEbookRepository{
 	
 	@Override
 	public Ebook buscarPorId(int idItem) {
+		
+		if(idItem <= 0) {
+			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
+		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -186,6 +191,10 @@ public class EbookRepository implements IEbookRepository{
 	@Override
 	public List<Ebook> buscarPorTermo(String termo){
 		
+		if(termo == null) {
+			throw new DbException("O termo de pesquisa não pode ser null");
+		}
+		
 		List<Ebook> ebooks = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -228,7 +237,7 @@ public class EbookRepository implements IEbookRepository{
 	public void delete(int idItem) {
 		
 		if(idItem <= 0) {
-			throw new BusinessExcepition("Id inválido");
+			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
 		}
 		
 		Connection conn = null;
@@ -255,6 +264,11 @@ public class EbookRepository implements IEbookRepository{
 	
 	@Override
 	public void atualizar(Ebook ebook) {
+		
+		
+		if(ebook == null) {
+			throw new DbException("Objeto tipo Ebook não pode ser null");
+		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;

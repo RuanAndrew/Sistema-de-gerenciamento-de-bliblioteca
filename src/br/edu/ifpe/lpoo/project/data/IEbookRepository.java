@@ -3,13 +3,12 @@ package br.edu.ifpe.lpoo.project.data;
 import java.util.List;
 
 import br.edu.ifpe.lpoo.project.entities.acervo.Ebook;
-import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
 
 public interface IEbookRepository {
 	
-	void insert(ItemAcervo item);
+	void insert(Ebook ebook);
 	
-	boolean exist(ItemAcervo item);
+	boolean existItem(Ebook ebook);
 	
 	Ebook buscarPorId(int idItem);
 	

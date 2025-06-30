@@ -11,9 +11,7 @@ import java.util.List;
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IExemplarRepository;
 import br.edu.ifpe.lpoo.project.data.ILivroRepository;
-import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
 import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class LivroRepository implements ILivroRepository{
@@ -37,13 +35,16 @@ public class LivroRepository implements ILivroRepository{
 	}
 	
 	@Override
-	public void insert(ItemAcervo item) {
+	public void insert(Livro livro) {
+		
+		if(livro == null) {
+			throw new DbException("Objeto tipo Livro não pode ser null");
+		}
+		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		int idItem = -1;
-		
-		Livro livro = (Livro) item;
 		
 		String consultaSql = "INSERT INTO livro (isbn, numero_paginas, genero, titulo, autor, ano_publicacao, editora, idioma)"
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -81,13 +82,13 @@ public class LivroRepository implements ILivroRepository{
 	}
 
 	@Override
-	public boolean existItem(String indentifier) {
+	public boolean existItem(Livro livro) {
+		
+		if(livro == null) {
+			throw new DbException("Objeto tipo Livro não pode ser null");
+		}
 		
 		boolean exists = false;
-		
-		if(indentifier == null) {
-			return exists;
-		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -96,10 +97,11 @@ public class LivroRepository implements ILivroRepository{
 		try {
 			conn = ConnectionDb.getConnection();
 			
-			stmt = conn.prepareStatement("SELECT * FROM livro WHERE isbn = ? OR titulo = ?");
+			stmt = conn.prepareStatement("SELECT * FROM livro WHERE isbn = ? OR (titulo = ? AND editora = ?)");
 			
-			stmt.setString(1, indentifier);
-			stmt.setString(2, indentifier);
+			stmt.setString(1, livro.getIsbn());
+			stmt.setString(2, livro.getTitulo());
+			stmt.setString(3, livro.getEditora());
 			
 			rst = stmt.executeQuery();
 			
@@ -119,6 +121,10 @@ public class LivroRepository implements ILivroRepository{
 	
 	@Override
 	public Livro buscarPorId(int idItem) {
+		
+		if(idItem <= 0) {
+			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
+		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -185,6 +191,10 @@ public class LivroRepository implements ILivroRepository{
 	
 	public List<Livro> buscarPorTermo(String termo){
 		
+		if(termo == null) {
+			throw new DbException("O termo de pesquisa não pode ser null");
+		}
+		
 		List<Livro> livros = new ArrayList<>();
 		
 		Connection conn = null;
@@ -224,10 +234,10 @@ public class LivroRepository implements ILivroRepository{
 		return livros;
 	}
 	
-public void delete(int idItem) {
+	public void delete(int idItem) {
 		
 		if(idItem <= 0) {
-			throw new BusinessExcepition("Id inválido");
+			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
 		}
 		
 		IExemplarRepository exemplarRepository = new ExemplarRepository();
@@ -258,6 +268,10 @@ public void delete(int idItem) {
 
 	@Override
 	public void atualizar(Livro livro) {
+		
+		if(livro == null) {
+			throw new DbException("Objeto tipo Livro não pode ser null");
+		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
