@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IAlunoRepository;
@@ -38,6 +40,10 @@ public class AlunoRepository implements IAlunoRepository{
 	
 	@Override
 	public void insert (Aluno aluno) {
+		
+		if(aluno == null) {
+			throw new DbException("Objeto tipo Aluno não pode ser null");
+		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -80,11 +86,11 @@ public class AlunoRepository implements IAlunoRepository{
 	@Override
 	public boolean existMembro(Aluno aluno) {
 		
-		boolean exists = false;
-		
 		if(aluno == null) {
-			return false;
+			throw new DbException("Objeto tipo Aluno não pode ser null");
 		}
+		
+		boolean exists = false;
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -145,9 +151,9 @@ public class AlunoRepository implements IAlunoRepository{
 	}
 	
 	@Override
-	public Aluno buscarPorId(Integer idMembro) {
+	public Aluno buscarPorId(int idMembro) {
 		
-		if(idMembro == null) {
+		if(idMembro <= 0) {
 			throw new DbException("Id inválido");
 		}
 		
@@ -170,10 +176,8 @@ public class AlunoRepository implements IAlunoRepository{
 			if(rst.next()) {
 				aluno = instanciarAluno(rst);
 			}
-			
-			
-			
-		} catch (Exception e) {
+					
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		}finally {
 			ConnectionDb.closeResultSet(rst);
@@ -184,6 +188,82 @@ public class AlunoRepository implements IAlunoRepository{
 		return aluno;
 	}
 
+	@Override
+	public List<Aluno> buscarTodos() {
+
+		List<Aluno> alunos = new ArrayList<Aluno>();
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		String consulta = "SELECT * FROM aluno";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				alunos.add(instanciarAluno(rst));
+			}
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+		
+		return alunos;
+	}
+
+	@Override
+	public List<Aluno> buscarPorTermo(String termo) {
+		
+		if(termo == null) {
+			throw new DbException("O termo de pesquisa não pode ser null");
+		}
+		
+		List<Aluno> alunos = new ArrayList<Aluno>();
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		String termoStmt = "%" + termo.toLowerCase() + "%";
+		
+		String consulta = "SELECT * FROM aluno "
+				+ "WHERE LOWER(nome) LIKE ? "
+				+ "OR LOWER(cpf) LIKE ? "
+				+ "OR LOWER(matricula) LIKE ? "
+				+ "ORDER BY nome";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setString(1, termoStmt);
+			stmt.setString(2, termoStmt);
+			stmt.setString(3, termoStmt);
+			
+			rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				alunos.add(instanciarAluno(rst));
+			}
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+		return alunos;
+	}
+
+	
+	
 //	@Override
 //	public void atualizar(Aluno aluno) {
 //		

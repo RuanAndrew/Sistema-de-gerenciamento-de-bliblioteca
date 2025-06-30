@@ -1,5 +1,7 @@
 package br.edu.ifpe.lpoo.project.data;
 
+import java.util.List;
+
 import br.edu.ifpe.lpoo.project.entities.membros.Professor;
 
 public interface IProfessorRepository {
@@ -10,5 +12,9 @@ public interface IProfessorRepository {
 	
 	void delete(int idMembro);
 	
-	Professor buscarPorId(Integer idMembro);
+	Professor buscarPorId(int idMembro);
+	
+	List<Professor> buscarTodos();
+	
+	List<Professor> buscarPorTermo(String termo);
 }

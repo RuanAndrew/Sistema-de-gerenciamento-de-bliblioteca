@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IProfessorRepository;
@@ -40,6 +42,11 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 
 	@Override
 	public void insert(Professor professor) {
+		
+		if(professor == null) {
+			throw new DbException("Objeto tipo Professor não pode ser null");
+		}
+		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
@@ -82,11 +89,14 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 
 	@Override
 	public boolean existMembro(Professor professor) {
-		boolean exists = false;
 		
 		if(professor == null) {
-			return false;
+			throw new DbException("Objeto tipo Professor não pode ser null");
 		}
+		
+		
+		boolean exists = false;
+		
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -147,9 +157,9 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 	}
 
 	@Override
-	public Professor buscarPorId(Integer idMembro) {
+	public Professor buscarPorId(int idMembro) {
 
-		if(idMembro == null) {
+		if(idMembro <= 0) {
 			throw new DbException("Id inválido");
 		}
 		
@@ -175,7 +185,7 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 			
 			
 			
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		}finally {
 			ConnectionDb.closeResultSet(rst);
@@ -184,5 +194,80 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 		}
 			
 		return professor;
+	}
+
+	@Override
+	public List<Professor> buscarTodos() {
+		
+		List<Professor> professores = new ArrayList<Professor>();
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		String consulta = "SELECT * FROM professor";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				professores.add(instanciarProfessor(rst));
+			}
+			
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+			
+		return professores;
+	}
+
+	@Override
+	public List<Professor> buscarPorTermo(String termo) {
+		
+		if(termo == null) {
+			throw new DbException("O termo de pesquisa não pode ser null");
+		}
+		
+		List<Professor> professores = new ArrayList<Professor>();
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		
+		String termoStmt = "%" + termo.toLowerCase() + "%";
+		
+		String consulta = "SELECT * FROM professor "
+				+ "WHERE LOWER(nome) LIKE ? "
+				+ "OR LOWER(cpf) LIKE ? "
+				+ "OR LOWER(matricula) LIKE ? "
+				+ "ORDER BY nome";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setString(1, termoStmt);
+			stmt.setString(2, termoStmt);
+			stmt.setString(3, termoStmt);
+			
+			rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				professores.add(instanciarProfessor(rst));
+			}
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+		return professores;
 	}
 }

@@ -1,5 +1,7 @@
 package br.edu.ifpe.lpoo.project.data;
 
+import java.util.List;
+
 import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
 
 public interface IPesquisadorRepository {
@@ -10,6 +12,9 @@ public interface IPesquisadorRepository {
 	
 	void delete(int idMembro);
 	
-	Pesquisador buscarPorId(Integer idMembro);
+	Pesquisador buscarPorId(int idMembro);
 	
+	List<Pesquisador> buscarTodos();
+	
+	List<Pesquisador> buscarPorTermo(String termo);
 }

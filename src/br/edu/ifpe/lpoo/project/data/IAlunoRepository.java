@@ -1,5 +1,7 @@
 package br.edu.ifpe.lpoo.project.data;
 
+import java.util.List;
+
 import br.edu.ifpe.lpoo.project.entities.membros.Aluno;
 
 public interface IAlunoRepository {
@@ -10,5 +12,9 @@ public interface IAlunoRepository {
 	
 	void delete(int idMembro);
 	
-	Aluno buscarPorId(Integer idMembro);
+	Aluno buscarPorId(int idMembro);
+	
+	List<Aluno> buscarTodos();
+	
+	List<Aluno> buscarPorTermo(String termo);
 }
