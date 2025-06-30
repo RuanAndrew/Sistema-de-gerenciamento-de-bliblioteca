@@ -1,7 +1,10 @@
 package br.edu.ifpe.lpoo.project.ui.dto;
 
+import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
+
 public class EbookDTO {
     private int id;
+    private TipoItemAcervo tipoItemAcervo = TipoItemAcervo.EBOOK;
     private String titulo;
     private String autor;
     private String anoPublicacao;
@@ -112,5 +115,13 @@ public class EbookDTO {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public TipoItemAcervo getTipoItemAcervo() {
+        return tipoItemAcervo;
+    }
+
+    public void setTipoItemAcervo(TipoItemAcervo tipoItemAcervo) {
+        this.tipoItemAcervo = tipoItemAcervo;
     }
 }

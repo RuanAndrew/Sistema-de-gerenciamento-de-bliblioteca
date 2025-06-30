@@ -7,6 +7,7 @@ import br.edu.ifpe.lpoo.project.data.implement.PeriodicoRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.*;
 import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
+import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 import br.edu.ifpe.lpoo.project.ui.dto.EbookDTO;
@@ -153,15 +154,15 @@ public class AcervoService {
             throw new BusinessExcepition("Ano de publicação inválido: deve ser um valor numérico.");
         }
 
-        if (parsedNumeroPaginas < 1) {
-            throw new BusinessExcepition("O número de páginas deve ser maior que zero.");
+        if (parsedNumeroPaginas < 0) {
+            throw new BusinessExcepition("O número de páginas não pode ser menor que zero.");
         }
 
         if (parsedAnoPublicacao > anoAtual) {
             throw new BusinessExcepition("O ano de publicação não pode ser futuro.");
         }
 
-        Pattern anoPublicacaoPattern = Pattern.compile("\\d{1,4}");
+        Pattern anoPublicacaoPattern = Pattern.compile("-?\\d{1,4}");
         Matcher anoPublicacaoMatcher = anoPublicacaoPattern.matcher(anoPublicacao);
         if (!anoPublicacaoMatcher.matches()) {
             throw new BusinessExcepition("O ano deve ter de 1 a quatro digitos.");
@@ -169,7 +170,7 @@ public class AcervoService {
 
         FormatoDigital formatoDigitalNovo = null;
         for(FormatoDigital c : FormatoDigital.values()) {
-            if (formatoDigital.equals(String.valueOf(c))) {
+            if (formatoDigital.toUpperCase().equals(String.valueOf(c))) {
                 formatoDigitalNovo = c;
                 break;
             }
@@ -240,30 +241,24 @@ public class AcervoService {
         if (parsedAnoPublicacao > anoAtual) {
             throw new BusinessExcepition("O ano de publicação não pode ser futuro.");
         }
+        if (parsedNumeroEdicao < 0) {
+            throw new BusinessExcepition("O numero da edição não pode ser menor que zero");
+        }
+        if (parsedVolume < 0) {
+            throw new BusinessExcepition("O volume não pode ser menor que zero");
+        }
 
 
-        Pattern issnPattern = Pattern.compile("^\\d{4}[ -]?\\d{3}[\\dxORX]$");
+        Pattern issnPattern = Pattern.compile("^\\d{4}[ -]?\\d{3}[\\dxX]$");
         Matcher issnMatcher = issnPattern.matcher(issn);
         if (!issnMatcher.matches()) {
             throw new BusinessExcepition("ISSN invalido");
         }
 
-        Pattern numeroEdicaoPattern = Pattern.compile("^\\d+$");
-        Matcher numeroEdicaoMatcher = numeroEdicaoPattern.matcher(numeroEdicao);
-        if (!numeroEdicaoMatcher.matches()) {
-            throw new BusinessExcepition("O numero da edição deve conter somente numeros");
-        }
-
-        Pattern volumePattern = Pattern.compile("^\\d+$");
-        Matcher volumeMatcher = volumePattern.matcher(volume);
-        if (!volumeMatcher.matches()) {
-            throw new BusinessExcepition("O volume deve conter somente numeros");
-        }
-
-        Pattern anoPublicacaoPattern = Pattern.compile("\\d{1,4}");
+        Pattern anoPublicacaoPattern = Pattern.compile("-?\\d{1,4}");
         Matcher anoPublicacaoMatcher = anoPublicacaoPattern.matcher(anoPublicacao);
         if (!anoPublicacaoMatcher.matches()) {
-            throw new BusinessExcepition("O ano deve ter de 1 a quatro digitos.");
+            throw new BusinessExcepition("O ano deve ter de um a quatro digitos.");
         }
       
 
@@ -493,35 +488,52 @@ public class AcervoService {
 
     // Deletar itens do acervo
 
-    public void deletarItem (Integer id) {
-        if (id != null) {
-            try {
-                livroRepository.delete(id); // deve deletar também os exemplares
-                ebookRepository.delete(id);
-                periodicoRepository.delete(id);
-            } catch (DbException e) {
-                throw new BusinessExcepition("Erro ao deletar item de acervo: " + e.getMessage());
+    public void deletarItem (Integer id, TipoItemAcervo tipoItemAcervo) {
+        if (id == null) {
+            throw new BusinessExcepition("ID do item não pode ser nulo ou vazio para deleção.");
+        }
+        try {
+            ItemAcervo itemParaDeletar = buscarItemPorId(id);
+
+            if (itemParaDeletar == null) {
+                throw new BusinessExcepition("Item de acervo com ID " + id + " não encontrado para deleção");
             }
+
+            switch (tipoItemAcervo) {
+                case LIVRO ->
+                        livroRepository.delete(id);
+                case EBOOK ->
+                        ebookRepository.delete(id);
+                case PERIODICO ->
+                        periodicoRepository.delete(id);
+                default ->
+                        throw new BusinessExcepition("Tipo de item de acervo desconhecido para deleção.");
+            }
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Formato de ID inválido para deleção: " + id);
+        } catch (DbException e) {
+            throw new BusinessExcepition("Erro de banco de dados ao deletar item de acervo: " + e.getMessage());
         }
     }
 
-
     // Vizualizar itens do acervo
-
 
     public ItemAcervo buscarItemPorId (int id) {
         try {
-            ItemAcervo item = livroRepository.buscarPorId(id);
-            if (item != null) {return item;}
 
-            item = ebookRepository.buscarPorId(id);
-            if (item != null) {return item;}
+            Livro livro = livroRepository.buscarPorId(id);
+            if (livro != null) {return livro;}
 
-            item = periodicoRepository.buscarPorId(id);
-            if (item != null) {return item;}
+            Ebook ebook = ebookRepository.buscarPorId(id);
+            if (ebook != null) {return ebook;}
+
+            Periodico periodico = periodicoRepository.buscarPorId(id);
+            if (periodico != null) {return periodico;}
 
             return null;
-        } catch (DbException e) {
+        }catch (NumberFormatException e) {
+            throw new BusinessExcepition ("Formato de ID invalido: " + id);
+        }catch (DbException e) {
             throw new BusinessExcepition("Erro ao buscar item de acervo por ID: " + e.getMessage());
         }
     }
@@ -549,7 +561,6 @@ public class AcervoService {
         }
         return resultados;
     }
-
 
     // Gerenciar exemplares de itens do acervo
 

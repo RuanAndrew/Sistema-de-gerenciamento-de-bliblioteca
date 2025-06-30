@@ -1,7 +1,10 @@
 package br.edu.ifpe.lpoo.project.ui.dto;
 
+import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
+
 public class PeriodicoDTO {
     private int id;
+    private TipoItemAcervo tipoItemAcervo = TipoItemAcervo.PERIODICO;
     private String titulo;
     private String autor;
     private String anoPublicacao;
@@ -102,5 +105,13 @@ public class PeriodicoDTO {
 
     public void setGenero(String genero) {
         this.genero = genero;
+    }
+
+    public TipoItemAcervo getTipoItemAcervo() {
+        return tipoItemAcervo;
+    }
+
+    public void setTipoItemAcervo(TipoItemAcervo tipoItemAcervo) {
+        this.tipoItemAcervo = tipoItemAcervo;
     }
 }

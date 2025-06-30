@@ -1,7 +1,10 @@
 package br.edu.ifpe.lpoo.project.ui.dto;
 
+import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
+
 public class LivroDTO {
     private int id;
+    private TipoItemAcervo tipoItemAcervo = TipoItemAcervo.LIVRO;
     private String titulo;
     private String autor;
     private String anoPublicacao;
@@ -92,5 +95,13 @@ public class LivroDTO {
 
     public void setIdioma(String idioma) {
         this.idioma = idioma;
+    }
+
+    public TipoItemAcervo getTipoItemAcervo() {
+        return tipoItemAcervo;
+    }
+
+    public void setTipoItemAcervo(TipoItemAcervo tipoItemAcervo) {
+        this.tipoItemAcervo = tipoItemAcervo;
     }
 }
