@@ -234,7 +234,7 @@ public class EbookRepository implements IEbookRepository{
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		
-		String consulta = "DELETE FROM ebook WHERE id_ebook= = ?";
+		String consulta = "DELETE FROM ebook WHERE id_ebook = ?";
 		
 		try {
 			
