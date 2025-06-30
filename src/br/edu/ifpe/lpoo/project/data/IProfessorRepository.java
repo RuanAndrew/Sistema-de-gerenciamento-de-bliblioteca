@@ -17,4 +17,6 @@ public interface IProfessorRepository {
 	List<Professor> buscarTodos();
 	
 	List<Professor> buscarPorTermo(String termo);
+	
+	void atualizar(Professor professor);
 }

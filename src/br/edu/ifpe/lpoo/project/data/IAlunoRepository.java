@@ -17,4 +17,6 @@ public interface IAlunoRepository {
 	List<Aluno> buscarTodos();
 	
 	List<Aluno> buscarPorTermo(String termo);
+	
+	void atualizar(Aluno aluno);
 }

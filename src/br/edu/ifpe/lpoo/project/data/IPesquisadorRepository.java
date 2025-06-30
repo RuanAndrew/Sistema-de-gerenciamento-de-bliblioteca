@@ -17,4 +17,6 @@ public interface IPesquisadorRepository {
 	List<Pesquisador> buscarTodos();
 	
 	List<Pesquisador> buscarPorTermo(String termo);
+	
+	void atualizar(Pesquisador pesquisador);
 }

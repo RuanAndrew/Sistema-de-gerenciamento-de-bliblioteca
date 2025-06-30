@@ -264,42 +264,42 @@ public class AlunoRepository implements IAlunoRepository{
 
 	
 	
-//	@Override
-//	public void atualizar(Aluno aluno) {
-//		
-//		if(aluno == null) {
-//			throw new DbException("Aluno não pode ser null");
-//		}
-//		
-//		Connection conn = null;
-//		PreparedStatement stmt = null;
-//		
-//		String consulta = "UPDATE aluno "
-//						+ "SET nome = ?, email = ?, cpf = ?, matricula = ?, tipo_membro = ?, debito_multas = ?, status_membro = ?, curso = ?"
-//						+ "WHERE id_aluno = ?";
-//		
-//		try {
-//			conn = ConnectionDb.getConnection();
-//			stmt = conn.prepareStatement(consulta);
-//			
-//			stmt.setString(1, aluno.getNome());
-//			stmt.setString(2, aluno.getEmail());
-//			stmt.setString(3, aluno.getCpf());
-//			stmt.setString(4, aluno.getMatricula());
-//			stmt.setString(5, aluno.getTipomembro().name());
-//			stmt.setInt(6, aluno.getDebitomultas());
-//			stmt.setString(7, aluno.getStatusmembro().name());
-//			stmt.setString(8, aluno.getCurso());
-//			stmt.setInt(9, aluno.getId());
-//			
-//			stmt.executeUpdate();
-//			
-//		} catch (Exception e) {
-//			throw new DbException(e.getMessage());
-//		}finally {
-//			ConnectionDb.closeStatement(stmt);
-//			ConnectionDb.closeConnection(conn);
-//		}
-//	}
+	@Override
+	public void atualizar(Aluno aluno) {
+		
+		if(aluno == null) {
+			throw new DbException("Aluno não pode ser null");
+		}
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		String consulta = "UPDATE aluno "
+						+ "SET nome = ?, email = ?, cpf = ?, matricula = ?, tipo_membro = ?, debito_multas = ?, status_membro = ?, curso = ?"
+						+ "WHERE id_aluno = ?";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setString(1, aluno.getNome());
+			stmt.setString(2, aluno.getEmail());
+			stmt.setString(3, aluno.getCpf());
+			stmt.setString(4, aluno.getMatricula());
+			stmt.setString(5, aluno.getTipomembro().name());
+			stmt.setInt(6, aluno.getDebitomultas());
+			stmt.setString(7, aluno.getStatusmembro().name());
+			stmt.setString(8, aluno.getCurso());
+			stmt.setInt(9, aluno.getId());
+			
+			stmt.executeUpdate();
+			
+		} catch (Exception e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+	}
 	
 }

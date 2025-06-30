@@ -270,4 +270,44 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 		}
 		return professores;
 	}
+
+	@Override
+	public void atualizar(Professor professor) {
+		
+		if(professor == null) {
+			throw new DbException("Professor não pode ser null");
+		}
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		String consulta = "UPDATE professor "
+						+ "SET nome = ?, email = ?, cpf = ?, matricula = ?, tipo_membro = ?, debito_multas = ?, status_membro = ?, area_atuacao = ?, departamento = ? "
+						+ "WHERE id_professor = ?";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setString(1, professor.getNome());
+			stmt.setString(2, professor.getEmail());
+			stmt.setString(3, professor.getCpf());
+			stmt.setString(4, professor.getMatricula());
+			stmt.setString(5, professor.getTipomembro().name());
+			stmt.setInt(6, professor.getDebitomultas());
+			stmt.setString(7, professor.getStatusmembro().name());
+			stmt.setString(8, professor.getAreaAtuacao());
+			stmt.setString(9, professor.getDepartamento());
+			stmt.setInt(10, professor.getId());
+			
+			stmt.executeUpdate();
+			
+		} catch (Exception e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+		
+	}
 }

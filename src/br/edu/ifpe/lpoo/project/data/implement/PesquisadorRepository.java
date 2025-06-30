@@ -267,41 +267,42 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 		return pesquisadores;
 	}
 
-//	@Override
-//	public void atualizar(Pesquisador pesquisador) {
-//		if(pesquisador == null) {
-//			throw new DbException("Aluno não pode ser null");
-//		}
-//		
-//		Connection conn = null;
-//		PreparedStatement stmt = null;
-//		
-//		String consulta = "UPDATE pesquisador "
-//						+ "SET nome = ?, email = ?, cpf = ?, matricula = ?, tipo_membro = ?, debito_multas = ?, status_membro = ?, instituicao = ?"
-//						+ "WHERE id_pesquisador = ?";
-//		
-//		try {
-//			conn = ConnectionDb.getConnection();
-//			stmt = conn.prepareStatement(consulta);
-//			
-//			stmt.setString(1, pesquisador.getNome());
-//			stmt.setString(2, pesquisador.getEmail());
-//			stmt.setString(3, pesquisador.getCpf());
-//			stmt.setString(4, pesquisador.getMatricula());
-//			stmt.setString(5, pesquisador.getTipomembro().name());
-//			stmt.setInt(6, pesquisador.getDebitomultas());
-//			stmt.setString(7, pesquisador.getStatusmembro().name());
-//			stmt.setString(8, pesquisador.getInstituicao());
-//			stmt.setInt(9, pesquisador.getId());
-//			
-//			stmt.executeUpdate();
-//			
-//		} catch (Exception e) {
-//			throw new DbException(e.getMessage());
-//		}finally {
-//			ConnectionDb.closeStatement(stmt);
-//			ConnectionDb.closeConnection(conn);
-//		}
-//		
-//	}
+	@Override
+	public void atualizar(Pesquisador pesquisador) {
+		
+		if(pesquisador == null) {
+			throw new DbException("Pesquisador não pode ser null");
+		}
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		String consulta = "UPDATE pesquisador "
+						+ "SET nome = ?, email = ?, cpf = ?, matricula = ?, tipo_membro = ?, debito_multas = ?, status_membro = ?, instituicao = ? "
+						+ "WHERE id_pesquisador = ?";
+		
+		try {
+			conn = ConnectionDb.getConnection();
+			stmt = conn.prepareStatement(consulta);
+			
+			stmt.setString(1, pesquisador.getNome());
+			stmt.setString(2, pesquisador.getEmail());
+			stmt.setString(3, pesquisador.getCpf());
+			stmt.setString(4, pesquisador.getMatricula());
+			stmt.setString(5, pesquisador.getTipomembro().name());
+			stmt.setInt(6, pesquisador.getDebitomultas());
+			stmt.setString(7, pesquisador.getStatusmembro().name());
+			stmt.setString(8, pesquisador.getInstituicao());
+			stmt.setInt(9, pesquisador.getId());
+			
+			stmt.executeUpdate();
+			
+		} catch (Exception e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeConnection(conn);
+		}
+		
+	}
 }
