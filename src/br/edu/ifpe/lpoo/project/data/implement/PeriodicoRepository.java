@@ -10,9 +10,7 @@ import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.IPeriodicoRepository;
-import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
 import br.edu.ifpe.lpoo.project.entities.acervo.Periodico;
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class PeriodicoRepository implements IPeriodicoRepository{
@@ -38,12 +36,14 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 	}
 	
 	@Override
-	public void insert(ItemAcervo item) {
+	public void insert(Periodico periodico) {
+		
+		if(periodico == null) {
+			throw new DbException("Objeto tipo Periodico não pode ser null");
+		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		
-		Periodico periodico = (Periodico) item; 
 		
 		String consulta = "INSERT INTO periodico (issn, titulo, autor, numero_edicao, volume, editora, idioma, ano_publicacao, genero) "
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -73,19 +73,18 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 	}
 
 	@Override
-	public boolean exist(ItemAcervo item) {
+	public boolean existItem(Periodico periodico) {
+		
+		if(periodico == null) {
+			throw new DbException("Objeto tipo Periodico não pode ser null");
+		}
 		
 		boolean exist = false;
-		
-		if(item == null) {
-			return exist;
-		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
-		Periodico periodico = (Periodico) item; 
 		
 		String consulta = "SELECT * FROM periodico WHERE "
 						+"issn = ? OR (titulo = ? AND numero_edicao = ? AND volume = ?)";
@@ -116,6 +115,10 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 	
 	@Override
 	public Periodico buscarPorId(int idItem) {
+		
+		if(idItem <= 0) {
+			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
+		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -184,6 +187,10 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 	@Override
 	public List<Periodico> buscarPorTermo(String termo){
 		
+		if(termo == null) {
+			throw new DbException("O termo de pesquisa não pode ser null");
+		}
+		
 		List<Periodico> periodicos = new ArrayList<>();
 		
 		Connection conn = null;
@@ -230,7 +237,7 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 	public void delete(int idItem) {
 		
 		if(idItem <= 0) {
-			throw new BusinessExcepition("Id inválido");
+			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
 		}
 		
 		Connection conn = null;
@@ -257,6 +264,11 @@ public class PeriodicoRepository implements IPeriodicoRepository{
 	
 	@Override
 	public void atualizar(Periodico periodico) {
+		
+		if(periodico == null) {
+			throw new DbException("Objeto tipo Periodico não pode ser null");
+		}
+		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		

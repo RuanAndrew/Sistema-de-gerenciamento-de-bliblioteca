@@ -3,14 +3,13 @@ package br.edu.ifpe.lpoo.project.data;
 
 import java.util.List;
 
-import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
 import br.edu.ifpe.lpoo.project.entities.acervo.Periodico;
 
 public interface IPeriodicoRepository {
 	
-	void insert(ItemAcervo item);
+	void insert(Periodico periodico);
 	
-	boolean exist(ItemAcervo item);	
+	boolean existItem(Periodico periodico);	
 	
 	Periodico buscarPorId(int idItem);
 	

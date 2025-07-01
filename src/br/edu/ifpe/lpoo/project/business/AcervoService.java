@@ -88,11 +88,11 @@ public class AcervoService {
             throw new BusinessExcepition("O ano deve ter de 1 a quatro digitos.");
         }
 
-        ItemAcervo livro = new Livro(titulo,autor, parsedAnoPublicacao, editora, idioma, isbn, parsedNumeroPaginas, genero);
+        Livro livro = new Livro(titulo,autor, parsedAnoPublicacao, editora, idioma, isbn, parsedNumeroPaginas, genero);
         livroRepository = new LivroRepository();
         exemplarRepository = new ExemplarRepository();
 
-        boolean exist = livroRepository.existItem(titulo);
+        boolean exist = livroRepository.existItem(livro);
 
         if(!exist) {
             try {
@@ -180,10 +180,10 @@ public class AcervoService {
             throw new BusinessExcepition("Formato digital invalido.");
         }
 
-        ItemAcervo ebook = new Ebook(titulo,autor,parsedAnoPublicacao,editora,idioma,isbn,parsedNumeroPaginas,genero, formatoDigitalNovo,url);
+        Ebook ebook = new Ebook(titulo,autor,parsedAnoPublicacao,editora,idioma,isbn,parsedNumeroPaginas,genero, formatoDigitalNovo,url);
         ebookRepository = new EbookRepository();
 
-        boolean exist = ebookRepository.exist(ebook);
+        boolean exist = ebookRepository.existItem(ebook);
 
         if(!exist) {
             try {
@@ -263,10 +263,10 @@ public class AcervoService {
         }
       
 
-        ItemAcervo periodico = new Periodico (titulo, autor, parsedAnoPublicacao, editora, idioma, issn, parsedNumeroEdicao, parsedVolume, genero);
+        Periodico periodico = new Periodico (titulo, autor, parsedAnoPublicacao, editora, idioma, issn, parsedNumeroEdicao, parsedVolume, genero);
         IPeriodicoRepository periodicoRepository = new PeriodicoRepository();
 
-        boolean exist = periodicoRepository.exist(periodico);
+        boolean exist = periodicoRepository.existItem(periodico);
 
         if(!exist) {
             try {
