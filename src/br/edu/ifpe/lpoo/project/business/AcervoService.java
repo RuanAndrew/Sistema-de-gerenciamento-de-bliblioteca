@@ -26,6 +26,7 @@ public class AcervoService {
     ExemplarRepository exemplarRepository;
     EbookRepository ebookRepository;
     PeriodicoRepository periodicoRepository;
+    CatalogacaoService catalogacaoService;
     LocalDate currentDate = LocalDate.now();
     int anoAtual = currentDate.getYear();
 
@@ -280,7 +281,9 @@ public class AcervoService {
         
     }
 
-    public void cadastrarPorCodigo () {}
+    public Livro buscarDadosParaPreenchimentoAutomatico(String isbn) {
+        return catalogacaoService.buscarDadosLivroPorIsbn(isbn);
+    }
 
     // Atualizar itens do acervo
 
