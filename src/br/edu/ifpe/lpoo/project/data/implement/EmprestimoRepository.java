@@ -25,7 +25,7 @@ public class EmprestimoRepository implements IEmprestimoRepository {
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
-		int idExemplar = -1;
+		int idEmprestimo = -1;
 		
 		String consulta = "INSERT INTO emprestimo (id_item, id_membro, tipo_item, tipo_membro, data_emprestimo, data_para_devolucao, data_devolucao) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -47,7 +47,7 @@ public class EmprestimoRepository implements IEmprestimoRepository {
 			rst = stmt.getGeneratedKeys();
 			
 			while(rst.next()) {
-				idExemplar = rst.getInt(1);
+				idEmprestimo = rst.getInt(1);
 			}
 			
 		} catch (SQLException e) {
@@ -57,7 +57,7 @@ public class EmprestimoRepository implements IEmprestimoRepository {
 			ConnectionDb.closeStatement(stmt);
 			ConnectionDb.closeConnection(conn);
 		}
-		return idExemplar;
+		return idEmprestimo;
 	}
 
 }
