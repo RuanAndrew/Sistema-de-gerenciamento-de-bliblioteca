@@ -9,22 +9,22 @@ public class Emprestimo {
 
 	private int idEmprestimo;
 	private int idItemAcervo;
-	private int idAluno;
+	private int idMembro;
 	private TipoItemAcervo tipoItemAcervo;
 	private TipoMembro tipoMembro;
-	private String tipoItem;
 	private LocalDate dataEmprestimo;
+	private LocalDate dataParaDevolucao;
 	private LocalDate dataDevolucao;
 
-	public Emprestimo(int idItemAcervo, int idAluno, TipoItemAcervo tipoItemAcervo, TipoMembro tipoMembro,
-			String tipoItem, LocalDate dataEmprestimo, LocalDate dataDevolucao) {
+	public Emprestimo(int idItemAcervo, int idMembro, TipoItemAcervo tipoItemAcervo, TipoMembro tipoMembro,
+			LocalDate dataEmprestimo, LocalDate dataParaDevolucao, LocalDate dataDevolucao) {
 		super();
 		this.idItemAcervo = idItemAcervo;
-		this.idAluno = idAluno;
+		this.idMembro = idMembro;
 		this.tipoItemAcervo = tipoItemAcervo;
 		this.tipoMembro = tipoMembro;
-		this.tipoItem = tipoItem;
 		this.dataEmprestimo = dataEmprestimo;
+		this.dataParaDevolucao = dataParaDevolucao;
 		this.dataDevolucao = dataDevolucao;
 	}
 
@@ -44,12 +44,12 @@ public class Emprestimo {
 		this.idItemAcervo = idItemAcervo;
 	}
 
-	public int getIdAluno() {
-		return idAluno;
+	public int getIdMembro() {
+		return idMembro;
 	}
 
-	public void setIdAluno(int idAluno) {
-		this.idAluno = idAluno;
+	public void setIdMembro(int idMembro) {
+		this.idMembro = idMembro;
 	}
 
 	public TipoItemAcervo getTipoItemAcervo() {
@@ -68,20 +68,20 @@ public class Emprestimo {
 		this.tipoMembro = tipoMembro;
 	}
 
-	public String getTipoItem() {
-		return tipoItem;
-	}
-
-	public void setTipoItem(String tipoItem) {
-		this.tipoItem = tipoItem;
-	}
-
 	public LocalDate getDataEmprestimo() {
 		return dataEmprestimo;
 	}
 
 	public void setDataEmprestimo(LocalDate dataEmprestimo) {
 		this.dataEmprestimo = dataEmprestimo;
+	}
+
+	public LocalDate getDataParaDevolucao() {
+		return dataParaDevolucao;
+	}
+
+	public void setDataParaDevolucao(LocalDate dataParaDevolucao) {
+		this.dataParaDevolucao = dataParaDevolucao;
 	}
 
 	public LocalDate getDataDevolucao() {
@@ -91,5 +91,5 @@ public class Emprestimo {
 	public void setDataDevolucao(LocalDate dataDevolucao) {
 		this.dataDevolucao = dataDevolucao;
 	}
-	
+
 }
