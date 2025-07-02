@@ -47,4 +47,5 @@ public class Periodico extends ItemAcervo{
     public void setGenero(String genero) {
         this.genero = genero;
     }
+
 }
