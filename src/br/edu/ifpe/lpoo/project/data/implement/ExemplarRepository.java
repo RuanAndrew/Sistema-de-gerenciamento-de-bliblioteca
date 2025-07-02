@@ -25,7 +25,7 @@ public class ExemplarRepository implements IExemplarRepository {
 		StatusExemplar statusExemplar = StatusExemplar.valueOf(status);
 
 		Exemplar exemplar = new Exemplar(idLivro, registro, statusExemplar);
-		exemplar.setIdLivro(idExemplar);
+		exemplar.setIdExemplar(idExemplar);
 		
 		return exemplar;
 	}
