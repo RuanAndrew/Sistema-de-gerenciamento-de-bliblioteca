@@ -36,6 +36,7 @@ CREATE TABLE ebook(
     url_ebook VARCHAR(255)
 );
 
+
 CREATE TABLE periodico (
 	id_periodico INT AUTO_INCREMENT PRIMARY KEY,
     issn VARCHAR(255) UNIQUE, 
@@ -47,4 +48,41 @@ CREATE TABLE periodico (
     idioma VARCHAR(255), 
     ano_publicacao INT,
     genero VARCHAR(255)
+);
+
+CREATE TABLE aluno(
+	id_aluno INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255), 
+    email VARCHAR(255) UNIQUE, 
+    cpf VARCHAR(11) UNIQUE, 
+    matricula VARCHAR(10) UNIQUE, 
+    tipo_membro VARCHAR(20), 
+    debito_multas INT, 
+    status_membro VARCHAR(255), 
+    curso VARCHAR(255)
+);
+
+CREATE TABLE professor(
+	id_professor INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255), 
+    email VARCHAR(255) UNIQUE, 
+    cpf VARCHAR(11) UNIQUE, 
+    matricula VARCHAR(10) UNIQUE, 
+    tipo_membro VARCHAR(20), 
+    debito_multas INT, 
+    status_membro VARCHAR(255),
+    area_atuacao VARCHAR(255), 
+    departamento VARCHAR(255)
+);
+
+CREATE TABLE pesquisador(
+	id_pesquisador INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255), 
+    email VARCHAR(255) UNIQUE, 
+    cpf VARCHAR(11) UNIQUE, 
+    matricula VARCHAR(10) UNIQUE, 
+    tipo_membro VARCHAR(20), 
+    debito_multas INT, 
+    status_membro VARCHAR(255),
+    instituicao VARCHAR(255)
 );
