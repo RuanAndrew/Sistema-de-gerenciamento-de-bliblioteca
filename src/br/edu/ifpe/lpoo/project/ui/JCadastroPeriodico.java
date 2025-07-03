@@ -19,7 +19,7 @@ public class JCadastroPeriodico extends JPanel {
     private JTextField txtVolume;
     private JTextField txtAnoPublicacao;
     private JTextField txtGenero;
-    private JTextField txtIdioma;
+    private JComboBox<String> comboIdioma;
 
     public JCadastroPeriodico(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -114,9 +114,11 @@ public class JCadastroPeriodico extends JPanel {
         idiomaLabel.setBounds(80, 375, 140, 25);
         idiomaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(idiomaLabel);
-        txtIdioma = new JTextField();
-        txtIdioma.setBounds(250, 375, 300, 30);
-        add(txtIdioma);
+
+        String[] idiomas = {"Português", "Inglês", "Espanhol", "Francês", "Alemão"};
+        comboIdioma = new JComboBox<>(idiomas);
+        comboIdioma.setBounds(250, 375, 300, 30);
+        add(comboIdioma);
 
         // --- Botão Cadastrar ---
         JButton btnCadastrar = new JButton("Cadastrar Periódico");
@@ -127,7 +129,6 @@ public class JCadastroPeriodico extends JPanel {
         add(btnCadastrar);
         btnCadastrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 if (txtTitulo.getText().trim().isEmpty() ||
                         txtAutor.getText().trim().isEmpty() ||
                         txtIssn.getText().trim().isEmpty() ||
@@ -135,8 +136,7 @@ public class JCadastroPeriodico extends JPanel {
                         txtNumeroEdicao.getText().trim().isEmpty() ||
                         txtVolume.getText().trim().isEmpty() ||
                         txtAnoPublicacao.getText().trim().isEmpty() ||
-                        txtGenero.getText().trim().isEmpty() ||
-                        txtIdioma.getText().trim().isEmpty()) {
+                        txtGenero.getText().trim().isEmpty()) {
 
                     JOptionPane.showMessageDialog(JCadastroPeriodico.this,
                             "Por favor, preencha todos os campos antes de cadastrar.",
@@ -145,15 +145,15 @@ public class JCadastroPeriodico extends JPanel {
                     return;
                 }
 
-                String titulo = txtTitulo.getText().trim();
-                String autor = txtAutor.getText().trim();
-                String issn = txtIssn.getText().trim();
-                String editora = txtEditora.getText().trim();
-                String numeroEdicao = txtNumeroEdicao.getText().trim();
-                String volume = txtVolume.getText().trim();
-                String anoPublicacao = txtAnoPublicacao.getText().trim();
-                String genero = txtGenero.getText().trim();
-                String idioma = txtIdioma.getText().trim();
+                String titulo = txtTitulo.getText();
+                String autor = txtAutor.getText();
+                String issn = txtIssn.getText();
+                String editora = txtEditora.getText();
+                String numeroEdicao = txtNumeroEdicao.getText();
+                String volume = txtVolume.getText();
+                String anoPublicacao = txtAnoPublicacao.getText();
+                String genero = txtGenero.getText();
+                String idioma = (String) comboIdioma.getSelectedItem();
 
                 try {
                     AcervoService controller = new AcervoService();
@@ -193,6 +193,6 @@ public class JCadastroPeriodico extends JPanel {
         txtVolume.setText("");
         txtAnoPublicacao.setText("");
         txtGenero.setText("");
-        txtIdioma.setText("");
+        comboIdioma.setSelectedIndex(0);
     }
 }

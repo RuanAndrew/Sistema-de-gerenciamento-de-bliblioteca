@@ -1,4 +1,4 @@
-package br.edu.ifpe.lpoo.project.data.implement;
+package br.edu.ifpe.lpoo.project.data.acervo.implement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
-import br.edu.ifpe.lpoo.project.data.IExemplarRepository;
-import br.edu.ifpe.lpoo.project.data.ILivroRepository;
+import br.edu.ifpe.lpoo.project.data.acervo.repository.IExemplarRepository;
+import br.edu.ifpe.lpoo.project.data.acervo.repository.ILivroRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 

@@ -18,7 +18,7 @@ public class JCadastroLivro extends JPanel {
 	private JTextField txtEditora;
 	private JTextField txtNumeroPaginas;
 	private JTextField txtGenero;
-	private JTextField txtIdioma;
+	private JComboBox<String> comboIdioma;
 	private JTextField txtQuantidade;
 
 	public JCadastroLivro(MainFrame mainFrame) {
@@ -105,9 +105,11 @@ public class JCadastroLivro extends JPanel {
 		idiomaLabel.setBounds(80, 340, 120, 25);
 		idiomaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		add(idiomaLabel);
-		txtIdioma = new JTextField();
-		txtIdioma.setBounds(250, 340, 300, 30);
-		add(txtIdioma);
+
+		String[] idiomas = {"Português", "Inglês", "Espanhol", "Francês", "Alemão"};
+		comboIdioma = new JComboBox<>(idiomas);
+		comboIdioma.setBounds(250, 340, 300, 30);
+		add(comboIdioma);
 
 		// --- Quantidade ---
 		JLabel quantidadeLabel = new JLabel("Quantidade:");
@@ -127,7 +129,6 @@ public class JCadastroLivro extends JPanel {
 		add(btnCadastrar);
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				if (txtIsbn.getText().trim().isEmpty() ||
 						txtTitulo.getText().trim().isEmpty() ||
 						txtAutor.getText().trim().isEmpty() ||
@@ -135,7 +136,6 @@ public class JCadastroLivro extends JPanel {
 						txtEditora.getText().trim().isEmpty() ||
 						txtNumeroPaginas.getText().trim().isEmpty() ||
 						txtGenero.getText().trim().isEmpty() ||
-						txtIdioma.getText().trim().isEmpty() ||
 						txtQuantidade.getText().trim().isEmpty()) {
 
 					JOptionPane.showMessageDialog(JCadastroLivro.this,
@@ -145,15 +145,15 @@ public class JCadastroLivro extends JPanel {
 					return;
 				}
 
-				String isbn = txtIsbn.getText().trim();
-				String titulo = txtTitulo.getText().trim();
-				String autor = txtAutor.getText().trim();
-				String anoPublicacao = txtAnoPublicacao.getText().trim();
-				String editora = txtEditora.getText().trim();
-				String numeroPaginas = txtNumeroPaginas.getText().trim();
-				String genero = txtGenero.getText().trim();
-				String idioma = txtIdioma.getText().trim();
-				String quantidade = txtQuantidade.getText().trim();
+				String isbn = txtIsbn.getText();
+				String titulo = txtTitulo.getText();
+				String autor = txtAutor.getText();
+				String anoPublicacao = txtAnoPublicacao.getText();
+				String editora = txtEditora.getText();
+				String numeroPaginas = txtNumeroPaginas.getText();
+				String genero = txtGenero.getText();
+				String idioma = (String) comboIdioma.getSelectedItem();
+				String quantidade = txtQuantidade.getText();
 
 				try {
 					AcervoService controller = new AcervoService();
@@ -192,7 +192,7 @@ public class JCadastroLivro extends JPanel {
 		txtEditora.setText("");
 		txtNumeroPaginas.setText("");
 		txtGenero.setText("");
-		txtIdioma.setText("");
+		comboIdioma.setSelectedIndex(0);
 		txtQuantidade.setText("");
 	}
 }
