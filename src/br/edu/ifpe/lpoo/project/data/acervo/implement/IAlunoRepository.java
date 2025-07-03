@@ -1,4 +1,4 @@
-package br.edu.ifpe.lpoo.project.data.implement;
+package br.edu.ifpe.lpoo.project.data.acervo.implement;
 
 import java.util.List;
 

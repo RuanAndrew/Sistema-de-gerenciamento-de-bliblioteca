@@ -1,18 +1,19 @@
 package br.edu.ifpe.lpoo.project.business;
 
+import br.edu.ifpe.lpoo.project.data.acervo.implement.AlunoRepository;
+import br.edu.ifpe.lpoo.project.data.acervo.implement.PesquisadorRepository;
+import br.edu.ifpe.lpoo.project.data.acervo.implement.ProfessorRepository;
 import br.edu.ifpe.lpoo.project.entities.membros.Aluno;
 import br.edu.ifpe.lpoo.project.entities.membros.Professor;
 import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.enums.StatusMembro;
 import br.edu.ifpe.lpoo.project.enums.TipoMembro;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
-import br.edu.ifpe.lpoo.project.data.implement.AlunoRepository;
-import br.edu.ifpe.lpoo.project.exceptions.DbException;
-import br.edu.ifpe.lpoo.project.data.implement.ProfessorRepository;
-import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
-import br.edu.ifpe.lpoo.project.data.implement.PesquisadorRepository;
 
-import java.sql.SQLException;
+import br.edu.ifpe.lpoo.project.exceptions.DbException;
+
+import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
+
 
 public class MembroService {
 	AlunoRepository alunoRepository;
