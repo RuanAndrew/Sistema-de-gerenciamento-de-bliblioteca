@@ -1,9 +1,9 @@
 package br.edu.ifpe.lpoo.project.business;
-import br.edu.ifpe.lpoo.project.data.IPeriodicoRepository;
-import br.edu.ifpe.lpoo.project.data.implement.EbookRepository;
-import br.edu.ifpe.lpoo.project.data.implement.ExemplarRepository;
-import br.edu.ifpe.lpoo.project.data.implement.LivroRepository;
-import br.edu.ifpe.lpoo.project.data.implement.PeriodicoRepository;
+import br.edu.ifpe.lpoo.project.data.acervo.implement.EbookRepository;
+import br.edu.ifpe.lpoo.project.data.acervo.implement.ExemplarRepository;
+import br.edu.ifpe.lpoo.project.data.acervo.implement.LivroRepository;
+import br.edu.ifpe.lpoo.project.data.acervo.implement.PeriodicoRepository;
+import br.edu.ifpe.lpoo.project.data.acervo.repository.IPeriodicoRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.*;
 import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
@@ -29,6 +29,13 @@ public class AcervoService {
     CatalogacaoService catalogacaoService;
     LocalDate currentDate = LocalDate.now();
     int anoAtual = currentDate.getYear();
+
+    public AcervoService() {
+        this.livroRepository = new LivroRepository();
+        this.exemplarRepository = new ExemplarRepository();
+        this.ebookRepository = new EbookRepository();
+        this.periodicoRepository = new PeriodicoRepository();
+    }
 
     // Cadastrar itens ao acervo
 
