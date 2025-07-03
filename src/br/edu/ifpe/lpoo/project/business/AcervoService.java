@@ -53,6 +53,10 @@ public class AcervoService {
             throw new BusinessExcepition("O idioma é obrigatório.");
         }
 
+        if (isValidIsbn(isbn)) {
+            throw new BusinessExcepition("ISBN invalido");
+        }
+
         int parsedNumeroPaginas;
         try {
             parsedNumeroPaginas = Integer.parseInt(numeroPaginas);
@@ -140,6 +144,10 @@ public class AcervoService {
         }
         if (url.isBlank()) {
             throw new BusinessExcepition("A URL e obrigatória.");
+        }
+
+        if (isValidIsbn(isbn)) {
+            throw new BusinessExcepition("ISBN invalido");
         }
 
         int parsedNumeroPaginas;
@@ -572,6 +580,28 @@ public class AcervoService {
     public void atualizarStatusExemplar () {}
     public List<Exemplar> listarExemplaresPorLivro () {
         return null;
+    }
+
+    // metodos auxiliares
+
+    public static boolean isValidIsbn(String isbn) {
+
+        final String ISBN10_REGEX = "^\\d{9}[\\dX]$";
+        final String ISBN13_REGEX = "^(978|979)\\d{10}$";
+
+        if (isbn == null || isbn.trim().isEmpty()) {
+            return true;
+        }
+
+        String cleanedIsbn = isbn.trim().replaceAll("[\\s-]", "");
+
+        if (cleanedIsbn.length() == 10) {
+            return !Pattern.matches(ISBN10_REGEX, cleanedIsbn);
+        } else if (cleanedIsbn.length() == 13) {
+            return !Pattern.matches(ISBN13_REGEX, cleanedIsbn);
+        }
+
+        return true;
     }
 }
 

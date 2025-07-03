@@ -18,4 +18,6 @@ module SistemaGenrenciamentoBiblioteca {
     exports br.edu.ifpe.lpoo.project.entities.acervo;
     exports br.edu.ifpe.lpoo.project.entities;
     exports br.edu.ifpe.lpoo.project.exceptions;
+    exports br.edu.ifpe.lpoo.project.ui.dto;
+    exports br.edu.ifpe.lpoo.project.enums;
 }
