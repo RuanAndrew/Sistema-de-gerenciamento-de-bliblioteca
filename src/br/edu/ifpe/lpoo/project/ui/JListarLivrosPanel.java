@@ -35,12 +35,11 @@ public class JListarLivrosPanel extends JPanel {
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(titleLabel, BorderLayout.NORTH);
 
-        // Modelo da Tabela (sem colunas de botão)
+
         String[] columnNames = {"ID", "Título", "Autor", "Ano", "ISBN"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Nenhuma célula é editável
                 return false;
             }
         };
@@ -81,7 +80,6 @@ public class JListarLivrosPanel extends JPanel {
             for (ItemAcervo item : todosItens) {
                 if (item instanceof Livro) {
                     Livro livro = (Livro) item;
-                    // Prepara os dados da linha (sem os botões)
                     Object[] rowData = {
                             livro.getId(),
                             livro.getTitulo(),
@@ -96,6 +94,4 @@ public class JListarLivrosPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Erro ao carregar livros: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-    // As classes internas para os botões foram removidas pois não são mais necessárias.
 }

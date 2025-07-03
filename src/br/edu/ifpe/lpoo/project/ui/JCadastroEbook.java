@@ -18,8 +18,8 @@ public class JCadastroEbook extends JPanel {
     private JTextField txtIsbn;
     private JTextField txtNumeroPaginas;
     private JTextField txtGenero;
-    private JTextField txtIdioma;
-    private JTextField txtFormatoDigital;
+    private JComboBox<String> comboIdioma;
+    private JComboBox<String> comboFormatoDigital;
     private JTextField txtUrl;
 
     public JCadastroEbook(MainFrame mainFrame) {
@@ -106,18 +106,22 @@ public class JCadastroEbook extends JPanel {
         idiomaLabel.setBounds(80, 340, 120, 25);
         idiomaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(idiomaLabel);
-        txtIdioma = new JTextField();
-        txtIdioma.setBounds(250, 340, 300, 30);
-        add(txtIdioma);
+
+        String[] idiomas = {"Português", "Inglês", "Espanhol", "Francês", "Alemão"};
+        comboIdioma = new JComboBox<>(idiomas);
+        comboIdioma.setBounds(250, 340, 300, 30);
+        add(comboIdioma);
 
         // --- Formato Digital ---
         JLabel formatoDigitalLabel = new JLabel("Formato Digital:");
         formatoDigitalLabel.setBounds(80, 375, 120, 25);
         formatoDigitalLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(formatoDigitalLabel);
-        txtFormatoDigital = new JTextField();
-        txtFormatoDigital.setBounds(250, 375, 300, 30);
-        add(txtFormatoDigital);
+
+        String[] formatos = {"PDF", "EPUB", "MOBI"};
+        comboFormatoDigital = new JComboBox<>(formatos);
+        comboFormatoDigital.setBounds(250, 375, 300, 30);
+        add(comboFormatoDigital);
 
         // --- URL ---
         JLabel urlLabel = new JLabel("URL:");
@@ -137,7 +141,6 @@ public class JCadastroEbook extends JPanel {
         add(btnCadastrar);
         btnCadastrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 if (txtTitulo.getText().trim().isEmpty() ||
                         txtAutores.getText().trim().isEmpty() ||
                         txtAnoPublicacao.getText().trim().isEmpty() ||
@@ -145,8 +148,6 @@ public class JCadastroEbook extends JPanel {
                         txtIsbn.getText().trim().isEmpty() ||
                         txtNumeroPaginas.getText().trim().isEmpty() ||
                         txtGenero.getText().trim().isEmpty() ||
-                        txtIdioma.getText().trim().isEmpty() ||
-                        txtFormatoDigital.getText().trim().isEmpty() ||
                         txtUrl.getText().trim().isEmpty()) {
 
                     JOptionPane.showMessageDialog(JCadastroEbook.this,
@@ -156,16 +157,16 @@ public class JCadastroEbook extends JPanel {
                     return;
                 }
 
-                String titulo = txtTitulo.getText().trim();
-                String autores = txtAutores.getText().trim();
-                String anoPublicacao = txtAnoPublicacao.getText().trim();
-                String editora = txtEditora.getText().trim();
-                String isbn = txtIsbn.getText().trim();
-                String numeroPaginas = txtNumeroPaginas.getText().trim();
-                String genero = txtGenero.getText().trim();
-                String idioma = txtIdioma.getText().trim();
-                String formatoDigital = txtFormatoDigital.getText().trim();
-                String url = txtUrl.getText().trim();
+                String titulo = txtTitulo.getText();
+                String autores = txtAutores.getText();
+                String anoPublicacao = txtAnoPublicacao.getText();
+                String editora = txtEditora.getText();
+                String isbn = txtIsbn.getText();
+                String numeroPaginas = txtNumeroPaginas.getText();
+                String genero = txtGenero.getText();
+                String idioma = (String) comboIdioma.getSelectedItem();
+                String formatoDigital = (String) comboFormatoDigital.getSelectedItem();
+                String url = txtUrl.getText();
 
                 try {
                     AcervoService controller = new AcervoService();
@@ -204,8 +205,8 @@ public class JCadastroEbook extends JPanel {
         txtIsbn.setText("");
         txtNumeroPaginas.setText("");
         txtGenero.setText("");
-        txtIdioma.setText("");
-        txtFormatoDigital.setText("");
+        comboIdioma.setSelectedIndex(0);
+        comboFormatoDigital.setSelectedIndex(0);
         txtUrl.setText("");
     }
 }
