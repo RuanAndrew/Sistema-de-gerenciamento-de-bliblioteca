@@ -30,6 +30,13 @@ public class AcervoService {
     LocalDate currentDate = LocalDate.now();
     int anoAtual = currentDate.getYear();
 
+    public AcervoService() {
+        this.livroRepository = new LivroRepository();
+        this.exemplarRepository = new ExemplarRepository();
+        this.ebookRepository = new EbookRepository();
+        this.periodicoRepository = new PeriodicoRepository();
+    }
+
     // Cadastrar itens ao acervo
 
     public void cadastrarLivro(String titulo, String autor, String anoPublicacao, String editora, String isbn, String numeroPaginas, String genero, String idioma, String quantidadeExemplares) {
