@@ -77,10 +77,38 @@ public class TelaPrincipalPanel extends JPanel {
         btnListarLivros.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(mainFrame, "Funcionalidade de Listar Livros em breve!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                mainFrame.showPanel("ListarLivros");
             }
         });
         buttonPanel.add(btnListarLivros);
+
+        JButton btnListarEbooks = new JButton("Listar Ebooks");
+        btnListarEbooks.setPreferredSize(new Dimension(250, 60));
+        btnListarEbooks.setFont(new Font("Arial", Font.PLAIN, 18));
+        btnListarEbooks.setBackground(new Color(60, 179, 113));
+        btnListarEbooks.setForeground(Color.WHITE);
+        btnListarEbooks.setFocusPainted(false);
+        btnListarEbooks.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainFrame.showPanel("ListarEbooks");
+            }
+        });
+        buttonPanel.add(btnListarEbooks);
+
+        JButton btnListarPeriodicos = new JButton("Listar Periodico");
+        btnListarPeriodicos.setPreferredSize(new Dimension(250, 60));
+        btnListarPeriodicos.setFont(new Font("Arial", Font.PLAIN, 18));
+        btnListarPeriodicos.setBackground(new Color(60, 179, 113));
+        btnListarPeriodicos.setForeground(Color.WHITE);
+        btnListarPeriodicos.setFocusPainted(false);
+        btnListarPeriodicos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainFrame.showPanel("ListarPeriodicos");
+            }
+        });
+        buttonPanel.add(btnListarPeriodicos);
 
         JButton btnSair = new JButton("Sair");
         btnSair.setPreferredSize(new Dimension(250, 60));
