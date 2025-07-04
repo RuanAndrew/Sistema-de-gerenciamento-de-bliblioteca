@@ -20,4 +20,6 @@ module SistemaGenrenciamentoBiblioteca {
     exports br.edu.ifpe.lpoo.project.entities.gerenciamento;
     exports br.edu.ifpe.lpoo.project.enums;
     exports br.edu.ifpe.lpoo.project.exceptions;
+    exports br.edu.ifpe.lpoo.project.ui.dto;
+    exports br.edu.ifpe.lpoo.project.enums;
 }
