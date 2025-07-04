@@ -6,11 +6,11 @@ import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.enums.StatusMembro;
 import br.edu.ifpe.lpoo.project.enums.TipoMembro;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
-import br.edu.ifpe.lpoo.project.data.implement.AlunoRepository;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
-import br.edu.ifpe.lpoo.project.data.implement.ProfessorRepository;
 import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
-import br.edu.ifpe.lpoo.project.data.implement.PesquisadorRepository;
+import br.edu.ifpe.lpoo.project.data.membros.implement.AlunoRepository;
+import br.edu.ifpe.lpoo.project.data.membros.implement.PesquisadorRepository;
+import br.edu.ifpe.lpoo.project.data.membros.implement.ProfessorRepository;
 
 import java.sql.SQLException;
 

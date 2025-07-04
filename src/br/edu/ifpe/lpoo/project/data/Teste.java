@@ -1,6 +1,7 @@
 package br.edu.ifpe.lpoo.project.data;
 
-import br.edu.ifpe.lpoo.project.data.implement.AlunoRepository;
+import br.edu.ifpe.lpoo.project.data.membros.implement.AlunoRepository;
+import br.edu.ifpe.lpoo.project.data.membros.repository.IAlunoRepository;
 import br.edu.ifpe.lpoo.project.entities.membros.Aluno;
 import br.edu.ifpe.lpoo.project.enums.StatusMembro;
 import br.edu.ifpe.lpoo.project.enums.TipoMembro;

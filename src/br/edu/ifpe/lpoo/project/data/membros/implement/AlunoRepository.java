@@ -1,4 +1,4 @@
-package br.edu.ifpe.lpoo.project.data.implement;
+package br.edu.ifpe.lpoo.project.data.membros.implement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,19 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
-import br.edu.ifpe.lpoo.project.data.IPesquisadorRepository;
-import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
+import br.edu.ifpe.lpoo.project.data.membros.repository.IAlunoRepository;
+import br.edu.ifpe.lpoo.project.entities.membros.Aluno;
 import br.edu.ifpe.lpoo.project.enums.StatusMembro;
 import br.edu.ifpe.lpoo.project.enums.TipoMembro;
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
-public class PesquisadorRepository implements IPesquisadorRepository{
-
+public class AlunoRepository implements IAlunoRepository{
 	
-	private Pesquisador instanciarPesquisador(ResultSet rst) throws SQLException{
+	private Aluno instanciarAluno(ResultSet rst) throws SQLException{
 		
-		int idPesquisador = rst.getInt("id_pesquisador");
+		int idAluno = rst.getInt("id_aluno");
 		String nome = rst.getString("nome");
 		String email = rst.getString("email");
 		String cpf = rst.getString("cpf");
@@ -31,27 +29,27 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 		int debitoMultas = rst.getInt("debito_multas");
 		String status = rst.getString("status_membro");
 		StatusMembro statusMembro = StatusMembro.valueOf(status);
-		String instituicao = rst.getString("instituicao");
+		String curso = rst.getString("curso");
 		
-		Pesquisador pesquisador = new Pesquisador(nome, email, cpf, matricula, tipoMembro, debitoMultas, statusMembro, instituicao);
-		pesquisador.setId(idPesquisador);
+		Aluno aluno = new Aluno(nome, email, cpf, matricula, tipoMembro, debitoMultas, statusMembro, curso);
+		aluno.setId(idAluno);
 		
-		return pesquisador;
+		return aluno;
 		
 	}
 	
 	@Override
-	public void insert(Pesquisador pesquisador) {
+	public void insert (Aluno aluno) {
 		
-		if(pesquisador == null) {
-			throw new DbException("Objeto tipo Pesquisador não pode ser null");
+		if(aluno == null) {
+			throw new DbException("Objeto tipo Aluno não pode ser null");
 		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
-		
-		String consulta = "INSERT INTO pesquisador (nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, instituicao) "
+
+		String consulta = "INSERT INTO aluno (nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, curso) "
 							+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		try {
@@ -59,21 +57,21 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS);
 			
-			stmt.setString(1, pesquisador.getNome());
-			stmt.setString(2, pesquisador.getEmail());
-			stmt.setString(3, pesquisador.getCpf());
-			stmt.setString(4, pesquisador.getMatricula());
-			stmt.setString(5, pesquisador.getTipomembro().name());
-			stmt.setInt(6, pesquisador.getDebitomultas());
-			stmt.setString(7, pesquisador.getStatusmembro().name());
-			stmt.setString(8, pesquisador.getInstituicao());
+			stmt.setString(1, aluno.getNome());
+			stmt.setString(2, aluno.getEmail());
+			stmt.setString(3, aluno.getCpf());
+			stmt.setString(4, aluno.getMatricula());
+			stmt.setString(5, aluno.getTipomembro().name());
+			stmt.setInt(6, aluno.getDebitomultas());
+			stmt.setString(7, aluno.getStatusmembro().name());
+			stmt.setString(8, aluno.getCurso());
 			
 			stmt.executeUpdate();
 			
 			rst = stmt.getGeneratedKeys();
 			
 			if(rst.next()) {
-				pesquisador.setId(rst.getInt(1));
+				aluno.setId(rst.getInt(1));
 			}
 			
 		}catch(SQLException e) {
@@ -83,14 +81,13 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 			ConnectionDb.closeStatement(stmt);
 			ConnectionDb.closeConnection(conn);
 		}
-		
 	}
 
 	@Override
-	public boolean existMembro(Pesquisador pesquisador) {
+	public boolean existMembro(Aluno aluno) {
 		
-		if(pesquisador == null) {
-			throw new DbException("Objeto tipo Pesquisador não pode ser null");
+		if(aluno == null) {
+			throw new DbException("Objeto tipo Aluno não pode ser null");
 		}
 		
 		boolean exists = false;
@@ -99,14 +96,14 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
-		String consulta = "SELECT * FROM pesquisador WHERE cpf = ?";
+		String consulta = "SELECT * FROM aluno WHERE cpf = ?";
 		
 		try {
 			
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 			
-			stmt.setString(1, pesquisador.getCpf());
+			stmt.setString(1, aluno.getCpf());
 			
 			rst = stmt.executeQuery();
 			
@@ -123,18 +120,18 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 		
 		return exists;
 	}
-	
+
 	@Override
 	public void delete(int idMembro) {
 		
 		if(idMembro <= 0) {
-			throw new BusinessExcepition("Id inválido");
+			throw new DbException("Id inválido");
 		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		
-		String consulta = "DELETE FROM pesquisador WHERE id_pesquisador = ?";
+		String consulta = "DELETE FROM aluno WHERE id_aluno = ?";
 		
 		try {
 			
@@ -152,21 +149,21 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 			ConnectionDb.closeConnection(conn);
 		}
 	}
-
+	
 	@Override
-	public Pesquisador buscarPorId(int idMembro) {
+	public Aluno buscarPorId(int idMembro) {
 		
 		if(idMembro <= 0) {
-			throw new BusinessExcepition("Id inválido");
+			throw new DbException("Id inválido");
 		}
 		
-		Pesquisador pesquisador = null;
+		Aluno aluno = null;
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
-		String consulta = "SELECT * FROM pesquisador WHERE id_pesquisador = ?";
+		String consulta = "SELECT * FROM aluno WHERE id_aluno = ?";
 		
 		try {
 			conn = ConnectionDb.getConnection();
@@ -177,10 +174,10 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 			rst = stmt.executeQuery();
 			
 			if(rst.next()) {
-				pesquisador = instanciarPesquisador(rst);
+				aluno = instanciarAluno(rst);
 			}
-			
-		} catch (Exception e) {
+					
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		}finally {
 			ConnectionDb.closeResultSet(rst);
@@ -188,20 +185,19 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 			ConnectionDb.closeConnection(conn);
 		}
 			
-		return pesquisador;
-		
+		return aluno;
 	}
 
 	@Override
-	public List<Pesquisador> buscarTodos() {
+	public List<Aluno> buscarTodos() {
 
-		List<Pesquisador> pesquisadores = new ArrayList<Pesquisador>();
+		List<Aluno> alunos = new ArrayList<Aluno>();
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
-		String consulta = "SELECT * FROM pesquisador";
+		String consulta = "SELECT * FROM aluno";
 		
 		try {
 			conn = ConnectionDb.getConnection();
@@ -209,9 +205,8 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 			rst = stmt.executeQuery();
 			
 			while(rst.next()) {
-				pesquisadores.add(instanciarPesquisador(rst));
+				alunos.add(instanciarAluno(rst));
 			}
-			
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		}finally {
@@ -220,17 +215,17 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 			ConnectionDb.closeConnection(conn);
 		}
 		
-		return pesquisadores;
+		return alunos;
 	}
 
 	@Override
-	public List<Pesquisador> buscarPorTermo(String termo) {
+	public List<Aluno> buscarPorTermo(String termo) {
 		
 		if(termo == null) {
 			throw new DbException("O termo de pesquisa não pode ser null");
 		}
 		
-		List<Pesquisador> pesquisadores = new ArrayList<Pesquisador>();
+		List<Aluno> alunos = new ArrayList<Aluno>();
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -238,7 +233,7 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 		
 		String termoStmt = "%" + termo.toLowerCase() + "%";
 		
-		String consulta = "SELECT * FROM pesquisador "
+		String consulta = "SELECT * FROM aluno "
 				+ "WHERE LOWER(nome) LIKE ? "
 				+ "OR LOWER(cpf) LIKE ? "
 				+ "OR LOWER(matricula) LIKE ? "
@@ -255,7 +250,7 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 			rst = stmt.executeQuery();
 			
 			while(rst.next()) {
-				pesquisadores.add(instanciarPesquisador(rst));
+				alunos.add(instanciarAluno(rst));
 			}
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
@@ -264,36 +259,38 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 			ConnectionDb.closeStatement(stmt);
 			ConnectionDb.closeConnection(conn);
 		}
-		return pesquisadores;
+		return alunos;
 	}
 
+	
+	
 	@Override
-	public void atualizar(Pesquisador pesquisador) {
+	public void atualizar(Aluno aluno) {
 		
-		if(pesquisador == null) {
-			throw new DbException("Pesquisador não pode ser null");
+		if(aluno == null) {
+			throw new DbException("Aluno não pode ser null");
 		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		
-		String consulta = "UPDATE pesquisador "
-						+ "SET nome = ?, email = ?, cpf = ?, matricula = ?, tipo_membro = ?, debito_multas = ?, status_membro = ?, instituicao = ? "
-						+ "WHERE id_pesquisador = ?";
+		String consulta = "UPDATE aluno "
+						+ "SET nome = ?, email = ?, cpf = ?, matricula = ?, tipo_membro = ?, debito_multas = ?, status_membro = ?, curso = ?"
+						+ "WHERE id_aluno = ?";
 		
 		try {
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 			
-			stmt.setString(1, pesquisador.getNome());
-			stmt.setString(2, pesquisador.getEmail());
-			stmt.setString(3, pesquisador.getCpf());
-			stmt.setString(4, pesquisador.getMatricula());
-			stmt.setString(5, pesquisador.getTipomembro().name());
-			stmt.setInt(6, pesquisador.getDebitomultas());
-			stmt.setString(7, pesquisador.getStatusmembro().name());
-			stmt.setString(8, pesquisador.getInstituicao());
-			stmt.setInt(9, pesquisador.getId());
+			stmt.setString(1, aluno.getNome());
+			stmt.setString(2, aluno.getEmail());
+			stmt.setString(3, aluno.getCpf());
+			stmt.setString(4, aluno.getMatricula());
+			stmt.setString(5, aluno.getTipomembro().name());
+			stmt.setInt(6, aluno.getDebitomultas());
+			stmt.setString(7, aluno.getStatusmembro().name());
+			stmt.setString(8, aluno.getCurso());
+			stmt.setInt(9, aluno.getId());
 			
 			stmt.executeUpdate();
 			
@@ -303,6 +300,6 @@ public class PesquisadorRepository implements IPesquisadorRepository{
 			ConnectionDb.closeStatement(stmt);
 			ConnectionDb.closeConnection(conn);
 		}
-		
 	}
+	
 }

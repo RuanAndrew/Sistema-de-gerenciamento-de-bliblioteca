@@ -1,4 +1,4 @@
-package br.edu.ifpe.lpoo.project.data.implement;
+package br.edu.ifpe.lpoo.project.data.membros.implement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,18 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
-import br.edu.ifpe.lpoo.project.data.IProfessorRepository;
-import br.edu.ifpe.lpoo.project.entities.membros.Professor;
+import br.edu.ifpe.lpoo.project.data.membros.repository.IPesquisadorRepository;
+import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
 import br.edu.ifpe.lpoo.project.enums.StatusMembro;
 import br.edu.ifpe.lpoo.project.enums.TipoMembro;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
-public class ProfessorRepository implements IProfessorRepository{
+public class PesquisadorRepository implements IPesquisadorRepository{
+
 	
-private Professor instanciarProfessor(ResultSet rst) throws SQLException{
+	private Pesquisador instanciarPesquisador(ResultSet rst) throws SQLException{
 		
-		int idProfessor = rst.getInt("id_professor");
+		int idPesquisador = rst.getInt("id_pesquisador");
 		String nome = rst.getString("nome");
 		String email = rst.getString("email");
 		String cpf = rst.getString("cpf");
@@ -30,51 +31,49 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 		int debitoMultas = rst.getInt("debito_multas");
 		String status = rst.getString("status_membro");
 		StatusMembro statusMembro = StatusMembro.valueOf(status);
-		String areaAtuacao = rst.getString("area_atuacao");
-		String departamento = rst.getString("departamento");
+		String instituicao = rst.getString("instituicao");
 		
-		Professor professor = new Professor(nome, email, cpf, matricula, tipoMembro, debitoMultas, statusMembro, areaAtuacao, departamento);
-		professor.setId(idProfessor);
+		Pesquisador pesquisador = new Pesquisador(nome, email, cpf, matricula, tipoMembro, debitoMultas, statusMembro, instituicao);
+		pesquisador.setId(idPesquisador);
 		
-		return professor;
+		return pesquisador;
 		
 	}
-
+	
 	@Override
-	public void insert(Professor professor) {
+	public void insert(Pesquisador pesquisador) {
 		
-		if(professor == null) {
-			throw new DbException("Objeto tipo Professor não pode ser null");
+		if(pesquisador == null) {
+			throw new DbException("Objeto tipo Pesquisador não pode ser null");
 		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
-		String consulta = "INSERT INTO professor (nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, area_atuacao, departamento) "
-							+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String consulta = "INSERT INTO pesquisador (nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, instituicao) "
+							+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		try {
 			
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS);
 			
-			stmt.setString(1, professor.getNome());
-			stmt.setString(2, professor.getEmail());
-			stmt.setString(3, professor.getCpf());
-			stmt.setString(4, professor.getMatricula());
-			stmt.setString(5, professor.getTipomembro().name());
-			stmt.setInt(6, professor.getDebitomultas());
-			stmt.setString(7, professor.getStatusmembro().name());
-			stmt.setString(8, professor.getAreaAtuacao());
-			stmt.setString(9, professor.getDepartamento());
+			stmt.setString(1, pesquisador.getNome());
+			stmt.setString(2, pesquisador.getEmail());
+			stmt.setString(3, pesquisador.getCpf());
+			stmt.setString(4, pesquisador.getMatricula());
+			stmt.setString(5, pesquisador.getTipomembro().name());
+			stmt.setInt(6, pesquisador.getDebitomultas());
+			stmt.setString(7, pesquisador.getStatusmembro().name());
+			stmt.setString(8, pesquisador.getInstituicao());
 			
 			stmt.executeUpdate();
 			
 			rst = stmt.getGeneratedKeys();
 			
 			if(rst.next()) {
-				professor.setId(rst.getInt(1));
+				pesquisador.setId(rst.getInt(1));
 			}
 			
 		}catch(SQLException e) {
@@ -88,28 +87,26 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 	}
 
 	@Override
-	public boolean existMembro(Professor professor) {
+	public boolean existMembro(Pesquisador pesquisador) {
 		
-		if(professor == null) {
-			throw new DbException("Objeto tipo Professor não pode ser null");
+		if(pesquisador == null) {
+			throw new DbException("Objeto tipo Pesquisador não pode ser null");
 		}
 		
-		
 		boolean exists = false;
-		
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
-		String consulta = "SELECT * FROM professor WHERE cpf = ?";
+		String consulta = "SELECT * FROM pesquisador WHERE cpf = ?";
 		
 		try {
 			
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 			
-			stmt.setString(1, professor.getCpf());
+			stmt.setString(1, pesquisador.getCpf());
 			
 			rst = stmt.executeQuery();
 			
@@ -137,7 +134,7 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		
-		String consulta = "DELETE FROM professor WHERE id_professor = ?";
+		String consulta = "DELETE FROM pesquisador WHERE id_pesquisador = ?";
 		
 		try {
 			
@@ -157,19 +154,19 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 	}
 
 	@Override
-	public Professor buscarPorId(int idMembro) {
-
+	public Pesquisador buscarPorId(int idMembro) {
+		
 		if(idMembro <= 0) {
-			throw new DbException("Id inválido");
+			throw new BusinessExcepition("Id inválido");
 		}
 		
-		Professor professor = null;
+		Pesquisador pesquisador = null;
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
-		String consulta = "SELECT * FROM professor WHERE id_professor = ?";
+		String consulta = "SELECT * FROM pesquisador WHERE id_pesquisador = ?";
 		
 		try {
 			conn = ConnectionDb.getConnection();
@@ -180,12 +177,10 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 			rst = stmt.executeQuery();
 			
 			if(rst.next()) {
-				professor = instanciarProfessor(rst);
+				pesquisador = instanciarPesquisador(rst);
 			}
 			
-			
-			
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DbException(e.getMessage());
 		}finally {
 			ConnectionDb.closeResultSet(rst);
@@ -193,19 +188,20 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 			ConnectionDb.closeConnection(conn);
 		}
 			
-		return professor;
+		return pesquisador;
+		
 	}
 
 	@Override
-	public List<Professor> buscarTodos() {
-		
-		List<Professor> professores = new ArrayList<Professor>();
+	public List<Pesquisador> buscarTodos() {
+
+		List<Pesquisador> pesquisadores = new ArrayList<Pesquisador>();
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
-		String consulta = "SELECT * FROM professor";
+		String consulta = "SELECT * FROM pesquisador";
 		
 		try {
 			conn = ConnectionDb.getConnection();
@@ -213,7 +209,7 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 			rst = stmt.executeQuery();
 			
 			while(rst.next()) {
-				professores.add(instanciarProfessor(rst));
+				pesquisadores.add(instanciarPesquisador(rst));
 			}
 			
 		} catch (SQLException e) {
@@ -223,18 +219,18 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 			ConnectionDb.closeStatement(stmt);
 			ConnectionDb.closeConnection(conn);
 		}
-			
-		return professores;
+		
+		return pesquisadores;
 	}
 
 	@Override
-	public List<Professor> buscarPorTermo(String termo) {
+	public List<Pesquisador> buscarPorTermo(String termo) {
 		
 		if(termo == null) {
 			throw new DbException("O termo de pesquisa não pode ser null");
 		}
 		
-		List<Professor> professores = new ArrayList<Professor>();
+		List<Pesquisador> pesquisadores = new ArrayList<Pesquisador>();
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -242,7 +238,7 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 		
 		String termoStmt = "%" + termo.toLowerCase() + "%";
 		
-		String consulta = "SELECT * FROM professor "
+		String consulta = "SELECT * FROM pesquisador "
 				+ "WHERE LOWER(nome) LIKE ? "
 				+ "OR LOWER(cpf) LIKE ? "
 				+ "OR LOWER(matricula) LIKE ? "
@@ -259,7 +255,7 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 			rst = stmt.executeQuery();
 			
 			while(rst.next()) {
-				professores.add(instanciarProfessor(rst));
+				pesquisadores.add(instanciarPesquisador(rst));
 			}
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
@@ -268,37 +264,36 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 			ConnectionDb.closeStatement(stmt);
 			ConnectionDb.closeConnection(conn);
 		}
-		return professores;
+		return pesquisadores;
 	}
 
 	@Override
-	public void atualizar(Professor professor) {
+	public void atualizar(Pesquisador pesquisador) {
 		
-		if(professor == null) {
-			throw new DbException("Professor não pode ser null");
+		if(pesquisador == null) {
+			throw new DbException("Pesquisador não pode ser null");
 		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		
-		String consulta = "UPDATE professor "
-						+ "SET nome = ?, email = ?, cpf = ?, matricula = ?, tipo_membro = ?, debito_multas = ?, status_membro = ?, area_atuacao = ?, departamento = ? "
-						+ "WHERE id_professor = ?";
+		String consulta = "UPDATE pesquisador "
+						+ "SET nome = ?, email = ?, cpf = ?, matricula = ?, tipo_membro = ?, debito_multas = ?, status_membro = ?, instituicao = ? "
+						+ "WHERE id_pesquisador = ?";
 		
 		try {
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 			
-			stmt.setString(1, professor.getNome());
-			stmt.setString(2, professor.getEmail());
-			stmt.setString(3, professor.getCpf());
-			stmt.setString(4, professor.getMatricula());
-			stmt.setString(5, professor.getTipomembro().name());
-			stmt.setInt(6, professor.getDebitomultas());
-			stmt.setString(7, professor.getStatusmembro().name());
-			stmt.setString(8, professor.getAreaAtuacao());
-			stmt.setString(9, professor.getDepartamento());
-			stmt.setInt(10, professor.getId());
+			stmt.setString(1, pesquisador.getNome());
+			stmt.setString(2, pesquisador.getEmail());
+			stmt.setString(3, pesquisador.getCpf());
+			stmt.setString(4, pesquisador.getMatricula());
+			stmt.setString(5, pesquisador.getTipomembro().name());
+			stmt.setInt(6, pesquisador.getDebitomultas());
+			stmt.setString(7, pesquisador.getStatusmembro().name());
+			stmt.setString(8, pesquisador.getInstituicao());
+			stmt.setInt(9, pesquisador.getId());
 			
 			stmt.executeUpdate();
 			
