@@ -38,7 +38,6 @@ public class MembroService {
 			throw new BusinessExcepition("O curso é obrigatório");
 		}
 
-
 		if (!cpf.matches("\\d{11}")) {
 			throw new BusinessExcepition("O CPF deve conter exatamente 11 números.");
 		}
@@ -171,4 +170,27 @@ public class MembroService {
 			throw new BusinessExcepition("Aluno não encontrado para atualização.");
 		}
 	}
+	public Membro buscarMembroPorId(int id) throws DbException {
+        try {
+            return membroRepository.findById(id);
+        } catch (SQLException e) {
+            throw new DbException("Erro ao buscar membro pelo ID: " + e.getMessage());
+        }
+    }
+
+    public List<Membro> listarTodosMembros() throws DbException {
+        try {
+            return membroRepository.findAll();
+        } catch (SQLException e) {
+            throw new DbException("Erro ao listar todos os membros: " + e.getMessage());
+        }
+    }
+
+    public List<Membro> buscarMembrosPorTermo(String termo) throws DbException {
+        try {
+            return membroRepository.findByTermo(termo);
+        } catch (SQLException e) {
+            throw new DbException("Erro ao buscar membros pelo termo: " + e.getMessage());
+        }
+    }
 }
