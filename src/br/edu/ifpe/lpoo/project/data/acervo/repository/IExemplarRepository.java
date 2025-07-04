@@ -1,5 +1,6 @@
 package br.edu.ifpe.lpoo.project.data.acervo.repository;
 
+import java.sql.Connection;
 import java.util.List;
 
 import br.edu.ifpe.lpoo.project.entities.acervo.Exemplar;
@@ -10,7 +11,7 @@ public interface IExemplarRepository {
 
 	void insert(Exemplar exemplar, int idLivro);
 
-	void deleteParaLivros(int idLivro);
+	void deleteParaLivros(int idLivro, Connection conn);
 
 	void atualizarStatus(Exemplar exemplar);
 
