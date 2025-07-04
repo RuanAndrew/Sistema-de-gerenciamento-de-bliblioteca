@@ -1,10 +1,21 @@
 package br.edu.ifpe.lpoo.project.data;
 
-import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
+import java.util.List;
+
+import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
 
 public interface ILivroRepository {
-	void insert(ItemAcervo item);
+	void insert(Livro livro);
 
-	boolean existItem(String indentifier);
+	boolean existItem(Livro livro);
 	
+	Livro buscarPorId(int idItem);
+	
+	void delete(int idItem);
+	
+	List<Livro> buscarTodos();
+	
+	List<Livro> buscarPorTermo(String termo);
+	
+	void atualizar(Livro livro);
 }

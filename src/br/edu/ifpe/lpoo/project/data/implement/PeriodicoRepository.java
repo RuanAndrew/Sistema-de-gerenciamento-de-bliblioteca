@@ -7,62 +7,60 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
-import br.edu.ifpe.lpoo.project.data.IEbookRepository;
-import br.edu.ifpe.lpoo.project.entities.acervo.Ebook;
-import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
+import br.edu.ifpe.lpoo.project.data.IPeriodicoRepository;
+import br.edu.ifpe.lpoo.project.entities.acervo.Periodico;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
-public class EbookRepository implements IEbookRepository{
+public class PeriodicoRepository implements IPeriodicoRepository{
 	
-	private Ebook instanciarEbook(ResultSet rst) throws SQLException{
+	
+	private Periodico instanciarPeriodico(ResultSet rst) throws SQLException {
 		
-		int idEbook = rst.getInt("id_ebook");
+		int idPeriodico = rst.getInt("id_periodico");
 		String titulo = rst.getString("titulo");
 		String autor = rst.getString("autor");
 		int anoPublicacao = rst.getInt("ano_publicacao");
 		String editora = rst.getString("editora");
 		String idioma = rst.getString("idioma");
-		String isbn = rst.getString("isbn");
-		int numeroPaginas = rst.getInt("numero_paginas");
+		String issn = rst.getString("issn");
+		int numeroEdicao = rst.getInt("numero_edicao");
+		int volume = rst.getInt("volume");
 		String genero = rst.getString("genero");
-		String formato = rst.getString("formato_digital").toUpperCase();
-		FormatoDigital formatodigital = FormatoDigital.valueOf(formato);
-		String urlEbook = rst.getString("url_ebook");
 		
-		Ebook ebook = new Ebook(titulo, autor, anoPublicacao, editora, idioma, isbn, numeroPaginas, genero, formatodigital, urlEbook);
-		ebook.setId(idEbook);
+		Periodico periodico = new Periodico(titulo, autor, anoPublicacao, editora, idioma, issn, numeroEdicao, volume, genero);
+		periodico.setId(idPeriodico);
 		
-		return ebook;
+		return periodico;
 	}
 	
 	@Override
-	public void insert(Ebook ebook) {
+	public void insert(Periodico periodico) {
 		
-		if(ebook == null) {
-			throw new DbException("Objeto tipo Ebook não pode ser null");
+		if(periodico == null) {
+			throw new DbException("Objeto tipo Periodico não pode ser null");
 		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		
-		String consulta = "INSERT INTO ebook (isbn, numero_paginas, genero, titulo, autor, ano_publicacao, editora, idioma, formato_digital, url_ebook)"
-							+"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String consulta = "INSERT INTO periodico (issn, titulo, autor, numero_edicao, volume, editora, idioma, ano_publicacao, genero) "
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		try {
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 			
-			stmt.setString(1, ebook.getIsbn());
-			stmt.setInt(2, ebook.getNumeroPaginas());
-			stmt.setString(3, ebook.getGenero());
-			stmt.setString(4, ebook.getTitulo());
-			stmt.setString(5, ebook.getAutor());
-			stmt.setInt(6, ebook.getAnoPublicacao());
-			stmt.setString(7, ebook.getEditora());
-			stmt.setString(8, ebook.getIdioma());
-			stmt.setString(9, ebook.getFormatoDigital().name());
-			stmt.setString(10, ebook.getUrl());
+			stmt.setString(1, periodico.getIssn());
+			stmt.setString(2,  periodico.getTitulo());
+			stmt.setString(3, periodico.getAutor());
+			stmt.setInt(4, periodico.getNumeroEdicao());
+			stmt.setInt(5, periodico.getVolume());
+			stmt.setString(6, periodico.getEditora());
+			stmt.setString(7, periodico.getIdioma());
+			stmt.setInt(8, periodico.getAnoPublicacao());
+			stmt.setString(9, periodico.getGenero());
 			
 			stmt.executeUpdate();
 			
@@ -75,49 +73,48 @@ public class EbookRepository implements IEbookRepository{
 	}
 
 	@Override
-	public boolean existItem(Ebook ebook) {
+	public boolean existItem(Periodico periodico) {
 		
-		if(ebook == null) {
-			throw new DbException("Objeto tipo Ebook não pode ser null");
+		if(periodico == null) {
+			throw new DbException("Objeto tipo Periodico não pode ser null");
 		}
 		
-		
-		boolean exists = false;
+		boolean exist = false;
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
 		
-		String consulta = "SELECT * FROM ebook "
-							+ "WHERE isbn = ? OR (titulo = ? AND autor = ? AND editora = ?)";
+		String consulta = "SELECT * FROM periodico WHERE "
+						+"issn = ? OR (titulo = ? AND numero_edicao = ? AND volume = ?)";
 		
 		try {
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 			
-			stmt.setString(1, ebook.getIsbn());
-			stmt.setString(2, ebook.getTitulo());
-			stmt.setString(3, ebook.getAutor());
-			stmt.setString(4, ebook.getEditora());
+			stmt.setString(1, periodico.getIssn());
+			stmt.setString(2, periodico.getTitulo());
+			stmt.setInt(3, periodico.getNumeroEdicao());
+			stmt.setInt(4, periodico.getVolume());
 			
 			rst = stmt.executeQuery();
-			while(rst.next()) {
-				exists = true;
-			}
+			
+			exist = rst.next();
 			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
 		}finally {
-			ConnectionDb.closeStatement(stmt);
 			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt);
 			ConnectionDb.closeConnection(conn);
 		}
-		return exists;
+		
+		return exist;
 	}
 	
 	@Override
-	public Ebook buscarPorId(int idItem) {
+	public Periodico buscarPorId(int idItem) {
 		
 		if(idItem <= 0) {
 			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
@@ -127,9 +124,9 @@ public class EbookRepository implements IEbookRepository{
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
-		Ebook ebook = null;
+		Periodico periodico = null;
 		
-		String consulta = "SELECT * FROM ebook WHERE id_ebook = ?";
+		String consulta = "SELECT * FROM periodico WHERE id_periodico = ?";
 		
 		try {
 			conn = ConnectionDb.getConnection();
@@ -140,8 +137,8 @@ public class EbookRepository implements IEbookRepository{
 			rst = stmt.executeQuery();
 			
 			if(rst.next()) {
-
-				ebook = instanciarEbook(rst);
+				
+				periodico = instanciarPeriodico(rst);
 			}
 			
 		}catch(SQLException e) {
@@ -152,18 +149,18 @@ public class EbookRepository implements IEbookRepository{
 			ConnectionDb.closeConnection(conn);
 		}
 		
-		return ebook;
+		return periodico;
 	}
 	
 	@Override
-	public List<Ebook> buscarTodos(){
+	public List<Periodico> buscarTodos(){
 		
-		List<Ebook> ebooks = new ArrayList<>();
+		List<Periodico> periodicos = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
-		String consulta = "SELECT * FROM ebook";
+		String consulta = "SELECT * FROM periodico";
 		
 		try {
 			conn = ConnectionDb.getConnection();
@@ -173,7 +170,7 @@ public class EbookRepository implements IEbookRepository{
 			
 			while(rst.next()) {
 				
-				ebooks.add(instanciarEbook(rst));
+				periodicos.add(instanciarPeriodico(rst));
 			}
 			
 		}catch(SQLException e) {
@@ -184,43 +181,46 @@ public class EbookRepository implements IEbookRepository{
 			ConnectionDb.closeConnection(conn);
 		}
 		
-		return ebooks;
+		return periodicos;
 	}
 	
-	
 	@Override
-	public List<Ebook> buscarPorTermo(String termo){
+	public List<Periodico> buscarPorTermo(String termo){
 		
 		if(termo == null) {
 			throw new DbException("O termo de pesquisa não pode ser null");
 		}
 		
-		List<Ebook> ebooks = new ArrayList<>();
+		List<Periodico> periodicos = new ArrayList<>();
+		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 		
-		String termoBusca = "%" + termo.toLowerCase() + "%";
+		String buscaTermo = "%" + termo.toLowerCase() + "%";
 		
-		String consulta = "SELECT * FROM ebook "
-							+ "WHERE LOWER(titulo) LIKE ?"
-							+ "OR LOWER(autor) LIKE ? "
-							+ "OR LOWER(editora) LIKE ? "
+		String consulta = "SELECT * FROM periodico WHERE "
+							+ "LOWER(issn) LIKE ?" 
+							+ "OR LOWER(titulo) LIKE ? "
+							+ "OR LOWER(autor) LIKE ?"
 							+ "ORDER BY titulo";
+		
 		try {
+			
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 			
-			stmt.setString(1, termoBusca);
-			stmt.setString(2, termoBusca);
-			stmt.setString(3, termoBusca);
+			stmt.setString(1, buscaTermo);
+			stmt.setString(2, buscaTermo);
+			stmt.setString(3, buscaTermo);
 			
 			rst = stmt.executeQuery();
 			
 			while(rst.next()) {
 				
-				ebooks.add(instanciarEbook(rst));
+				periodicos.add(instanciarPeriodico(rst));
 			}
+			
 			
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
@@ -230,7 +230,7 @@ public class EbookRepository implements IEbookRepository{
 			ConnectionDb.closeConnection(conn);
 		}
 		
-		return ebooks;
+		return periodicos;
 	}
 	
 	@Override
@@ -243,7 +243,7 @@ public class EbookRepository implements IEbookRepository{
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		
-		String consulta = "DELETE FROM ebook WHERE id_ebook = ?";
+		String consulta = "DELETE FROM periodico WHERE id_periodico = ?";
 		
 		try {
 			
@@ -263,36 +263,33 @@ public class EbookRepository implements IEbookRepository{
 	}
 	
 	@Override
-	public void atualizar(Ebook ebook) {
+	public void atualizar(Periodico periodico) {
 		
-		
-		if(ebook == null) {
-			throw new DbException("Objeto tipo Ebook não pode ser null");
+		if(periodico == null) {
+			throw new DbException("Objeto tipo Periodico não pode ser null");
 		}
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		
-		String consulta = " UPDATE ebook "
-				+ "SET isbn = ?, numero_paginas = ?, genero = ?, titulo = ?, autor = ?, ano_publicacao = ?, "
-				+ "editora = ?, idioma = ?, formato_digital  = ?, url_ebook = ? "
-				+ "WHERE id_ebook = ?";
-		
+		String consulta = "UPDATE periodico "
+							+ "SET issn = ?, titulo = ?, autor = ?, numero_edicao = ?, volume = ?, editora = ?, idioma = ?, ano_publicacao = ?, genero = ? "
+							+ "WHERE id_periodico = ?";
+						
 		try {
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 			
-			stmt.setString(1, ebook.getIsbn());
-			stmt.setInt(2, ebook.getNumeroPaginas());
-			stmt.setString(3, ebook.getGenero());
-			stmt.setString(4, ebook.getTitulo());
-			stmt.setString(5, ebook.getAutor());
-			stmt.setInt(6, ebook.getAnoPublicacao());
-			stmt.setString(7, ebook.getEditora());
-			stmt.setString(8, ebook.getIdioma());
-			stmt.setString(9, ebook.getFormatoDigital().name());
-			stmt.setString(10, ebook.getUrl());
-			stmt.setInt(11, ebook.getId());
+			stmt.setString(1, periodico.getIssn());
+			stmt.setString(2,  periodico.getTitulo());
+			stmt.setString(3, periodico.getAutor());
+			stmt.setInt(4, periodico.getNumeroEdicao());
+			stmt.setInt(5, periodico.getVolume());
+			stmt.setString(6, periodico.getEditora());
+			stmt.setString(7, periodico.getIdioma());
+			stmt.setInt(8, periodico.getAnoPublicacao());
+			stmt.setString(9, periodico.getGenero());
+			stmt.setInt(10, periodico.getId());
 			
 			stmt.executeUpdate();
 			
@@ -302,6 +299,5 @@ public class EbookRepository implements IEbookRepository{
 			ConnectionDb.closeStatement(stmt);
 			ConnectionDb.closeConnection(conn);
 		}
-		
 	}
 }
