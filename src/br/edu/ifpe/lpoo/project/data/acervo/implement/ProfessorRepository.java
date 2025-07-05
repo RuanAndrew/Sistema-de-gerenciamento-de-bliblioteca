@@ -16,11 +16,11 @@ import br.edu.ifpe.lpoo.project.enums.TipoMembro;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
-public class ProfessorRepository implements IProfessorRepository{
-	
-private Professor instanciarProfessor(ResultSet rst) throws SQLException{
-		
-		int idProfessor = rst.getInt("id_professor");
+public class ProfessorRepository implements IProfessorRepository {
+
+	private Professor instanciarProfessor(ResultSet rst) throws SQLException {
+
+		int idProfessor = rst.getInt("id_membro");
 		String nome = rst.getString("nome");
 		String email = rst.getString("email");
 		String cpf = rst.getString("cpf");
@@ -32,33 +32,40 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 		StatusMembro statusMembro = StatusMembro.valueOf(status);
 		String areaAtuacao = rst.getString("area_atuacao");
 		String departamento = rst.getString("departamento");
-		
-		Professor professor = new Professor(nome, email, cpf, matricula, tipoMembro, debitoMultas, statusMembro, areaAtuacao, departamento);
+
+		Professor professor = new Professor(nome, email, cpf, matricula, tipoMembro, debitoMultas, statusMembro,
+				areaAtuacao, departamento);
 		professor.setId(idProfessor);
-		
+
 		return professor;
-		
+
 	}
 
 	@Override
 	public void insert(Professor professor) {
-		
-		if(professor == null) {
+
+		if (professor == null) {
 			throw new DbException("Objeto tipo Professor não pode ser null");
 		}
-		
+
 		Connection conn = null;
 		PreparedStatement stmt = null;
+		PreparedStatement stmt1 = null;
 		ResultSet rst = null;
-		
-		String consulta = "INSERT INTO professor (nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, area_atuacao, departamento) "
-							+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		
+
+		String sqlMembro = "INSERT INTO membro (nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+		String sqlProfessor = "INSERT INTO professor (id_professor, area_atuacao, departamento) VALUES (?, ?, ?)";
+
+		int idProfessor = -1;
+
 		try {
-			
+
 			conn = ConnectionDb.getConnection();
-			stmt = conn.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS);
-			
+			conn.setAutoCommit(false);
+
+			stmt = conn.prepareStatement(sqlMembro, Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, professor.getNome());
 			stmt.setString(2, professor.getEmail());
 			stmt.setString(3, professor.getCpf());
@@ -66,92 +73,109 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 			stmt.setString(5, professor.getTipomembro().name());
 			stmt.setInt(6, professor.getDebitomultas());
 			stmt.setString(7, professor.getStatusmembro().name());
-			stmt.setString(8, professor.getAreaAtuacao());
-			stmt.setString(9, professor.getDepartamento());
-			
 			stmt.executeUpdate();
-			
+
 			rst = stmt.getGeneratedKeys();
-			
-			if(rst.next()) {
-				professor.setId(rst.getInt(1));
+
+			if (rst.next()) {
+				idProfessor = rst.getInt(1);
+				professor.setId(idProfessor);
+			} else {
+				throw new DbException("Erro ao gerar id para membro");
 			}
-			
-		}catch(SQLException e) {
-			throw new DbException(e.getMessage());
-		}finally {
+
+			stmt1 = conn.prepareStatement(sqlProfessor);
+			stmt1.setInt(1, idProfessor);
+			stmt1.setString(2, professor.getAreaAtuacao());
+			stmt1.setString(3, professor.getDepartamento());
+			stmt1.executeUpdate();
+
+			conn.commit();
+
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				throw new DbException("Erro no rollback ao inserir professor. Causado por: " + e1.getMessage());
+			}
+			throw new DbException("Erro ao inserir um novo professor: " + e.getMessage());
+		} finally {
 			ConnectionDb.closeResultSet(rst);
+			ConnectionDb.closeStatement(stmt1);
 			ConnectionDb.closeStatement(stmt);
 			ConnectionDb.closeConnection(conn);
 		}
-		
+
 	}
 
 	@Override
 	public boolean existMembro(Professor professor) {
-		
-		if(professor == null) {
+
+		if (professor == null) {
 			throw new DbException("Objeto tipo Professor não pode ser null");
 		}
-		
-		
+
 		boolean exists = false;
-		
-		
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rst = null;
-		
-		String consulta = "SELECT * FROM professor WHERE cpf = ?";
-		
-		try {
-			
-			conn = ConnectionDb.getConnection();
-			stmt = conn.prepareStatement(consulta);
-			
+
+		String sqlMembro = "SELECT * FROM membro WHERE cpf = ?";
+
+		try (Connection conn = ConnectionDb.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(sqlMembro)) {
+
 			stmt.setString(1, professor.getCpf());
-			
-			rst = stmt.executeQuery();
-			
-			while(rst.next()) {
-				exists = true;
+
+			try (ResultSet rst = stmt.executeQuery()) {
+
+				if (rst.next()) {
+					exists = true;
+				}
 			}
-		}catch(SQLException e) {
-			throw new DbException(e.getMessage());
-		}finally {
-			ConnectionDb.closeResultSet(rst);
-			ConnectionDb.closeStatement(stmt);
-			ConnectionDb.closeConnection(conn);
+		} catch (SQLException e) {
+			throw new DbException("Erro ao verificar se o professor existe. Causado por: " + e.getMessage());
 		}
-		
+
 		return exists;
 	}
-	
+
 	@Override
 	public void delete(int idMembro) {
-		
-		if(idMembro <= 0) {
+
+		if (idMembro <= 0) {
 			throw new BusinessExcepition("Id inválido");
 		}
-		
+
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		
-		String consulta = "DELETE FROM professor WHERE id_professor = ?";
-		
+		PreparedStatement stmt1 = null;
+
+		String sqlMembro = "DELETE FROM membro WHERE id_membro = ?";
+		String sqlProfessor = "DELETE FROM professor WHERE id_professor = ?";
+
 		try {
-			
+
 			conn = ConnectionDb.getConnection();
-			stmt = conn.prepareStatement(consulta);
-			
+			conn.setAutoCommit(false);
+
+			stmt = conn.prepareStatement(sqlProfessor);
 			stmt.setInt(1, idMembro);
-			
 			stmt.executeUpdate();
-			
-		}catch(SQLException e) {
-			throw new DbException(e.getMessage());
-		}finally {
+
+			stmt1 = conn.prepareStatement(sqlMembro);
+			stmt1.setInt(1, idMembro);
+			stmt1.executeUpdate();
+
+			conn.commit();
+
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				throw new DbException("Erro no rollback ao deletar professor. Causado por: " + e1.getMessage());
+			}
+			throw new DbException("Erro ao deletar  professor. Causado por: " + e.getMessage());
+		} finally {
 			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeStatement(stmt1);
 			ConnectionDb.closeConnection(conn);
 		}
 	}
@@ -159,136 +183,116 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 	@Override
 	public Professor buscarPorId(int idMembro) {
 
-		if(idMembro <= 0) {
+		if (idMembro <= 0) {
 			throw new DbException("Id inválido");
 		}
-		
+
 		Professor professor = null;
-		
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rst = null;
-		
-		String consulta = "SELECT * FROM professor WHERE id_professor = ?";
-		
-		try {
-			conn = ConnectionDb.getConnection();
-			stmt = conn.prepareStatement(consulta);
-			
+
+		String sqlProfessor = "SELECT id_membro, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, area_atuacao, departamento FROM membro "
+				+ "INNER JOIN professor ON membro.id_membro = professor.id_professor " + "WHERE id_membro = ?";
+
+		try (Connection conn = ConnectionDb.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(sqlProfessor)) {
+
 			stmt.setInt(1, idMembro);
-			
-			rst = stmt.executeQuery();
-			
-			if(rst.next()) {
-				professor = instanciarProfessor(rst);
+
+			try (ResultSet rst = stmt.executeQuery()) {
+
+				if (rst.next()) {
+					professor = instanciarProfessor(rst);
+				}
 			}
-			
-			
-			
+
 		} catch (SQLException e) {
-			throw new DbException(e.getMessage());
-		}finally {
-			ConnectionDb.closeResultSet(rst);
-			ConnectionDb.closeStatement(stmt);
-			ConnectionDb.closeConnection(conn);
+			throw new DbException("Erro ao buscar professor por id. Causado por: " + e.getMessage());
 		}
-			
+
 		return professor;
 	}
 
 	@Override
 	public List<Professor> buscarTodos() {
-		
+
 		List<Professor> professores = new ArrayList<Professor>();
-		
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rst = null;
-		
-		String consulta = "SELECT * FROM professor";
-		
-		try {
-			conn = ConnectionDb.getConnection();
-			stmt = conn.prepareStatement(consulta);
-			rst = stmt.executeQuery();
-			
-			while(rst.next()) {
-				professores.add(instanciarProfessor(rst));
+
+		String sqlProfessor = "SELECT id_membro, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, area_atuacao, departamento FROM membro "
+				+ "INNER JOIN professor ON membro.id_membro = professor.id_professor";
+
+		try (Connection conn = ConnectionDb.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(sqlProfessor)) {
+
+			try (ResultSet rst = stmt.executeQuery()) {
+
+				while (rst.next()) {
+					professores.add(instanciarProfessor(rst));
+				}
 			}
-			
+
 		} catch (SQLException e) {
-			throw new DbException(e.getMessage());
-		}finally {
-			ConnectionDb.closeResultSet(rst);
-			ConnectionDb.closeStatement(stmt);
-			ConnectionDb.closeConnection(conn);
+			throw new DbException("Erro ao buscar todos os professores. Causado por: " + e.getMessage());
 		}
-			
+
 		return professores;
 	}
 
 	@Override
 	public List<Professor> buscarPorTermo(String termo) {
-		
-		if(termo == null) {
+
+		if (termo == null) {
 			throw new DbException("O termo de pesquisa não pode ser null");
 		}
-		
+
 		List<Professor> professores = new ArrayList<Professor>();
-		
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rst = null;
-		
+
 		String termoStmt = "%" + termo.toLowerCase() + "%";
-		
-		String consulta = "SELECT * FROM professor "
-				+ "WHERE LOWER(nome) LIKE ? "
-				+ "OR LOWER(cpf) LIKE ? "
-				+ "OR LOWER(matricula) LIKE ? "
-				+ "ORDER BY nome";
-		
-		try {
-			conn = ConnectionDb.getConnection();
-			stmt = conn.prepareStatement(consulta);
-			
+
+		String sqlProfessor = "SELECT id_membro, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, area_atuacao, departamento FROM membro "
+				+ "INNER JOIN professor ON membro.id_membro = professor.id_professor "
+				+ "WHERE LOWER(nome) LIKE ? OR LOWER(cpf) LIKE ? OR LOWER(matricula) LIKE ? " + "ORDER BY nome";
+
+		try (Connection conn = ConnectionDb.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(sqlProfessor)) {
+
 			stmt.setString(1, termoStmt);
 			stmt.setString(2, termoStmt);
 			stmt.setString(3, termoStmt);
-			
-			rst = stmt.executeQuery();
-			
-			while(rst.next()) {
-				professores.add(instanciarProfessor(rst));
+
+			try (ResultSet rst = stmt.executeQuery()) {
+
+				while (rst.next()) {
+					professores.add(instanciarProfessor(rst));
+				}
 			}
 		} catch (SQLException e) {
-			throw new DbException(e.getMessage());
-		}finally {
-			ConnectionDb.closeResultSet(rst);
-			ConnectionDb.closeStatement(stmt);
-			ConnectionDb.closeConnection(conn);
+			throw new DbException("Erro ao buscar todos os professores por termo. Causado por: " + e.getMessage());
 		}
+
 		return professores;
 	}
 
 	@Override
 	public void atualizar(Professor professor) {
-		
-		if(professor == null) {
+
+		if (professor == null) {
 			throw new DbException("Professor não pode ser null");
 		}
-		
+
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		
-		String consulta = "UPDATE professor "
-						+ "SET nome = ?, email = ?, cpf = ?, matricula = ?, tipo_membro = ?, debito_multas = ?, status_membro = ?, area_atuacao = ?, departamento = ? "
-						+ "WHERE id_professor = ?";
-		
+		PreparedStatement stmt1 = null;
+
+		String sqlMembro = "UPDATE membro "
+				+ "SET nome = ?, email = ?, cpf = ?, matricula = ?, tipo_membro = ?, debito_multas = ?, status_membro = ? "
+				+ "WHERE id_membro = ?";
+
+		String sqlProfessor = "UPDATE professor SET area_atuacao = ?, departamento = ? WHERE id_professor = ?";
+
 		try {
 			conn = ConnectionDb.getConnection();
-			stmt = conn.prepareStatement(consulta);
-			
+			conn.setAutoCommit(false);
+
+			stmt = conn.prepareStatement(sqlMembro);
 			stmt.setString(1, professor.getNome());
 			stmt.setString(2, professor.getEmail());
 			stmt.setString(3, professor.getCpf());
@@ -296,18 +300,29 @@ private Professor instanciarProfessor(ResultSet rst) throws SQLException{
 			stmt.setString(5, professor.getTipomembro().name());
 			stmt.setInt(6, professor.getDebitomultas());
 			stmt.setString(7, professor.getStatusmembro().name());
-			stmt.setString(8, professor.getAreaAtuacao());
-			stmt.setString(9, professor.getDepartamento());
-			stmt.setInt(10, professor.getId());
-			
+			stmt.setInt(8, professor.getId());
 			stmt.executeUpdate();
-			
+
+			stmt1 = conn.prepareStatement(sqlProfessor);
+			stmt1.setString(1, professor.getAreaAtuacao());
+			stmt1.setString(2, professor.getDepartamento());
+			stmt1.setInt(3, professor.getId());
+			stmt1.executeUpdate();
+
+			conn.commit();
+
 		} catch (Exception e) {
-			throw new DbException(e.getMessage());
-		}finally {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				throw new DbException("Erro no rollback ao atualizar professor. Causado por: " + e1.getMessage());
+			}
+			throw new DbException("Erro ao atualizar professor: " + e.getMessage());
+		} finally {
 			ConnectionDb.closeStatement(stmt);
+			ConnectionDb.closeStatement(stmt1);
 			ConnectionDb.closeConnection(conn);
 		}
-		
+
 	}
 }
