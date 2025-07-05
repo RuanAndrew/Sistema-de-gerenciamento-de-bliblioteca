@@ -2,30 +2,27 @@ package br.edu.ifpe.lpoo.project.entities.gerenciamento;
 
 import java.time.LocalDate;
 
-import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
-import br.edu.ifpe.lpoo.project.enums.TipoMembro;
+import br.edu.ifpe.lpoo.project.enums.StatusEmprestimo;
 
 public class Emprestimo {
 
 	private int idEmprestimo;
 	private int idItemAcervo;
 	private int idMembro;
-	private TipoItemAcervo tipoItemAcervo;
-	private TipoMembro tipoMembro;
 	private LocalDate dataEmprestimo;
 	private LocalDate dataParaDevolucao;
 	private LocalDate dataDevolucao;
+	private StatusEmprestimo statusEmprestimo;
 
-	public Emprestimo(int idItemAcervo, int idMembro, TipoItemAcervo tipoItemAcervo, TipoMembro tipoMembro,
-			LocalDate dataEmprestimo, LocalDate dataParaDevolucao, LocalDate dataDevolucao) {
+	public Emprestimo(int idItemAcervo, int idMembro, LocalDate dataEmprestimo, LocalDate dataParaDevolucao,
+			LocalDate dataDevolucao, StatusEmprestimo statusEmprestimo) {
 		super();
 		this.idItemAcervo = idItemAcervo;
 		this.idMembro = idMembro;
-		this.tipoItemAcervo = tipoItemAcervo;
-		this.tipoMembro = tipoMembro;
 		this.dataEmprestimo = dataEmprestimo;
 		this.dataParaDevolucao = dataParaDevolucao;
 		this.dataDevolucao = dataDevolucao;
+		this.statusEmprestimo = statusEmprestimo;
 	}
 
 	public int getIdEmprestimo() {
@@ -52,22 +49,6 @@ public class Emprestimo {
 		this.idMembro = idMembro;
 	}
 
-	public TipoItemAcervo getTipoItemAcervo() {
-		return tipoItemAcervo;
-	}
-
-	public void setTipoItemAcervo(TipoItemAcervo tipoItemAcervo) {
-		this.tipoItemAcervo = tipoItemAcervo;
-	}
-
-	public TipoMembro getTipoMembro() {
-		return tipoMembro;
-	}
-
-	public void setTipoMembro(TipoMembro tipoMembro) {
-		this.tipoMembro = tipoMembro;
-	}
-
 	public LocalDate getDataEmprestimo() {
 		return dataEmprestimo;
 	}
@@ -92,4 +73,11 @@ public class Emprestimo {
 		this.dataDevolucao = dataDevolucao;
 	}
 
+	public StatusEmprestimo getStatusEmprestimo() {
+		return statusEmprestimo;
+	}
+
+	public void setStatusEmprestimo(StatusEmprestimo statusEmprestimo) {
+		this.statusEmprestimo = statusEmprestimo;
+	}
 }
