@@ -1,8 +1,8 @@
 package br.edu.ifpe.lpoo.project.business;
 
 import br.edu.ifpe.lpoo.project.entities.membros.Aluno;
+import br.edu.ifpe.lpoo.project.entities.membros.Membro;
 import br.edu.ifpe.lpoo.project.entities.membros.Professor;
-import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.enums.StatusMembro;
 import br.edu.ifpe.lpoo.project.enums.TipoMembro;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
@@ -12,7 +12,8 @@ import br.edu.ifpe.lpoo.project.data.implement.ProfessorRepository;
 import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
 import br.edu.ifpe.lpoo.project.data.implement.PesquisadorRepository;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MembroService {
 	AlunoRepository alunoRepository;
@@ -150,7 +151,7 @@ public class MembroService {
 		}
 	}
 
-	public void atualizarMembro(Aluno alunoAtualizado) {
+	public void atualizarMembro(Aluno alunoAtualizado, Professor professorAtualizado, Pesquisador pesquisadoratualizado) {
 		if (alunoAtualizado == null || alunoAtualizado.getCpf() == null || alunoAtualizado.getCpf().isBlank()) {
 			throw new BusinessExcepition("CPF obrigatório para atualizar o aluno.");
 		}
@@ -168,28 +169,83 @@ public class MembroService {
 		} else {
 			throw new BusinessExcepition("Aluno não encontrado para atualização.");
 		}
+		if (professorAtualizado == null || professorAtualizado.getCpf() == null || professorAtualizado.getCpf().isBlank()) {
+			throw new BusinessExcepition("CPF obrigatório para atualizar o professor.");
+		}
+
+		professorRepository = new ProfessorRepository();
+
+		boolean existeprofessor = professorRepository.existMembro(professorAtualizado);
+
+		if (existeprofessor) {
+			try {
+				professorRepository.atualizar(professorAtualizado);
+			} catch (DbException e) {
+				throw new BusinessExcepition("Erro ao atualizar professor: " + e.getMessage());
+			}
+		} else {
+			throw new BusinessExcepition("Professor não encontrado para atualização.");
+		}
+		if (pesquisadoratualizado == null || pesquisadoratualizado.getCpf() == null || pesquisadoratualizado.getCpf().isBlank()) {
+			throw new BusinessExcepition("CPF obrigatório para atualizar o professor.");
+		}
+
+		professorRepository = new ProfessorRepository();
+
+		boolean existepesquisador = pesquisadorRepository.existMembro(pesquisadoratualizado);
+
+		if (existepesquisador) {
+			try {
+				pesquisadorRepository.atualizar(pesquisadoratualizado);
+			} catch (DbException e) {
+				throw new BusinessExcepition("Erro ao atualizar pesquisador: " + e.getMessage());
+			}
+		} else {
+			throw new BusinessExcepition("pesquisador não encontrado para atualização.");
+		}
 	}
-	public Membro buscarMembroPorId(int id) throws DbException {
-        try {
-            return membroRepository.findById(id);
-        } catch (SQLException e) {
-            throw new DbException("Erro ao buscar membro pelo ID: " + e.getMessage());
-        }
-    }
+		
+	 public Membro buscarmembroPorId (int id) {
+	        try {
 
-    public List<Membro> listarTodosMembros() throws DbException {
-        try {
-            return membroRepository.findAll();
-        } catch (SQLException e) {
-            throw new DbException("Erro ao listar todos os membros: " + e.getMessage());
-        }
-    }
+	            Aluno aluno = alunoRepository.buscarPorId(id);
+	            if (aluno != null) {return aluno;}
 
-    public List<Membro> buscarMembrosPorTermo(String termo) throws DbException {
-        try {
-            return membroRepository.findByTermo(termo);
-        } catch (SQLException e) {
-            throw new DbException("Erro ao buscar membros pelo termo: " + e.getMessage());
-        }
-    }
+	            Professor professor = professorRepository.buscarPorId(id);
+	            if (professor != null) {return professor;}
+
+	            Pesquisador pesquisador = pesquisadorRepository.buscarPorId(id);
+	            if (pesquisador != null) {return pesquisador;}
+
+	            return null;
+	        }catch (NumberFormatException e) {
+	            throw new BusinessExcepition ("Formato de ID invalido: " + id);
+	        }catch (DbException e) {
+	            throw new BusinessExcepition("Erro ao buscar Membros por ID: " + e.getMessage());
+	        }
+	    }
+
+	 public List<Membro> listarTodosItens () {
+	        List<Membro> todosItens = new ArrayList<>();
+	        try {
+	            todosItens.addAll(alunoRepository.buscarTodos());
+	            todosItens.addAll(professorRepository.buscarTodos());
+	            todosItens.addAll(pesquisadorRepository.buscarTodos());
+	        } catch (DbException e) {
+	            throw new BusinessExcepition("Erro ao listar todos os Membros: " + e.getMessage());
+	        }
+	        return todosItens;
+	    }
+
+	    public List<Membro> buscarItensPorTermo (String termoBusca) {
+	        List<Membro> resultados = new ArrayList<>();
+	        try {
+	            resultados.addAll(alunoRepository.buscarPorTermo(termoBusca));
+	            resultados.addAll(professorRepository.buscarPorTermo(termoBusca));
+	            resultados.addAll(pesquisadorRepository.buscarPorTermo(termoBusca));
+	        } catch (DbException e) {
+	            throw new BusinessExcepition("Erro ao buscar Membros por termo: " + e.getMessage());
+	        }
+	        return resultados;
+	    }
 }
