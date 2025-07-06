@@ -1,8 +1,8 @@
-package br.edu.ifpe.lpoo.project.data;
+package br.edu.ifpe.lpoo.project.data.empretimos.repository;
 
 import java.util.List;
 
-import br.edu.ifpe.lpoo.project.entities.gerenciamento.Reserva;
+import br.edu.ifpe.lpoo.project.entities.emprestimo.Reserva;;
 
 public interface IReservaRepository {
 

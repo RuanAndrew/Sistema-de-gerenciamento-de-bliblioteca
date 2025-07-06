@@ -1,4 +1,4 @@
-package br.edu.ifpe.lpoo.project.data.acervo.implement;
+package br.edu.ifpe.lpoo.project.data.empretimos.implement;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
-import br.edu.ifpe.lpoo.project.data.IReservaRepository;
-import br.edu.ifpe.lpoo.project.entities.gerenciamento.Reserva;
+import br.edu.ifpe.lpoo.project.data.empretimos.repository.IReservaRepository;
+import br.edu.ifpe.lpoo.project.entities.emprestimo.Reserva;
 import br.edu.ifpe.lpoo.project.enums.StatusReserva;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class ReservaRepository implements IReservaRepository {
 
-	private Reserva instanciarReserva(ResultSet rst) throws SQLException {
+	private br.edu.ifpe.lpoo.project.entities.emprestimo.Reserva instanciarReserva(ResultSet rst) throws SQLException {
 
 		int idReserva = rst.getInt("id_reserva");
 		int idMembro = rst.getInt("id_membro");

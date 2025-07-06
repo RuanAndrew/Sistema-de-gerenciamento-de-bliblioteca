@@ -4,36 +4,27 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-// Ignora propriedades JSON que não vamos mapear
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DetalhesLivroApi {
 
     @JsonProperty("title")
     private String title;
 
-    // O nome do campo no JSON é "authors" (no plural)
     @JsonProperty("authors")
     private List<AutorApi> authors;
 
-    // O nome do campo no JSON é "publish_date" (com underscore)
     @JsonProperty("publish_date")
     private String publish_date;
 
-    // O nome do campo no JSON é "number_of_pages" (com underscore)
     @JsonProperty("number_of_pages")
     private Integer number_of_pages;
 
-    // O nome do campo no JSON é "subjects" (no plural)
     @JsonProperty("subjects")
     private List<String> subjects;
 
-    // O nome do campo no JSON é "publishers" (no plural)
     @JsonProperty("publishers")
     private List<String> publishers;
 
-    // Você pode adicionar outros campos se precisar, como "key", "cover", etc.
-
-    // --- Getters e Setters (Necessários para o Jackson) ---
 
     public String getTitle() {
         return title;

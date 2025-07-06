@@ -1,4 +1,4 @@
-package br.edu.ifpe.lpoo.project.data.acervo.implement;
+package br.edu.ifpe.lpoo.project.data.empretimos.implement;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
-import br.edu.ifpe.lpoo.project.data.IEmprestimoRepository;
-import br.edu.ifpe.lpoo.project.entities.gerenciamento.Emprestimo;
+import br.edu.ifpe.lpoo.project.data.empretimos.repository.IEmprestimoRepository;
+import br.edu.ifpe.lpoo.project.entities.emprestimo.Emprestimo;
 import br.edu.ifpe.lpoo.project.enums.StatusEmprestimo;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 

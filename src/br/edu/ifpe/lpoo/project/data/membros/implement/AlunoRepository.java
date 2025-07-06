@@ -1,4 +1,4 @@
-package br.edu.ifpe.lpoo.project.data.acervo.implement;
+package br.edu.ifpe.lpoo.project.data.membros.implement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
-import br.edu.ifpe.lpoo.project.data.IAlunoRepository;
+import br.edu.ifpe.lpoo.project.data.membros.repository.IAlunoRepository;
 import br.edu.ifpe.lpoo.project.entities.membros.Aluno;
 import br.edu.ifpe.lpoo.project.enums.StatusMembro;
 import br.edu.ifpe.lpoo.project.enums.TipoMembro;

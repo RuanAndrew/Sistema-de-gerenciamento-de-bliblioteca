@@ -1,4 +1,4 @@
-package br.edu.ifpe.lpoo.project.ui;
+package br.edu.ifpe.lpoo.project.ui.membros;
 
 import br.edu.ifpe.lpoo.project.business.MembroService;
 import br.edu.ifpe.lpoo.project.entities.membros.Aluno;
@@ -142,12 +142,10 @@ public class CadastroAlunoTela extends JFrame {
             return;
         }
 
-        // 3. Criar o objeto de modelo (entidade)
-        Aluno novoAluno = new Aluno(nome, cpf, email, matricula, curso);
 
-        // 4. Enviar para a camada de serviço e tratar a resposta
+        // 3. Enviar para a camada de serviço e tratar a resposta
         try {
-            membroService.cadastrarAluno(novoAluno);
+            membroService.cadastrarAluno(nome,cpf,email,matricula,curso);
             JOptionPane.showMessageDialog(this, "Aluno cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             limparCampos();
         } catch (IllegalArgumentException ex) {

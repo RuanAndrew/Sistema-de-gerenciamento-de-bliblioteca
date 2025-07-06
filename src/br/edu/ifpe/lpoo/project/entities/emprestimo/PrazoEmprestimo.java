@@ -1,4 +1,4 @@
-package br.edu.ifpe.lpoo.project.entities.gerenciamento;
+package br.edu.ifpe.lpoo.project.entities.emprestimo;
 
 public final class PrazoEmprestimo {
 

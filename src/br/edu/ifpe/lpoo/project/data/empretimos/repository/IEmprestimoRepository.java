@@ -1,8 +1,8 @@
-package br.edu.ifpe.lpoo.project.data;
+package br.edu.ifpe.lpoo.project.data.empretimos.repository;
 
 import java.util.List;
 
-import br.edu.ifpe.lpoo.project.entities.gerenciamento.Emprestimo;
+import br.edu.ifpe.lpoo.project.entities.emprestimo.Emprestimo;
 
 public interface IEmprestimoRepository {
 
