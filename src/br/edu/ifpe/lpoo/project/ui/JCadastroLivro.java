@@ -6,15 +6,11 @@ import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
 
+public class JCadastroLivro extends JPanel {
 
-
-public class JCadastroLivro {
-
-	private JFrame frame;
-	private JTextField textField;
+	private MainFrame mainFrame;
 	private JTextField txtIsbn;
 	private JTextField txtTitulo;
 	private JTextField txtAutor;
@@ -22,134 +18,133 @@ public class JCadastroLivro {
 	private JTextField txtEditora;
 	private JTextField txtNumeroPaginas;
 	private JTextField txtGenero;
-	private JTextField txtIdioma;
+	private JComboBox<String> comboIdioma;
 	private JTextField txtQuantidade;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					JCadastroLivro window = new JCadastroLivro();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the application.
-	 */
-	public JCadastroLivro() {
+	public JCadastroLivro(MainFrame mainFrame) {
+		this.mainFrame = mainFrame;
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
-		frame = new JFrame("Cadastro de Livro");
-		frame.setSize(650, 550);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		frame.setLocationRelativeTo(null);
-		frame.getContentPane().setBackground(new Color(248, 248, 255));
+		setLayout(null);
+		setBackground(new Color(248, 248, 255));
 
+		// Título da tela de cadastro
+		JLabel titleLabel = new JLabel("Cadastro de Livro");
+		titleLabel.setFont(new Font("Arial", Font.BOLD, 22));
+		titleLabel.setBounds(200, 30, 250, 30);
+		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		add(titleLabel);
 
 		// --- ISBN ---
 		JLabel isbnLabel = new JLabel("ISBN:");
 		isbnLabel.setBounds(80, 95, 120, 25);
 		isbnLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		frame.getContentPane().add(isbnLabel);
+		add(isbnLabel);
 		txtIsbn = new JTextField();
 		txtIsbn.setBounds(250, 95, 300, 30);
-		frame.getContentPane().add(txtIsbn);
+		add(txtIsbn);
 
 		// --- Titulo ---
 		JLabel tituloLabel = new JLabel("Título:");
 		tituloLabel.setBounds(80, 130, 120, 25);
 		tituloLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		frame.getContentPane().add(tituloLabel);
+		add(tituloLabel);
 		txtTitulo = new JTextField();
 		txtTitulo.setBounds(250, 130, 300, 30);
-		frame.getContentPane().add(txtTitulo);
+		add(txtTitulo);
 
 		// --- Autor ---
 		JLabel autorLabel = new JLabel("Autor:");
 		autorLabel.setBounds(80, 165, 120, 25);
 		autorLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		frame.getContentPane().add(autorLabel);
+		add(autorLabel);
 		txtAutor = new JTextField();
 		txtAutor.setBounds(250, 165, 300, 30);
-		frame.getContentPane().add(txtAutor);
+		add(txtAutor);
 
 		// --- Ano de Publicação ---
 		JLabel anoPublicacaoLabel = new JLabel("Ano Publicação:");
 		anoPublicacaoLabel.setBounds(80, 200, 130, 25);
 		anoPublicacaoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		frame.getContentPane().add(anoPublicacaoLabel);
+		add(anoPublicacaoLabel);
 		txtAnoPublicacao = new JTextField();
 		txtAnoPublicacao.setBounds(250, 200, 300, 30);
-		frame.getContentPane().add(txtAnoPublicacao);
+		add(txtAnoPublicacao);
 
 		// --- Editora ---
 		JLabel editoraLabel = new JLabel("Editora:");
 		editoraLabel.setBounds(80, 235, 120, 25);
 		editoraLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		frame.getContentPane().add(editoraLabel);
+		add(editoraLabel);
 		txtEditora = new JTextField();
 		txtEditora.setBounds(250, 235, 300, 30);
-		frame.getContentPane().add(txtEditora);
+		add(txtEditora);
 
 		// --- Número de Páginas ---
 		JLabel numeroPaginasLabel = new JLabel("Número Páginas:");
 		numeroPaginasLabel.setBounds(80, 270, 140, 25);
 		numeroPaginasLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		frame.getContentPane().add(numeroPaginasLabel);
+		add(numeroPaginasLabel);
 		txtNumeroPaginas = new JTextField();
 		txtNumeroPaginas.setBounds(250, 270, 300, 30);
-		frame.getContentPane().add(txtNumeroPaginas);
+		add(txtNumeroPaginas);
 
 		// --- Gênero ---
 		JLabel generoLabel = new JLabel("Gênero:");
 		generoLabel.setBounds(80, 305, 120, 25);
 		generoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		frame.getContentPane().add(generoLabel);
+		add(generoLabel);
 		txtGenero = new JTextField();
 		txtGenero.setBounds(250, 305, 300, 30);
-		frame.getContentPane().add(txtGenero);
+		add(txtGenero);
 
 		// --- Idioma ---
 		JLabel idiomaLabel = new JLabel("Idioma:");
 		idiomaLabel.setBounds(80, 340, 120, 25);
 		idiomaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		frame.getContentPane().add(idiomaLabel);
-		txtIdioma = new JTextField();
-		txtIdioma.setBounds(250, 340, 300, 30);
-		frame.getContentPane().add(txtIdioma);
+		add(idiomaLabel);
+
+		String[] idiomas = {"Português", "Inglês", "Espanhol", "Francês", "Alemão"};
+		comboIdioma = new JComboBox<>(idiomas);
+		comboIdioma.setBounds(250, 340, 300, 30);
+		add(comboIdioma);
 
 		// --- Quantidade ---
 		JLabel quantidadeLabel = new JLabel("Quantidade:");
 		quantidadeLabel.setBounds(80, 375, 120, 25);
 		quantidadeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		frame.getContentPane().add(quantidadeLabel);
+		add(quantidadeLabel);
 		txtQuantidade = new JTextField();
 		txtQuantidade.setBounds(250, 375, 300, 30);
-		frame.getContentPane().add(txtQuantidade);
+		add(txtQuantidade);
 
 		// --- Botão Cadastrar ---
 		JButton btnCadastrar = new JButton("Cadastrar Livro");
 		btnCadastrar.setBackground(new Color(60, 179, 113));
 		btnCadastrar.setForeground(Color.WHITE);
 		btnCadastrar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-		btnCadastrar.setBounds(225, 430, 200, 40);
-		frame.getContentPane().add(btnCadastrar);
+		btnCadastrar.setBounds(150, 470, 180, 40);
+		add(btnCadastrar);
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (txtIsbn.getText().trim().isEmpty() ||
+						txtTitulo.getText().trim().isEmpty() ||
+						txtAutor.getText().trim().isEmpty() ||
+						txtAnoPublicacao.getText().trim().isEmpty() ||
+						txtEditora.getText().trim().isEmpty() ||
+						txtNumeroPaginas.getText().trim().isEmpty() ||
+						txtGenero.getText().trim().isEmpty() ||
+						txtQuantidade.getText().trim().isEmpty()) {
+
+					JOptionPane.showMessageDialog(JCadastroLivro.this,
+							"Por favor, preencha todos os campos antes de cadastrar.",
+							"Campos Vazios",
+							JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+
 				String isbn = txtIsbn.getText();
 				String titulo = txtTitulo.getText();
 				String autor = txtAutor.getText();
@@ -157,19 +152,47 @@ public class JCadastroLivro {
 				String editora = txtEditora.getText();
 				String numeroPaginas = txtNumeroPaginas.getText();
 				String genero = txtGenero.getText();
-				String idioma = txtIdioma.getText();
+				String idioma = (String) comboIdioma.getSelectedItem();
 				String quantidade = txtQuantidade.getText();
 
 				try {
 					AcervoService controller = new AcervoService();
 					controller.cadastrarLivro(titulo, autor, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma, quantidade);
-					JOptionPane.showMessageDialog(JCadastroLivro.this.frame, "O livro foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
-				}catch (NumberFormatException ne){
-					JOptionPane.showMessageDialog(JCadastroLivro.this.frame, ne.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-				}catch (BusinessExcepition be){
-					JOptionPane.showMessageDialog(JCadastroLivro.this.frame, be.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(JCadastroLivro.this, "O livro foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
+					clearFields();
+				} catch (NumberFormatException ne) {
+					JOptionPane.showMessageDialog(JCadastroLivro.this, ne.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+				} catch (BusinessExcepition be) {
+					JOptionPane.showMessageDialog(JCadastroLivro.this, be.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
+
+		// --- Botão Voltar ---
+		JButton btnVoltar = new JButton("Voltar ao Menu");
+		btnVoltar.setBackground(new Color(255, 140, 0));
+		btnVoltar.setForeground(Color.WHITE);
+		btnVoltar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+		btnVoltar.setBounds(350, 470, 180, 40);
+		add(btnVoltar);
+		btnVoltar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mainFrame.showPanel("TelaPrincipal");
+				clearFields();
+			}
+		});
+	}
+
+	private void clearFields() {
+		txtIsbn.setText("");
+		txtTitulo.setText("");
+		txtAutor.setText("");
+		txtAnoPublicacao.setText("");
+		txtEditora.setText("");
+		txtNumeroPaginas.setText("");
+		txtGenero.setText("");
+		comboIdioma.setSelectedIndex(0);
+		txtQuantidade.setText("");
 	}
 }
