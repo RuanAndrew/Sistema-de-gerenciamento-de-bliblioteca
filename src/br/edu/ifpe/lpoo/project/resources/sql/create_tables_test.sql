@@ -96,3 +96,14 @@ CREATE TABLE emprestimo(
     FOREIGN KEY (id_item) REFERENCES item_acervo (id_item),
     FOREIGN KEY (id_membro) REFERENCES membro (id_membro)
 );
+
+CREATE TABLE reserva(
+	id_reserva INT AUTO_INCREMENT PRIMARY KEY,
+    id_membro INT NOT NULL,
+    id_item INT NOT NULL,
+	data_reserva Date NOT NULL,
+	data_expiracao Date NOT NULL,
+    status_reserva VARCHAR(50) NOT NULL,
+    FOREIGN KEY (id_membro) REFERENCES membro (id_membro),
+    FOREIGN KEY (id_item) REFERENCES item_acervo (id_item)
+);
