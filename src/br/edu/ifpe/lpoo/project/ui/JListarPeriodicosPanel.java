@@ -8,6 +8,8 @@ import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.List;
 
 public class JListarPeriodicosPanel extends JPanel {
@@ -22,6 +24,12 @@ public class JListarPeriodicosPanel extends JPanel {
         this.acervoService = new AcervoService();
         initialize();
         carregarPeriodicos();
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                carregarPeriodicos();
+            }
+        });
     }
 
     private void initialize() {

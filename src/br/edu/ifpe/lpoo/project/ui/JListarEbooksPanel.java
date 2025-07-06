@@ -8,6 +8,8 @@ import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.List;
 
 public class JListarEbooksPanel extends JPanel {
@@ -22,6 +24,12 @@ public class JListarEbooksPanel extends JPanel {
         this.acervoService = new AcervoService();
         initialize();
         carregarEbooks();
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                carregarEbooks();
+            }
+        });
     }
 
     private void initialize() {
@@ -51,11 +59,11 @@ public class JListarEbooksPanel extends JPanel {
 
         // Define a largura das colunas
         table.getColumnModel().getColumn(0).setPreferredWidth(40);  // ID
-        table.getColumnModel().getColumn(1).setPreferredWidth(300); // Título
+        table.getColumnModel().getColumn(1).setPreferredWidth(250); // Título
         table.getColumnModel().getColumn(2).setPreferredWidth(200); // Autor(es)
         table.getColumnModel().getColumn(3).setPreferredWidth(60);  // Ano
         table.getColumnModel().getColumn(4).setPreferredWidth(100); // Formato
-        table.getColumnModel().getColumn(5).setPreferredWidth(150); // ISBN
+        table.getColumnModel().getColumn(5).setPreferredWidth(200); // ISBN
 
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
