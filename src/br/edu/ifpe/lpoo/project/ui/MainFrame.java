@@ -1,5 +1,7 @@
 package br.edu.ifpe.lpoo.project.ui;
 
+import br.edu.ifpe.lpoo.project.ui.acervo.*;
+
 import javax.swing.*;
 import java.awt.*;
 

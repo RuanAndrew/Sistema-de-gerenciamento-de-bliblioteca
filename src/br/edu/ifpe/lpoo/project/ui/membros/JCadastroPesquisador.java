@@ -1,6 +1,7 @@
-package br.edu.ifpe.lpoo.project.ui;
+package br.edu.ifpe.lpoo.project.ui.membros;
 
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.business.MembroService;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -110,7 +111,19 @@ public class JCadastroPesquisador {
 				String email = txtEmail.getText();
 				String matricula = txtMatricula.getText();
 				String instituicao = txtInstituicao.getText();
+
+				try {
+					MembroService controller = new MembroService();
+					controller.CadastrarPesquisador(nome, cpf, email, matricula, instituicao);
+					JOptionPane.showMessageDialog(JCadastroPesquisador.this.frame, "O Pesquisador foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
+				}catch (NumberFormatException ne){
+					JOptionPane.showMessageDialog(JCadastroPesquisador.this.frame, ne.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+				}catch (BusinessExcepition be){
+					JOptionPane.showMessageDialog(JCadastroPesquisador.this.frame, be.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+				}
 			}
+
+			
 		});
 	}
 }

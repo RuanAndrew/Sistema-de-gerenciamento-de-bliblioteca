@@ -16,8 +16,9 @@ module SistemaGenrenciamentoBiblioteca {
     exports br.edu.ifpe.lpoo.project.business;
     exports br.edu.ifpe.lpoo.project.business.dto.api;
     exports br.edu.ifpe.lpoo.project.entities.acervo;
-    exports br.edu.ifpe.lpoo.project.entities;
+    exports br.edu.ifpe.lpoo.project.entities.membros;
+    exports br.edu.ifpe.lpoo.project.enums;
     exports br.edu.ifpe.lpoo.project.exceptions;
     exports br.edu.ifpe.lpoo.project.ui.dto;
-    exports br.edu.ifpe.lpoo.project.enums;
+    exports br.edu.ifpe.lpoo.project.entities.emprestimo;
 }

@@ -1,7 +1,8 @@
-package br.edu.ifpe.lpoo.project.ui;
+package br.edu.ifpe.lpoo.project.ui.acervo;
 
 import br.edu.ifpe.lpoo.project.business.AcervoService;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.ui.MainFrame;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
