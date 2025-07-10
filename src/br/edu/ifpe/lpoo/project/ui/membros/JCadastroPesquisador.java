@@ -97,7 +97,7 @@ public class JCadastroPesquisador {
 		frame.getContentPane().add(txtInstituicao);
 
 		//cadastrar:
-		JButton btnCadastrar = new JButton("Cadastrar Orientador");
+		JButton btnCadastrar = new JButton("Cadastrar Pesquisador");
 		btnCadastrar.setBackground(new Color(60, 179, 113));
 		btnCadastrar.setForeground(Color.WHITE);
 		btnCadastrar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -112,18 +112,21 @@ public class JCadastroPesquisador {
 				String matricula = txtMatricula.getText();
 				String instituicao = txtInstituicao.getText();
 
-				try {
-					MembroService controller = new MembroService();
-					controller.CadastrarPesquisador(nome, cpf, email, matricula, instituicao);
-					JOptionPane.showMessageDialog(JCadastroPesquisador.this.frame, "O Pesquisador foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
-				}catch (NumberFormatException ne){
-					JOptionPane.showMessageDialog(JCadastroPesquisador.this.frame, ne.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-				}catch (BusinessExcepition be){
-					JOptionPane.showMessageDialog(JCadastroPesquisador.this.frame, be.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-
-			
+								try {
+    MembroService controller = new MembroService();
+    controller.cadastrarProfessor(nome, cpf, email, matricula, matricula, instituicao);
+    JOptionPane.showMessageDialog(JCadastroPesquisador.this.frame, "O Professor foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
+} catch (NumberFormatException ne) {
+    ne.printStackTrace();
+    JOptionPane.showMessageDialog(JCadastroPesquisador.this.frame, ne.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+} catch (BusinessExcepition be) {
+    be.printStackTrace();
+    JOptionPane.showMessageDialog(JCadastroPesquisador.this.frame, be.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+} catch (Exception ex) {
+    ex.printStackTrace(); // pega qualquer outro erro que não seja BusinessException ou NumberFormat
+    JOptionPane.showMessageDialog(JCadastroPesquisador.this.frame, "Erro inesperado: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+}	
+		    }
 		});
-	}
+    }
 }

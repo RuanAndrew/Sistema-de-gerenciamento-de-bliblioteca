@@ -107,7 +107,7 @@ public class JCadastroProfessor {
         frame.getContentPane().add(txtDepartamento);
 
 		//cadastrar:
-		JButton btnCadastrar = new JButton("Cadastrar Orientador");
+		JButton btnCadastrar = new JButton("Cadastrar Professor");
 		btnCadastrar.setBackground(new Color(60, 179, 113));
 		btnCadastrar.setForeground(Color.WHITE);
 		btnCadastrar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -124,17 +124,20 @@ public class JCadastroProfessor {
                 String departamento = txtDepartamento.getText();
 
 				try {
-					MembroService controller = new MembroService();
-					controller.cadastrarProfessor(nome, cpf, email, matricula, areaAtuacao, departamento);
-					JOptionPane.showMessageDialog(JCadastroProfessor.this.frame, "O Professor foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
-				}catch (NumberFormatException ne){
-					JOptionPane.showMessageDialog(JCadastroProfessor.this.frame, ne.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-				}catch (BusinessExcepition be){
-					JOptionPane.showMessageDialog(JCadastroProfessor.this.frame, be.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-
-			
+    MembroService controller = new MembroService();
+    controller.cadastrarProfessor(nome, cpf, email, matricula, areaAtuacao, departamento);
+    JOptionPane.showMessageDialog(JCadastroProfessor.this.frame, "O Professor foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
+} catch (NumberFormatException ne) {
+    ne.printStackTrace();
+    JOptionPane.showMessageDialog(JCadastroProfessor.this.frame, ne.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+} catch (BusinessExcepition be) {
+    be.printStackTrace();
+    JOptionPane.showMessageDialog(JCadastroProfessor.this.frame, be.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+} catch (Exception ex) {
+    ex.printStackTrace(); // pega qualquer outro erro que não seja BusinessException ou NumberFormat
+    JOptionPane.showMessageDialog(JCadastroProfessor.this.frame, "Erro inesperado: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+}	
+		    }
 		});
-	}
+    }
 }

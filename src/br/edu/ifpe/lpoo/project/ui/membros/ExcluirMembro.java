@@ -17,7 +17,7 @@ public class ExcluirMembro extends JFrame {
 
     public ExcluirMembro() {
         setTitle("Gerenciar Membros da Biblioteca");
-        setSize(700, 400);
+        setSize(650, 550);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
