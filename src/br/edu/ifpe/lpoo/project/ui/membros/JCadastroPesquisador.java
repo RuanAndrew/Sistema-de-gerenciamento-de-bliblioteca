@@ -114,7 +114,7 @@ public class JCadastroPesquisador {
 
 								try {
     MembroService controller = new MembroService();
-    controller.cadastrarProfessor(nome, cpf, email, matricula, matricula, instituicao);
+    controller.cadastrarPesquisador(nome, cpf, email, matricula, instituicao);
     JOptionPane.showMessageDialog(JCadastroPesquisador.this.frame, "O Professor foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
 } catch (NumberFormatException ne) {
     ne.printStackTrace();

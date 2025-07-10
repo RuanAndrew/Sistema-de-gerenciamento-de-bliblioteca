@@ -102,7 +102,7 @@ public class MembroService {
 		}
 	}
 
-	public void CadastrarPesquisador(String nome, String cpf, String email, String matricula, String instituicao) {
+	public void cadastrarPesquisador(String nome, String cpf, String email, String matricula, String instituicao) {
 		if (nome == null || nome.isBlank()) {
 			throw new BusinessExcepition("O nome é obrigatório");
 		}
@@ -191,7 +191,7 @@ public class MembroService {
 			throw new BusinessExcepition("CPF obrigatório para atualizar o professor.");
 		}
 
-		professorRepository = new ProfessorRepository();
+		pesquisadorRepository = new PesquisadorRepository();
 
 		boolean existepesquisador = pesquisadorRepository.existMembro(pesquisadoratualizado);
 
