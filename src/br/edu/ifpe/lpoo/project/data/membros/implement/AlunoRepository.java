@@ -104,19 +104,19 @@ public class AlunoRepository implements IAlunoRepository {
 	}
 
 	@Override
-	public boolean existMembro(Aluno aluno) {
+	public boolean existMembro(String cpf) {
 
-		if (aluno == null) {
-			throw new DbException("Objeto tipo Aluno não pode ser null");
+		if (cpf == null) {
+			throw new DbException("cpf não pode ser null");
 		}
 
 		boolean exists = false;
 
-		String sqlMembro = "SELECT * FROM membro WHERE cpf = ?";
+		String sqlMembro = "SELECT 1 FROM membro WHERE cpf = ?";
 
 		try (Connection conn = ConnectionDb.getConnection();
-				PreparedStatement stmt = conn.prepareStatement(sqlMembro)) {
-			stmt.setString(1, aluno.getCpf());
+			 PreparedStatement stmt = conn.prepareStatement(sqlMembro)) {
+			stmt.setString(1, cpf);
 
 			try (ResultSet rst = stmt.executeQuery()) {
 
