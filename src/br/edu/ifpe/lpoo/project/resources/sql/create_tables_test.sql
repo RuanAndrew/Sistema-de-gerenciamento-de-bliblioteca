@@ -95,3 +95,31 @@ CREATE TABLE pesquisador(
     status_membro VARCHAR(255),
     instituicao VARCHAR(255)
 );
+
+CREATE TABLE bibliotecario (
+        id_bibliotecario INT AUTO_INCREMENT PRIMARY KEY,
+nome VARCHAR(255),
+email VARCHAR(255) UNIQUE,
+cpf VARCHAR(11) UNIQUE,
+matricula VARCHAR(10) UNIQUE,
+salario DECIMAL(10,2),
+cargo VARCHAR(100),
+id_credencial_acesso INT,
+setor VARCHAR(100),
+num_registro_conselho VARCHAR(100)
+);
+
+CREATE TABLE bibliotecario_chefe (
+        id_bibliotecario_chefe INT AUTO_INCREMENT PRIMARY KEY,
+nome VARCHAR(255),
+email VARCHAR(255) UNIQUE,
+cpf VARCHAR(11) UNIQUE,
+matricula VARCHAR(10) UNIQUE,
+salario DECIMAL(10,2),
+cargo VARCHAR(100),
+id_credencial_acesso INT,
+setor VARCHAR(100),
+num_registro_conselho VARCHAR(100),
+pode_gerenciar_contas BOOLEAN DEFAULT TRUE,
+data_inicio_chefia DATE
+);
