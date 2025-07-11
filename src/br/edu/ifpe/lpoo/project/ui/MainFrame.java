@@ -15,7 +15,7 @@ public class MainFrame extends JFrame {
     private JCadastroEbook jCadastroEbookPanel;
     private JCadastroPeriodico jCadastroPeriodicoPanel;
     private JListarLivrosPanel jListarLivrosPanel;
-    private JListarEbooksPanel jListarEbooksPanel;     // <-- ADICIONE ESTA LINHA
+    private JListarEbooksPanel jListarEbooksPanel;
     private JListarPeriodicosPanel jListarPeriodicosPanel;
 
     public MainFrame() {

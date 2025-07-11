@@ -1,6 +1,8 @@
 package br.edu.ifpe.lpoo.project.ui.acervo;
 
 import br.edu.ifpe.lpoo.project.business.AcervoService;
+import br.edu.ifpe.lpoo.project.business.CatalogacaoService;
+import br.edu.ifpe.lpoo.project.entities.acervo.Ebook;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.ui.MainFrame;
 
@@ -22,9 +24,11 @@ public class JCadastroEbook extends JPanel {
     private JComboBox<String> comboIdioma;
     private JComboBox<String> comboFormatoDigital;
     private JTextField txtUrl;
+    private CatalogacaoService catalogacaoService;
 
     public JCadastroEbook(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+        this.catalogacaoService = new CatalogacaoService();
         initialize();
     }
 
@@ -39,54 +43,57 @@ public class JCadastroEbook extends JPanel {
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(titleLabel);
 
+        // --- ISBN ---
+        JLabel isbnLabel = new JLabel("ISBN:");
+        isbnLabel.setBounds(80, 95, 120, 25);
+        isbnLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        add(isbnLabel);
+        txtIsbn = new JTextField();
+        txtIsbn.setBounds(250, 95, 200, 30);
+        add(txtIsbn);
+        JButton btnBuscarIsbn = new JButton("Buscar");
+        btnBuscarIsbn.setBounds(450, 95, 100, 30);
+        add(btnBuscarIsbn);
+
         // --- Titulo ---
         JLabel tituloLabel = new JLabel("Título:");
-        tituloLabel.setBounds(80, 95, 120, 25);
+        tituloLabel.setBounds(80, 130, 120, 25);
         tituloLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(tituloLabel);
         txtTitulo = new JTextField();
-        txtTitulo.setBounds(250, 95, 300, 30);
+        txtTitulo.setBounds(250, 130, 300, 30);
         add(txtTitulo);
 
         // --- Autor(s) ---
         JLabel autoresLabel = new JLabel("Autor:");
-        autoresLabel.setBounds(80, 130, 120, 25);
+        autoresLabel.setBounds(80, 165, 120, 25);
         autoresLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(autoresLabel);
         txtAutores = new JTextField();
-        txtAutores.setBounds(250, 130, 300, 30);
+        txtAutores.setBounds(250, 165, 300, 30);
         add(txtAutores);
 
         // --- Ano de Publicação ---
         JLabel anoPublicacaoLabel = new JLabel("Ano Publicação:");
-        anoPublicacaoLabel.setBounds(80, 165, 130, 25);
+        anoPublicacaoLabel.setBounds(80, 200, 120, 25);
         anoPublicacaoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(anoPublicacaoLabel);
         txtAnoPublicacao = new JTextField();
-        txtAnoPublicacao.setBounds(250, 165, 300, 30);
+        txtAnoPublicacao.setBounds(250, 200, 300, 30);
         add(txtAnoPublicacao);
 
         // --- Editora ---
         JLabel editoraLabel = new JLabel("Editora:");
-        editoraLabel.setBounds(80, 200, 120, 25);
+        editoraLabel.setBounds(80, 235, 120, 25);
         editoraLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(editoraLabel);
         txtEditora = new JTextField();
-        txtEditora.setBounds(250, 200, 300, 30);
+        txtEditora.setBounds(250, 235, 300, 30);
         add(txtEditora);
-
-        // --- ISBN ---
-        JLabel isbnLabel = new JLabel("ISBN:");
-        isbnLabel.setBounds(80, 235, 120, 25);
-        isbnLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        add(isbnLabel);
-        txtIsbn = new JTextField();
-        txtIsbn.setBounds(250, 235, 300, 30);
-        add(txtIsbn);
 
         // --- Número de Páginas ---
         JLabel numeroPaginasLabel = new JLabel("Número Páginas:");
-        numeroPaginasLabel.setBounds(80, 270, 140, 25);
+        numeroPaginasLabel.setBounds(80, 270, 120, 25);
         numeroPaginasLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(numeroPaginasLabel);
         txtNumeroPaginas = new JTextField();
@@ -132,6 +139,29 @@ public class JCadastroEbook extends JPanel {
         txtUrl = new JTextField();
         txtUrl.setBounds(250, 410, 300, 30);
         add(txtUrl);
+
+        // --- Botão Buscar ---
+        btnBuscarIsbn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String isbn = txtIsbn.getText().trim();
+                if(isbn.isEmpty()){
+                    JOptionPane.showMessageDialog(JCadastroEbook.this,"Por favor, insira um ISBN para buscar.","ISBN Vazio", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                try{
+                    Ebook ebookEncontrado = catalogacaoService.buscarDadosEbookPorIsbn(isbn);
+                    if (ebookEncontrado != null) {
+                        preencherFormulario(ebookEncontrado);
+                        JOptionPane.showMessageDialog(JCadastroEbook.this, "Dados do ebook preenchidos. Verifique as informações e adicione a quantidade.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(JCadastroEbook.this, "Nenhum ebook encontrado para este ISBN. Prossiga com o cadastro manual.", "Não Encontrado", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (BusinessExcepition ex) {
+                    JOptionPane.showMessageDialog(JCadastroEbook.this, "Erro ao buscar dados: " + ex.getMessage(), "Erro na API", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
         // --- Botão Cadastrar ---
         JButton btnCadastrar = new JButton("Cadastrar E-book");
@@ -197,6 +227,16 @@ public class JCadastroEbook extends JPanel {
             }
         });
     }
+
+    private void preencherFormulario(Ebook ebook) {
+        txtTitulo.setText(ebook.getTitulo() != null ? ebook.getTitulo() : "");
+        txtAutores.setText(ebook.getAutor() != null ? ebook.getAutor() : "");
+        txtAnoPublicacao.setText(String.valueOf(ebook.getAnoPublicacao()));
+        txtEditora.setText(ebook.getEditora() != null ? ebook.getEditora() : "");
+        txtNumeroPaginas.setText(String.valueOf(ebook.getNumeroPaginas()));
+        txtGenero.setText(ebook.getGenero() != null ? ebook.getGenero() : "");
+    }
+
 
     private void clearFields() {
         txtTitulo.setText("");
