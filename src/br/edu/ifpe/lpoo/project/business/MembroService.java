@@ -140,12 +140,12 @@ public class MembroService {
 		}
 	}
 
-	public void excluirMembro(Integer id) {
-		if (id != null) {
+	public void excluirMembro(Integer cpf) {
+		if (cpf != null) {
 			try {
-				alunoRepository.delete(id);
-				professorRepository.delete(id);
-				pesquisadorRepository.delete(id);
+				alunoRepository.delete(cpf);
+				professorRepository.delete(cpf);
+				pesquisadorRepository.delete(cpf);
 			} catch (DbException e) {
 				throw new BusinessExcepition("Erro ao deletar item de acervo: " + e.getMessage());
 			}
@@ -206,23 +206,23 @@ public class MembroService {
 		}
 	}
 		
-	 public Membro buscarmembroPorId (int id) {
+	 public Membro buscarmembroPorcpf (int cpf) {
 	        try {
 
-	            Aluno aluno = alunoRepository.buscarPorId(id);
+	            Aluno aluno = alunoRepository.buscarPorId(cpf);
 	            if (aluno != null) {return aluno;}
 
-	            Professor professor = professorRepository.buscarPorId(id);
+	            Professor professor = professorRepository.buscarPorId(cpf);
 	            if (professor != null) {return professor;}
 
-	            Pesquisador pesquisador = pesquisadorRepository.buscarPorId(id);
+	            Pesquisador pesquisador = pesquisadorRepository.buscarPorId(cpf);
 	            if (pesquisador != null) {return pesquisador;}
 
 	            return null;
 	        }catch (NumberFormatException e) {
-	            throw new BusinessExcepition ("Formato de ID invalido: " + id);
+	            throw new BusinessExcepition ("Formato de cpf invalido: " + cpf);
 	        }catch (DbException e) {
-	            throw new BusinessExcepition("Erro ao buscar Membros por ID: " + e.getMessage());
+	            throw new BusinessExcepition("Erro ao buscar Membros por cpf: " + e.getMessage());
 	        }
 	    }
 
