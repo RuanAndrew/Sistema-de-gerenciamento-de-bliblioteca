@@ -7,33 +7,34 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class JCadastroPesquisador extends JFrame {
+public class JCadastroAluno extends JFrame {
 
     private JTextField txtNome;
     private JTextField txtCpf;
     private JTextField txtEmail;
     private JTextField txtMatricula;
-    private JTextField txtInstituicao;
+    private JTextField txtCurso;
 
-    public JCadastroPesquisador() {
+    public JCadastroAluno() {
         initialize();
     }
 
     private void initialize() {
 
-        setTitle("Cadastro de Pesquisador");
+        setTitle("Cadastro de Aluno");
         setSize(650, 550);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(null);
         setLocationRelativeTo(null);
         getContentPane().setBackground(new Color(248, 248, 255));
 
-        JLabel lblTituloPrincipal = new JLabel("Cadastro de Pesquisador como Membro");
+        JLabel lblTituloPrincipal = new JLabel("Cadastro de Aluno como Membro");
         lblTituloPrincipal.setFont(new Font("SansSerif", Font.BOLD, 20));
         lblTituloPrincipal.setHorizontalAlignment(SwingConstants.CENTER);
         lblTituloPrincipal.setBounds(10, 25, 614, 30);
         getContentPane().add(lblTituloPrincipal);
 
+        // Nome
         JLabel nomeLabel = new JLabel("Nome:");
         nomeLabel.setBounds(80, 95, 120, 25);
         nomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -69,17 +70,17 @@ public class JCadastroPesquisador extends JFrame {
         txtMatricula.setBounds(250, 200, 300, 30);
         getContentPane().add(txtMatricula);
 
-        // Instituição
-        JLabel instituicaoLabel = new JLabel("Instituição:");
-        instituicaoLabel.setBounds(80, 235, 120, 25);
-        instituicaoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        getContentPane().add(instituicaoLabel);
-        txtInstituicao = new JTextField();
-        txtInstituicao.setBounds(250, 235, 300, 30);
-        getContentPane().add(txtInstituicao);
+        // Curso
+        JLabel cursoLabel = new JLabel("Curso:");
+        cursoLabel.setBounds(80, 235, 120, 25);
+        cursoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        getContentPane().add(cursoLabel);
+        txtCurso = new JTextField();
+        txtCurso.setBounds(250, 235, 300, 30);
+        getContentPane().add(txtCurso);
 
-        //Botão Cadastrar
-        JButton btnCadastrar = new JButton("Cadastrar Pesquisador");
+        // Botão Cadastrar
+        JButton btnCadastrar = new JButton("Cadastrar Aluno");
         btnCadastrar.setBackground(new Color(60, 179, 113));
         btnCadastrar.setForeground(Color.WHITE);
         btnCadastrar.setOpaque(true);
@@ -96,7 +97,6 @@ public class JCadastroPesquisador extends JFrame {
         btnVoltar.setBounds(115, 420, 200, 40);
         getContentPane().add(btnVoltar);
 
-        // Ações dos Botões
         btnVoltar.addActionListener(e -> this.dispose());
 
         btnCadastrar.addActionListener(e -> {
@@ -104,18 +104,18 @@ public class JCadastroPesquisador extends JFrame {
             String cpf = txtCpf.getText();
             String email = txtEmail.getText();
             String matricula = txtMatricula.getText();
-            String instituicao = txtInstituicao.getText();
+            String curso = txtCurso.getText();
 
             try {
                 MembroService controller = new MembroService();
-                controller.cadastrarPesquisador(nome, cpf, email, matricula, instituicao);
-                JOptionPane.showMessageDialog(this, "O Pesquisador foi cadastrado com sucesso!", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
+                controller.cadastrarAluno(nome, cpf, email, matricula, curso);
+                JOptionPane.showMessageDialog(this, "O Aluno foi cadastrado com sucesso!", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
                 
                 txtNome.setText("");
                 txtCpf.setText("");
                 txtEmail.setText("");
                 txtMatricula.setText("");
-                txtInstituicao.setText("");
+                txtCurso.setText("");
 
             } catch (BusinessExcepition be) {
                 JOptionPane.showMessageDialog(this, be.getMessage(), "Erro de Validação", JOptionPane.ERROR_MESSAGE);

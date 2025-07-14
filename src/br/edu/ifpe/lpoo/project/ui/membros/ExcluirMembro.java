@@ -1,81 +1,112 @@
 package br.edu.ifpe.lpoo.project.ui.membros;
 
 import br.edu.ifpe.lpoo.project.business.MembroService;
-import br.edu.ifpe.lpoo.project.entities.membros.Membro;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.util.List;
+import java.awt.event.ActionEvent;
+
 
 public class ExcluirMembro extends JFrame {
 
-    private JTable tabela;
-    private DefaultTableModel modeloTabela;
+    private JTextField campoIdExcluir;
+    private JButton botaoExcluir;
+
     private MembroService membroService;
 
     public ExcluirMembro() {
-        setTitle("Gerenciar Membros da Biblioteca");
-        setSize(650, 550);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.membroService = new MembroService();
+
+        setTitle("Excluir Membro da Biblioteca");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(450, 180);
         setLocationRelativeTo(null);
+        setResizable(false);
 
-        membroService = new MembroService();
+        JPanel painelPrincipal = new JPanel(new BorderLayout(10, 10));
+        painelPrincipal.setBorder(new EmptyBorder(15, 15, 15, 15));
+        setContentPane(painelPrincipal);
 
-        modeloTabela = new DefaultTableModel(new Object[]{"ID", "Nome", "CPF", "Email", "Tipo"}, 0);
-        tabela = new JTable(modeloTabela);
-        JScrollPane scrollPane = new JScrollPane(tabela);
+        JPanel painelEntrada = criarPainelEntrada();
+        painelPrincipal.add(painelEntrada, BorderLayout.CENTER);
 
-        JButton botaoExcluir = new JButton("Excluir Membro Selecionado");
-        botaoExcluir.addActionListener(e -> excluirMembroSelecionado());
-
-        add(scrollPane, BorderLayout.CENTER);
-        add(botaoExcluir, BorderLayout.SOUTH);
-
-        carregarMembros();
+        JPanel painelBotoes = criarPainelBotoes();
+        painelPrincipal.add(painelBotoes, BorderLayout.SOUTH);
     }
 
-    private void carregarMembros() {
-        modeloTabela.setRowCount(0);
+
+    private JPanel criarPainelEntrada() {
+        JPanel painel = new JPanel(new BorderLayout(10, 10));
+        painel.setBorder(new TitledBorder("Insira o ID do Membro a ser Excluído"));
+
+        JLabel labelId = new JLabel("ID do Membro:");
+        campoIdExcluir = new JTextField();
+
+        painel.add(labelId, BorderLayout.WEST);
+        painel.add(campoIdExcluir, BorderLayout.CENTER);
+
+        return painel;
+    }
+
+
+    private JPanel criarPainelBotoes() {
+        JPanel painel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        botaoExcluir = new JButton("Excluir Membro");
+        botaoExcluir.setFont(new Font("SansSerif", Font.BOLD, 14));
+        botaoExcluir.setForeground(new Color(211, 47, 47)); // Cor vermelha para indicar perigo
+
+        botaoExcluir.addActionListener(this::realizarExclusao);
+
+        painel.add(botaoExcluir);
+        return painel;
+    }
+
+
+
+    private void realizarExclusao(ActionEvent e) {
+        String idTexto = campoIdExcluir.getText();
+        if (idTexto == null || idTexto.isBlank()) {
+            JOptionPane.showMessageDialog(this, "O campo ID não pode estar vazio.", "Erro de Validação", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         try {
-            List<Membro> membros = membroService.listarTodosItens();
-            for (Membro m : membros) {
-                modeloTabela.addRow(new Object[]{
-                    m.getId(), m.getNome(), m.getCpf(), m.getEmail(), m.getTipomembro()
-                });
+            int resposta = JOptionPane.showConfirmDialog(
+                this,
+                "Tem a certeza de que deseja excluir o membro com o ID " + idTexto + "?\nEsta ação não pode ser desfeita.",
+                "Confirmação de Exclusão",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+            );
+
+            if (resposta == JOptionPane.YES_OPTION) {
+                int id = Integer.parseInt(idTexto);
+                
+                membroService.excluirMembro(id);
+
+                JOptionPane.showMessageDialog(this, "Membro com ID " + id + " excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                campoIdExcluir.setText("");
             }
-        } catch (BusinessExcepition e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar membros: " + e.getMessage(),
-                    "Erro", JOptionPane.ERROR_MESSAGE);
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "ID inválido. Por favor, insira apenas números.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
+        } catch (BusinessExcepition ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao excluir membro: " + ex.getMessage(), "Erro de Negócio", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void excluirMembroSelecionado() {
-        int linhaSelecionada = tabela.getSelectedRow();
-        if (linhaSelecionada != -1) {
-            int id = (int) modeloTabela.getValueAt(linhaSelecionada, 0);
-            int confirm = JOptionPane.showConfirmDialog(this,
-                    "Tem certeza que deseja excluir o membro de ID " + id + "?",
-                    "Confirmação", JOptionPane.YES_NO_OPTION);
-
-            if (confirm == JOptionPane.YES_OPTION) {
-                try {
-                    membroService.excluirMembro(id);
-                    carregarMembros(); // Atualiza a tabela
-                    JOptionPane.showMessageDialog(this, "Membro excluído com sucesso.");
-                } catch (BusinessExcepition e) {
-                    JOptionPane.showMessageDialog(this,
-                            "Erro ao excluir membro: " + e.getMessage(),
-                            "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Selecione um membro para excluir.");
-        }
-    }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ExcluirMembro().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            new ExcluirMembro().setVisible(true);
+        });
     }
 }
