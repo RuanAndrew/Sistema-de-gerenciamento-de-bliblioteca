@@ -110,6 +110,48 @@ public class TelaPrincipalPanel extends JPanel {
         });
         buttonPanel.add(btnListarPeriodicos);
 
+        JButton btnCadastrarAluno = new JButton("Cadastrar Aluno");
+        btnCadastrarAluno.setPreferredSize(new Dimension(250, 60));
+        btnCadastrarAluno.setFont(new Font("Arial", Font.PLAIN, 18));
+        btnCadastrarAluno.setBackground(new Color(60, 179, 113));
+        btnCadastrarAluno.setForeground(Color.WHITE);
+        btnCadastrarAluno.setFocusPainted(false);
+        btnCadastrarAluno.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainFrame.showPanel("CadastroAluno");
+            }
+        });
+        buttonPanel.add(btnCadastrarAluno);
+
+        JButton btnCadastrarPesquisador = new JButton("Cadastrar Pesquisador");
+        btnCadastrarPesquisador.setPreferredSize(new Dimension(250, 60));
+        btnCadastrarPesquisador.setFont(new Font("Arial", Font.PLAIN, 18));
+        btnCadastrarPesquisador.setBackground(new Color(60, 179, 113));
+        btnCadastrarPesquisador.setForeground(Color.WHITE);
+        btnCadastrarPesquisador.setFocusPainted(false);
+        btnCadastrarPesquisador.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainFrame.showPanel("CadastroPesquisador");
+            }
+        });
+        buttonPanel.add(btnCadastrarPesquisador);
+
+        JButton btnCadastrarProfessor = new JButton("Cadastrar Professor");
+        btnCadastrarProfessor.setPreferredSize(new Dimension(250, 60));
+        btnCadastrarProfessor.setFont(new Font("Arial", Font.PLAIN, 18));
+        btnCadastrarProfessor.setBackground(new Color(60, 179, 113));
+        btnCadastrarProfessor.setForeground(Color.WHITE);
+        btnCadastrarProfessor.setFocusPainted(false);
+        btnCadastrarProfessor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainFrame.showPanel("CadastroProfessor");
+            }
+        });
+        buttonPanel.add(btnCadastrarProfessor);
+
         JButton btnSair = new JButton("Sair");
         btnSair.setPreferredSize(new Dimension(250, 60));
         btnSair.setFont(new Font("Arial", Font.PLAIN, 18));

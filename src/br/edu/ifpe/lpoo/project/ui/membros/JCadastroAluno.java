@@ -2,12 +2,15 @@ package br.edu.ifpe.lpoo.project.ui.membros;
 
 import br.edu.ifpe.lpoo.project.business.MembroService;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.ui.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
 
 
-public class JCadastroAluno extends JFrame {
+public class JCadastroAluno extends JPanel {
+
+    private MainFrame mainFrame;
 
     private JTextField txtNome;
     private JTextField txtCpf;
@@ -15,69 +18,66 @@ public class JCadastroAluno extends JFrame {
     private JTextField txtMatricula;
     private JTextField txtCurso;
 
-    public JCadastroAluno() {
+    public JCadastroAluno(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
         initialize();
     }
 
     private void initialize() {
 
-        setTitle("Cadastro de Aluno");
-        setSize(650, 550);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(null);
-        setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(248, 248, 255));
+        setLayout(null);
+        setBackground(new Color(248, 248, 255));
 
         JLabel lblTituloPrincipal = new JLabel("Cadastro de Aluno como Membro");
         lblTituloPrincipal.setFont(new Font("SansSerif", Font.BOLD, 20));
         lblTituloPrincipal.setHorizontalAlignment(SwingConstants.CENTER);
         lblTituloPrincipal.setBounds(10, 25, 614, 30);
-        getContentPane().add(lblTituloPrincipal);
+        add(lblTituloPrincipal);
 
         // Nome
         JLabel nomeLabel = new JLabel("Nome:");
         nomeLabel.setBounds(80, 95, 120, 25);
         nomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        getContentPane().add(nomeLabel);
+        add(nomeLabel);
         txtNome = new JTextField();
         txtNome.setBounds(250, 95, 300, 30);
-        getContentPane().add(txtNome);
+        add(txtNome);
 
         // CPF
         JLabel cpfJLabel = new JLabel("CPF:");
         cpfJLabel.setBounds(80, 130, 120, 25);
         cpfJLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        getContentPane().add(cpfJLabel);
+        add(cpfJLabel);
         txtCpf = new JTextField();
         txtCpf.setBounds(250, 130, 300, 30);
-        getContentPane().add(txtCpf);
+        add(txtCpf);
 
         // E-mail
         JLabel emailJLabel = new JLabel("E-mail:");
         emailJLabel.setBounds(80, 165, 120, 25);
         emailJLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        getContentPane().add(emailJLabel);
+        add(emailJLabel);
         txtEmail = new JTextField();
         txtEmail.setBounds(250, 165, 300, 30);
-        getContentPane().add(txtEmail);
+        add(txtEmail);
 
         // Matrícula
         JLabel matriculaJLabel = new JLabel("Matrícula:");
         matriculaJLabel.setBounds(80, 200, 120, 25);
         matriculaJLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        getContentPane().add(matriculaJLabel);
+        add(matriculaJLabel);
         txtMatricula = new JTextField();
         txtMatricula.setBounds(250, 200, 300, 30);
-        getContentPane().add(txtMatricula);
+        add(txtMatricula);
 
         // Curso
         JLabel cursoLabel = new JLabel("Curso:");
         cursoLabel.setBounds(80, 235, 120, 25);
         cursoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        getContentPane().add(cursoLabel);
+        add(cursoLabel);
         txtCurso = new JTextField();
         txtCurso.setBounds(250, 235, 300, 30);
-        getContentPane().add(txtCurso);
+        add(txtCurso);
 
         // Botão Cadastrar
         JButton btnCadastrar = new JButton("Cadastrar Aluno");
@@ -86,7 +86,7 @@ public class JCadastroAluno extends JFrame {
         btnCadastrar.setOpaque(true);
         btnCadastrar.setBorderPainted(false);
         btnCadastrar.setBounds(335, 420, 200, 40);
-        getContentPane().add(btnCadastrar);
+        add(btnCadastrar);
 
         // Botão Voltar
         JButton btnVoltar = new JButton("Voltar");
@@ -95,9 +95,12 @@ public class JCadastroAluno extends JFrame {
         btnVoltar.setOpaque(true);
         btnVoltar.setBorderPainted(false);
         btnVoltar.setBounds(115, 420, 200, 40);
-        getContentPane().add(btnVoltar);
+        add(btnVoltar);
 
-        btnVoltar.addActionListener(e -> this.dispose());
+        btnVoltar.addActionListener(e -> {
+            clearFields();
+            mainFrame.showPanel("TelaPrincipal");
+        });
 
         btnCadastrar.addActionListener(e -> {
             String nome = txtNome.getText();
@@ -110,12 +113,7 @@ public class JCadastroAluno extends JFrame {
                 MembroService controller = new MembroService();
                 controller.cadastrarAluno(nome, cpf, email, matricula, curso);
                 JOptionPane.showMessageDialog(this, "O Aluno foi cadastrado com sucesso!", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
-                
-                txtNome.setText("");
-                txtCpf.setText("");
-                txtEmail.setText("");
-                txtMatricula.setText("");
-                txtCurso.setText("");
+                clearFields();
 
             } catch (BusinessExcepition be) {
                 JOptionPane.showMessageDialog(this, be.getMessage(), "Erro de Validação", JOptionPane.ERROR_MESSAGE);
@@ -123,5 +121,13 @@ public class JCadastroAluno extends JFrame {
                 JOptionPane.showMessageDialog(this, "Ocorreu um erro inesperado: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         });
+    }
+    private void clearFields() {
+        txtNome.setText("");
+        txtCpf.setText("");
+        txtEmail.setText("");
+        txtMatricula.setText("");
+        txtCurso.setText("");
+        txtNome.requestFocusInWindow();
     }
 }
