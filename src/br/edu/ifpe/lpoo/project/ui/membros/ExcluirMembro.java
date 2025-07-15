@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 
 public class ExcluirMembro extends JFrame {
 
-    private JTextField campoIdExcluir;
+    private JTextField campoCpfExcluir;
     private JButton botaoExcluir;
 
     private MembroService membroService;
@@ -43,10 +43,10 @@ public class ExcluirMembro extends JFrame {
         painel.setBorder(new TitledBorder("Insira o ID do Membro a ser Excluído"));
 
         JLabel labelId = new JLabel("ID do Membro:");
-        campoIdExcluir = new JTextField();
+        campoCpfExcluir = new JTextField();
 
         painel.add(labelId, BorderLayout.WEST);
-        painel.add(campoIdExcluir, BorderLayout.CENTER);
+        painel.add(campoCpfExcluir, BorderLayout.CENTER);
 
         return painel;
     }
@@ -67,8 +67,8 @@ public class ExcluirMembro extends JFrame {
 
 
     private void realizarExclusao(ActionEvent e) {
-        String idTexto = campoIdExcluir.getText();
-        if (idTexto == null || idTexto.isBlank()) {
+        String cpfTexto = campoCpfExcluir.getText();
+        if (cpfTexto == null || cpfTexto.isBlank()) {
             JOptionPane.showMessageDialog(this, "O campo ID não pode estar vazio.", "Erro de Validação", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -76,19 +76,19 @@ public class ExcluirMembro extends JFrame {
         try {
             int resposta = JOptionPane.showConfirmDialog(
                 this,
-                "Tem a certeza de que deseja excluir o membro com o ID " + idTexto + "?\nEsta ação não pode ser desfeita.",
+                "Tem a certeza de que deseja excluir o membro com o ID " + cpfTexto + "?\nEsta ação não pode ser desfeita.",
                 "Confirmação de Exclusão",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE
             );
 
             if (resposta == JOptionPane.YES_OPTION) {
-                int id = Integer.parseInt(idTexto);
+                int cpf = Integer.parseInt(cpfTexto);
                 
-                membroService.excluirMembro(id);
+                membroService.excluirMembro(cpf);
 
-                JOptionPane.showMessageDialog(this, "Membro com ID " + id + " excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                campoIdExcluir.setText("");
+                JOptionPane.showMessageDialog(this, "Membro com ID " + cpf + " excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                campoCpfExcluir.setText("");
             }
 
         } catch (NumberFormatException ex) {

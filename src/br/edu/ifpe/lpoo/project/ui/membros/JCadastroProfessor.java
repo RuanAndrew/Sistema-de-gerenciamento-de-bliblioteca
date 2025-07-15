@@ -33,6 +33,12 @@ public class JCadastroProfessor extends JFrame {
         setLocationRelativeTo(null);
         getContentPane().setBackground(new Color(248, 248, 255));
 
+        JLabel lblTituloPrincipal = new JLabel("Cadastro de Professor como Membro");
+        lblTituloPrincipal.setFont(new Font("SansSerif", Font.BOLD, 20));
+        lblTituloPrincipal.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTituloPrincipal.setBounds(10, 25, 614, 30);
+        getContentPane().add(lblTituloPrincipal);
+
         // Nome
         JLabel nomeLabel = new JLabel("Nome:");
         nomeLabel.setBounds(80, 95, 120, 25);
