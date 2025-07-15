@@ -1,6 +1,9 @@
 package br.edu.ifpe.lpoo.project.ui;
 
 import br.edu.ifpe.lpoo.project.ui.acervo.*;
+import br.edu.ifpe.lpoo.project.ui.membros.JCadastroAluno;
+import br.edu.ifpe.lpoo.project.ui.membros.JCadastroPesquisador;
+import br.edu.ifpe.lpoo.project.ui.membros.JCadastroProfessor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +20,9 @@ public class MainFrame extends JFrame {
     private JListarLivrosPanel jListarLivrosPanel;
     private JListarEbooksPanel jListarEbooksPanel;
     private JListarPeriodicosPanel jListarPeriodicosPanel;
+    private JCadastroAluno jCadastroAluno;
+    private JCadastroPesquisador jCadastroPesquisador;
+    private JCadastroProfessor jCadastroProfessor;
 
     public MainFrame() {
         setTitle("Sistema de Gerenciamento de Livros");
@@ -34,6 +40,9 @@ public class MainFrame extends JFrame {
         jListarLivrosPanel = new JListarLivrosPanel(this);
         jListarEbooksPanel = new JListarEbooksPanel(this);
         jListarPeriodicosPanel = new JListarPeriodicosPanel(this);
+        jCadastroAluno = new JCadastroAluno(this);
+        jCadastroPesquisador = new JCadastroPesquisador(this);
+        jCadastroProfessor = new JCadastroProfessor(this);
 
         cardPanel.add(telaPrincipalPanel, "TelaPrincipal");
         cardPanel.add(jCadastroLivroPanel, "CadastroLivro");
@@ -42,6 +51,9 @@ public class MainFrame extends JFrame {
         cardPanel.add(jListarLivrosPanel, "ListarLivros");
         cardPanel.add(jListarEbooksPanel, "ListarEbooks");
         cardPanel.add(jListarPeriodicosPanel, "ListarPeriodicos");
+        cardPanel.add(jCadastroAluno, "CadastroAluno");
+        cardPanel.add(jCadastroPesquisador,"CadastroPesquisador");
+        cardPanel.add(jCadastroProfessor,"CadastroProfessor");
 
 
         add(cardPanel);
