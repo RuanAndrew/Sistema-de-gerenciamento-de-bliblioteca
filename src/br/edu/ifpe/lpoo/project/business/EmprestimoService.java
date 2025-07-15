@@ -2,54 +2,93 @@ package br.edu.ifpe.lpoo.project.business;
 
 import br.edu.ifpe.lpoo.project.data.acervo.implement.EbookRepository;
 import br.edu.ifpe.lpoo.project.data.acervo.implement.ExemplarRepository;
-import br.edu.ifpe.lpoo.project.data.acervo.implement.LivroRepository;
 import br.edu.ifpe.lpoo.project.data.acervo.implement.PeriodicoRepository;
 import br.edu.ifpe.lpoo.project.data.empretimos.implement.EmprestimoRepository;
 import br.edu.ifpe.lpoo.project.data.membros.implement.AlunoRepository;
+import br.edu.ifpe.lpoo.project.data.membros.implement.PesquisadorRepository;
+import br.edu.ifpe.lpoo.project.data.membros.implement.ProfessorRepository;
+import br.edu.ifpe.lpoo.project.entities.acervo.Exemplar;
 import br.edu.ifpe.lpoo.project.entities.emprestimo.Emprestimo;
-import br.edu.ifpe.lpoo.project.enums.StatusEmprestimo;
-import br.edu.ifpe.lpoo.project.enums.StatusMembro;
+import br.edu.ifpe.lpoo.project.entities.emprestimo.PrazoEmprestimo;
+import br.edu.ifpe.lpoo.project.entities.membros.Aluno;
+import br.edu.ifpe.lpoo.project.entities.membros.Membro;
+import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
+import br.edu.ifpe.lpoo.project.entities.membros.Professor;
+import br.edu.ifpe.lpoo.project.enums.*;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
-import br.edu.ifpe.lpoo.project.ui.dto.AlunoDTO;
-import br.edu.ifpe.lpoo.project.ui.dto.LivroDTO;
 
 import java.time.LocalDate;
 
 public class EmprestimoService {
-    LivroRepository livroRepository;
-    ExemplarRepository exemplarRepository;
-    EbookRepository ebookRepository;
-    PeriodicoRepository periodicoRepository;
-    AlunoRepository alunoRepository;
-    EmprestimoRepository emprestimoRepository;
+    private final ExemplarRepository exemplarRepository;
+    private final AlunoRepository alunoRepository;
+    private final ProfessorRepository professorRepository;
+    private final PesquisadorRepository pesquisadorRepository;
+    private final EmprestimoRepository emprestimoRepository;
 
-    LocalDate localDate;
-    public EmprestimoService() {
-
+    public EmprestimoService(
+            ExemplarRepository exemplarRepository,
+            EbookRepository ebookRepository,
+            PeriodicoRepository periodicoRepository,
+            AlunoRepository alunoRepository,
+            ProfessorRepository professorRepository,
+            PesquisadorRepository pesquisadorRepository,
+            EmprestimoRepository emprestimoRepository) {
+        this.exemplarRepository = exemplarRepository;
+        this.alunoRepository = alunoRepository;
+        this.professorRepository = professorRepository;
+        this.pesquisadorRepository = pesquisadorRepository;
+        this.emprestimoRepository = emprestimoRepository;
     }
 
-    public void EmprestarLivro (LivroDTO livroDTO, AlunoDTO alunoDTO) {
-        if (livroRepository.existItem(livroDTO.getId())) {
-            throw new BusinessExcepition("id do livro não encontrado para empretimo");
-        }
-        if (alunoRepository.existMembro(alunoDTO.getCpf())) {
-            throw new BusinessExcepition("cpf do menbro não encontrado para empretimo");
+    private void realizarEmprestimo(int idExemplar, String membroCpf, TipoMembro tipoMembro) {
+
+        Exemplar exemplar = exemplarRepository.buscarPorId(idExemplar);
+        if (exemplar == null) {
+            throw new BusinessExcepition("Exemplar com ID " + idExemplar + " não encontrado para empréstimo.");
         }
 
-        if (alunoDTO.getStatusmembro() != StatusMembro.ATIVO) {
-            throw new BusinessExcepition("status do membro deve ser ativo");
+        if (exemplar.isDisponivel() != StatusExemplar.DISPONIVEL) {
+            throw new BusinessExcepition("Exemplar com ID " + idExemplar + " não está disponível para empréstimo. Status: " + exemplar.isDisponivel());
+        }
+
+        Membro membro = switch (tipoMembro) {
+            case ALUNO -> alunoRepository.buscarPorCPF(membroCpf);
+            case PROFESSOR -> professorRepository.buscarPorCPF(membroCpf);
+            case PESQUISADOR -> pesquisadorRepository.buscarPorCPF(membroCpf);
+            default -> throw new IllegalArgumentException("Tipo de membro desconhecido.");
+        };
+
+        if (membro == null) {
+            throw new BusinessExcepition("Membro com CPF " + membroCpf + " não encontrado para empréstimo.");
+        }
+
+        if (membro.getStatusmembro() != StatusMembro.ATIVO) {
+            throw new BusinessExcepition("O status do membro deve ser ATIVO para realizar empréstimos.");
         }
 
         LocalDate dataEmprestimo = LocalDate.now();
-
-        LocalDate dataParaDevolucao = dataEmprestimo.plusDays(7);
-
-        LocalDate dataDevolucao = null;
-
+        int prazoEmDias = getPrazoEmprestimo(membro);
+        LocalDate dataParaDevolucao = dataEmprestimo.plusDays(prazoEmDias);
         StatusEmprestimo statusEmprestimo = StatusEmprestimo.ABERTO;
 
-        Emprestimo emprestimo = new Emprestimo(livroDTO.getId(), alunoDTO.getId(), dataEmprestimo, dataParaDevolucao, dataDevolucao, statusEmprestimo);
-
+        Emprestimo emprestimo = new Emprestimo(exemplar.getIdExemplar(), membro.getId(), dataEmprestimo, dataParaDevolucao, null, statusEmprestimo);
         emprestimoRepository.insert(emprestimo);
+
+        exemplar.setDisponivel(StatusExemplar.EMPRESTADO);
     }
+
+    private int getPrazoEmprestimo(Membro membro) {
+        return switch (membro) {
+            case Aluno aluno -> PrazoEmprestimo.PRAZO_ALUNO;
+            case Professor professor -> PrazoEmprestimo.PRAZO_PROFESSOR;
+            case Pesquisador pesquisador -> PrazoEmprestimo.PRAZO_PESQUISADOR;
+            case null, default -> throw new IllegalArgumentException("Tipo de membro desconhecido. Não foi possível determinar o prazo de empréstimo.");
+        };
+    }
+
+    public void emprestar(int idExemplar, String cpfMembro, TipoMembro tipoMembro) {
+        realizarEmprestimo(idExemplar, cpfMembro, tipoMembro);
+    }
+
 }

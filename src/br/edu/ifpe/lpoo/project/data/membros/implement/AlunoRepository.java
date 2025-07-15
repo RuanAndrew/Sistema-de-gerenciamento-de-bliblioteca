@@ -104,6 +104,32 @@ public class AlunoRepository implements IAlunoRepository {
 	}
 
 	@Override
+	public boolean existMembro(Aluno aluno) {
+
+		if (aluno == null) {
+			throw new DbException("Objeto tipo Aluno não pode ser null");
+		}
+
+		boolean exists = false;
+
+		String sqlMembro = "SELECT * FROM membro WHERE cpf = ?";
+
+		try (Connection conn = ConnectionDb.getConnection();
+			 PreparedStatement stmt = conn.prepareStatement(sqlMembro)) {
+			stmt.setString(1, aluno.getCpf());
+
+			try (ResultSet rst = stmt.executeQuery()) {
+
+				exists = rst.next();
+			}
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao verificar existência do membro. Causado por: " + e.getMessage());
+		}
+
+		return exists;
+	}
+
 	public boolean existMembro(String cpf) {
 
 		if (cpf == null) {
@@ -200,6 +226,35 @@ public class AlunoRepository implements IAlunoRepository {
 
 		} catch (SQLException e) {
 			throw new DbException("Erro ao busca aluno por id. Causado por: " + e.getMessage());
+		}
+
+		return aluno;
+	}
+
+	public Aluno buscarPorCPF(String cpf) {
+
+		if (cpf == null) {
+			throw new DbException("cpf inválido");
+		}
+
+		Aluno aluno = null;
+
+		String sqlAluno = "SELECT id_aluno, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, curso " +
+				"FROM aluno WHERE cpf = ?";
+
+		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlAluno)) {
+
+			stmt.setString(1, cpf);
+
+			try (ResultSet rst = stmt.executeQuery()) {
+
+				if (rst.next()) {
+					aluno = instanciarAluno(rst);
+				}
+			}
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao busca aluno por cpf. Causado por: " + e.getMessage());
 		}
 
 		return aluno;

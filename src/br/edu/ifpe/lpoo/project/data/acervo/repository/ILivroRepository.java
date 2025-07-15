@@ -7,7 +7,7 @@ import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
 public interface ILivroRepository {
 	void insert(Livro livro);
 
-	boolean existItem(int idItem);
+	boolean existItem(Livro livro);
 	
 	Livro buscarPorId(int idItem);
 	

@@ -8,7 +8,7 @@ public interface IAlunoRepository {
 	
 	void insert (Aluno aluno);
 	
-	boolean existMembro(String cpf);
+	boolean existMembro(Aluno aluno);
 	
 	void delete(int idMembro);
 	

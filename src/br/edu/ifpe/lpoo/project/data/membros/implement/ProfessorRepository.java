@@ -10,6 +10,7 @@ import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.membros.repository.IProfessorRepository;
+import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
 import br.edu.ifpe.lpoo.project.entities.membros.Professor;
 import br.edu.ifpe.lpoo.project.enums.StatusMembro;
 import br.edu.ifpe.lpoo.project.enums.TipoMembro;
@@ -206,6 +207,37 @@ public class ProfessorRepository implements IProfessorRepository {
 
 		} catch (SQLException e) {
 			throw new DbException("Erro ao buscar professor por id. Causado por: " + e.getMessage());
+		}
+
+		return professor;
+	}
+
+	public Professor buscarPorCPF(String cpf) {
+
+		if (cpf == null) {
+			throw new DbException("cpf inválido");
+		}
+
+		Professor professor = null;
+
+		String sqlProfessor = "SELECT id_professor, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, area_atuacao, departamento " +
+				"FROM professor WHERE cpf = ?";
+
+
+		try (Connection conn = ConnectionDb.getConnection();
+			 PreparedStatement stmt = conn.prepareStatement(sqlProfessor)) {
+
+			stmt.setString(1, cpf);
+
+			try (ResultSet rst = stmt.executeQuery()) {
+
+				if (rst.next()) {
+					professor = instanciarProfessor(rst);
+				}
+			}
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao buscar professor por cpf. Causado por: " + e.getMessage());
 		}
 
 		return professor;

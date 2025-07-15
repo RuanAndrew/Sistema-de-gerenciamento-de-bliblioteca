@@ -76,19 +76,21 @@ public class LivroRepository implements ILivroRepository {
 	}
 
 	@Override
-	public boolean existItem(int idItem) {
+	public boolean existItem(Livro livro) {
 
-		if (idItem <= 0) {
-			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
+		if (livro == null) {
+			throw new DbException("Objeto tipo Livro não pode ser null");
 		}
 
 		boolean exists = false;
 
-		String sqlLivro = "SELECT 1 FROM livro WHERE id = ?";
+		String sqlLivro = "SELECT * FROM livro WHERE isbn = ? OR (titulo = ? AND editora = ?)";
 
 		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlLivro)) {
 
-			stmt.setInt(1, idItem);
+			stmt.setString(1, livro.getIsbn());
+			stmt.setString(2, livro.getTitulo());
+			stmt.setString(3, livro.getEditora());
 
 			try (ResultSet rst = stmt.executeQuery()) {
 				if (rst.next()) {

@@ -1,4 +1,4 @@
-package br.edu.ifpe.lpoo.project.ui.dto;
+package br.edu.ifpe.lpoo.project.ui.dto.acervo;
 
 import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
 

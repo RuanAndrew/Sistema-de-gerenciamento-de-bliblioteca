@@ -14,9 +14,9 @@ import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
 import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
-import br.edu.ifpe.lpoo.project.ui.dto.EbookDTO;
-import br.edu.ifpe.lpoo.project.ui.dto.LivroDTO;
-import br.edu.ifpe.lpoo.project.ui.dto.PeriodicoDTO;
+import br.edu.ifpe.lpoo.project.ui.dto.acervo.EbookDTO;
+import br.edu.ifpe.lpoo.project.ui.dto.acervo.LivroDTO;
+import br.edu.ifpe.lpoo.project.ui.dto.acervo.PeriodicoDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -62,6 +62,25 @@ public class AcervoService {
         }
         if (idioma.isBlank()) {
             throw new BusinessExcepition("O idioma é obrigatório.");
+        }
+
+        if (titulo.length() > 255) {
+            throw new BusinessExcepition("O título não pode ter mais de 255 caracteres.");
+        }
+        if (autor.length() > 255) {
+            throw new BusinessExcepition("O autor não pode ter mais de 255 caracteres.");
+        }
+        if (editora != null && editora.length() > 255) {
+            throw new BusinessExcepition("A editora não pode ter mais de 255 caracteres.");
+        }
+        if (isbn != null && isbn.length() > 17) {
+            throw new BusinessExcepition("O ISBN não pode ter mais de 17 caracteres.");
+        }
+        if (genero.length() > 255) {
+            throw new BusinessExcepition("O gênero não pode ter mais de 255 caracteres.");
+        }
+        if (idioma.length() > 255) {
+            throw new BusinessExcepition("O idioma não pode ter mais de 255 caracteres.");
         }
 
         if (isValidIsbn(isbn)) {

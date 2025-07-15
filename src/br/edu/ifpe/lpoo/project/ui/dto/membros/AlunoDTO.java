@@ -1,9 +1,10 @@
-package br.edu.ifpe.lpoo.project.ui.dto;
+package br.edu.ifpe.lpoo.project.ui.dto.membros;
 
 import br.edu.ifpe.lpoo.project.enums.StatusMembro;
 import br.edu.ifpe.lpoo.project.enums.TipoMembro;
 
-public class PesquisadorDTO {
+public class AlunoDTO {
+
     private int id;
     private String nome;
     private String email;
@@ -12,19 +13,18 @@ public class PesquisadorDTO {
     private TipoMembro tipomembro = TipoMembro.ALUNO;
     private String debitomultas;
     private StatusMembro statusmembro = StatusMembro.ATIVO;
-    private String instituicao;
+    private String curso;
 
-
-    public PesquisadorDTO(int id, String email, String nome, String cpf, String matricula, TipoMembro tipomembro, String debitomultas, StatusMembro statusmembro, String instituicao) {
+    public AlunoDTO(int id, String nome, String email, String cpf, String matricula, TipoMembro tipomembro, String debitomultas, String curso, StatusMembro statusmembro) {
         this.id = id;
-        this.email = email;
         this.nome = nome;
+        this.email = email;
         this.cpf = cpf;
         this.matricula = matricula;
         this.tipomembro = tipomembro;
         this.debitomultas = debitomultas;
+        this.curso = curso;
         this.statusmembro = statusmembro;
-        this.instituicao = instituicao;
     }
 
     public int getId() {
@@ -43,20 +43,20 @@ public class PesquisadorDTO {
         this.nome = nome;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getCpf() {
         return cpf;
     }
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getMatricula() {
@@ -91,11 +91,11 @@ public class PesquisadorDTO {
         this.statusmembro = statusmembro;
     }
 
-    public String getInstituicao() {
-        return instituicao;
+    public String getCurso() {
+        return curso;
     }
 
-    public void setInstituicao(String instituicao) {
-        this.instituicao = instituicao;
+    public void setCurso(String curso) {
+        this.curso = curso;
     }
 }
