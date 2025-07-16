@@ -41,6 +41,14 @@ public class EmprestimoService {
         this.emprestimoRepository = emprestimoRepository;
     }
 
+    public EmprestimoService() {
+        this.exemplarRepository = new ExemplarRepository();
+        this.alunoRepository = new AlunoRepository();
+        this.professorRepository = new ProfessorRepository();
+        this.pesquisadorRepository = new PesquisadorRepository();
+        this.emprestimoRepository = new EmprestimoRepository();
+    }
+
     private void realizarEmprestimo(int idExemplar, String membroCpf, TipoMembro tipoMembro) {
 
         Exemplar exemplar = exemplarRepository.buscarPorId(idExemplar);

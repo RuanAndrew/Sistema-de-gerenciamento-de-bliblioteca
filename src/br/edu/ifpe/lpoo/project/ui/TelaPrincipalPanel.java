@@ -110,6 +110,20 @@ public class TelaPrincipalPanel extends JPanel {
         });
         buttonPanel.add(btnListarPeriodicos);
 
+        JButton btnRealizarEmprestimo = new JButton("Realizar Empréstimo");
+        btnRealizarEmprestimo.setPreferredSize(new Dimension(250, 60));
+        btnRealizarEmprestimo.setFont(new Font("Arial", Font.PLAIN, 18));
+        btnRealizarEmprestimo.setBackground(new Color(60, 179, 113));
+        btnRealizarEmprestimo.setForeground(Color.WHITE);
+        btnRealizarEmprestimo.setFocusPainted(false);
+        btnRealizarEmprestimo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainFrame.showPanel("RealizarEmprestimo");
+            }
+        });
+        buttonPanel.add(btnRealizarEmprestimo);
+
         JButton btnSair = new JButton("Sair");
         btnSair.setPreferredSize(new Dimension(250, 60));
         btnSair.setFont(new Font("Arial", Font.PLAIN, 18));

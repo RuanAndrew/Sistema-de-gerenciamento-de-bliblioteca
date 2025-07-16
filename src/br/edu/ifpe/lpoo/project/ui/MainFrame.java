@@ -1,6 +1,7 @@
 package br.edu.ifpe.lpoo.project.ui;
 
 import br.edu.ifpe.lpoo.project.ui.acervo.*;
+import br.edu.ifpe.lpoo.project.ui.emprestimo.JRealizarEmprestimoPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,8 +16,9 @@ public class MainFrame extends JFrame {
     private JCadastroEbook jCadastroEbookPanel;
     private JCadastroPeriodico jCadastroPeriodicoPanel;
     private JListarLivrosPanel jListarLivrosPanel;
-    private JListarEbooksPanel jListarEbooksPanel;     // <-- ADICIONE ESTA LINHA
+    private JListarEbooksPanel jListarEbooksPanel;
     private JListarPeriodicosPanel jListarPeriodicosPanel;
+    private JRealizarEmprestimoPanel jRealizarEmprestimoPanel;
 
     public MainFrame() {
         setTitle("Sistema de Gerenciamento de Livros");
@@ -34,6 +36,7 @@ public class MainFrame extends JFrame {
         jListarLivrosPanel = new JListarLivrosPanel(this);
         jListarEbooksPanel = new JListarEbooksPanel(this);
         jListarPeriodicosPanel = new JListarPeriodicosPanel(this);
+        jRealizarEmprestimoPanel = new JRealizarEmprestimoPanel(this);
 
         cardPanel.add(telaPrincipalPanel, "TelaPrincipal");
         cardPanel.add(jCadastroLivroPanel, "CadastroLivro");
@@ -42,6 +45,7 @@ public class MainFrame extends JFrame {
         cardPanel.add(jListarLivrosPanel, "ListarLivros");
         cardPanel.add(jListarEbooksPanel, "ListarEbooks");
         cardPanel.add(jListarPeriodicosPanel, "ListarPeriodicos");
+        cardPanel.add(jRealizarEmprestimoPanel, "RealizarEmprestimo");
 
 
         add(cardPanel);
