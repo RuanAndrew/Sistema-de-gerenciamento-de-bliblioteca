@@ -218,14 +218,20 @@ public class JCadastroLivro extends JPanel {
 	}
 
 	private void preencherFormulario(Livro livro) {
-		txtTitulo.setText(livro.getTitulo() != null ? livro.getTitulo() : "");
-		txtAutor.setText(livro.getAutor() != null ? livro.getAutor() : "");
+		txtTitulo.setText(livro.getTitulo() != null ? cleanString(livro.getTitulo()) : "");
+		txtAutor.setText(livro.getAutor() != null ? cleanString(livro.getAutor()) : "");
 		txtAnoPublicacao.setText(String.valueOf(livro.getAnoPublicacao()));
-		txtEditora.setText(livro.getEditora() != null ? livro.getEditora() : "");
+		txtEditora.setText(livro.getEditora() != null ? cleanString(livro.getEditora()) : "");
 		txtNumeroPaginas.setText(String.valueOf(livro.getNumeroPaginas()));
-		txtGenero.setText(livro.getGenero() != null ? livro.getGenero() : "");
+		txtGenero.setText(livro.getGenero() != null ? cleanString(livro.getGenero()) : "");
 	}
 
+	private String cleanString(String input) {
+		if (input == null || input.length() < 2) {
+			return "";
+		}
+		return input.substring(1, input.length() - 1);
+	}
 
 	private void clearFields() {
 		txtIsbn.setText("");

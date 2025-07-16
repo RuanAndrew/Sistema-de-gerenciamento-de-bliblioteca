@@ -230,13 +230,19 @@ public class JCadastroEbook extends JPanel {
 
     private void preencherFormulario(Ebook ebook) {
         txtTitulo.setText(ebook.getTitulo() != null ? ebook.getTitulo() : "");
-        txtAutores.setText(ebook.getAutor() != null ? ebook.getAutor() : "");
+        txtAutores.setText(ebook.getAutor() != null ? cleanString(ebook.getAutor()) : "");
         txtAnoPublicacao.setText(String.valueOf(ebook.getAnoPublicacao()));
-        txtEditora.setText(ebook.getEditora() != null ? ebook.getEditora() : "");
+        txtEditora.setText(ebook.getEditora() != null ? cleanString(ebook.getEditora()) : "");
         txtNumeroPaginas.setText(String.valueOf(ebook.getNumeroPaginas()));
-        txtGenero.setText(ebook.getGenero() != null ? ebook.getGenero() : "");
+        txtGenero.setText(ebook.getGenero() != null ? cleanString(ebook.getGenero()) : "");
     }
 
+    private String cleanString(String input) {
+        if (input == null || input.length() < 2) {
+            return "";
+        }
+        return input.substring(1, input.length() - 1);
+    }
 
     private void clearFields() {
         txtTitulo.setText("");
