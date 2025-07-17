@@ -9,6 +9,8 @@ public interface ILivroRepository {
 
 	boolean existItem(Livro livro);
 	
+	boolean existPorId(int idLivro);
+	
 	Livro buscarPorId(int idItem);
 	
 	void delete(int idItem);

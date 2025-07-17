@@ -105,6 +105,29 @@ public class EbookRepository implements IEbookRepository {
 			ConnectionDb.closeConnection(conn);
 		}
 	}
+	
+	@Override
+	public boolean existPorId(int idEbook) {
+		
+		if (idEbook <= 0) {
+			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
+		}
+		
+		String sqlEbook = "SELECT * FROM ebook WHERE  id_ebook = ? LIMIT 1";
+		
+		boolean exists = false;
+		
+		try(Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlEbook)){
+			
+			stmt.setInt(1, idEbook);
+			try(ResultSet rst = stmt.executeQuery()){
+				exists = rst.next();
+			}
+		}catch (SQLException e) {
+			throw new DbException("Erro ao verificar existência do ebook com id, no banco de dados. Causado por: " + e.getMessage());
+		}
+		return exists;
+	}
 
 	@Override
 	public boolean existItem(Ebook ebook) {

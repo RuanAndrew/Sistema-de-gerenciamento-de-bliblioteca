@@ -101,6 +101,30 @@ public class ExemplarRepository implements IExemplarRepository {
 			ConnectionDb.closeConnection(conn);
 		}
 	}
+	
+	public boolean existPorId(int idExemplar) {
+		
+		if (idExemplar <= 0) {
+			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
+		}
+		
+		String sqlExemplar = "SELECT * FROM exemplar WHERE id_exemplar = ?";
+		boolean exists = false;
+		
+		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlExemplar)){
+			
+			stmt.setInt(1, idExemplar);
+			
+			try (ResultSet rst = stmt.executeQuery()){
+				exists = rst.next();
+			}
+			
+		} catch (SQLException e) {
+			throw new DbException("Erro ao verificar existência do exemplar com id, no banco de dados. Causado por: " + e.getMessage());
+		}
+		
+		return exists;
+	}
 
 	@Override
 	public boolean existItem(Exemplar exemplar) {

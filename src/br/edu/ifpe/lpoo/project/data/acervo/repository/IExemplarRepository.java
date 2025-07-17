@@ -10,7 +10,9 @@ public interface IExemplarRepository {
 	boolean existItem(Exemplar exemplar);
 
 	void insert(Exemplar exemplar, int idLivro);
-
+	
+	boolean existPorId(int idExemplar);
+	
 	void deleteParaLivros(int idLivro, Connection conn);
 
 	void atualizarStatus(Exemplar exemplar);

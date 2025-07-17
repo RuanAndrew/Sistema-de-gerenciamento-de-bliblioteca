@@ -10,6 +10,8 @@ public interface IEbookRepository {
 	
 	boolean existItem(Ebook ebook);
 	
+	boolean existPorId(int idEbook);
+	
 	Ebook buscarPorId(int idItem);
 	
 	void delete(int idItem);

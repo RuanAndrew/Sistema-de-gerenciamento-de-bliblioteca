@@ -104,6 +104,32 @@ public class PeriodicoRepository implements IPeriodicoRepository {
 	}
 
 	@Override
+	public boolean existPorId(int idPeriodico) {
+		
+		if (idPeriodico <= 0) {
+			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
+		}
+		
+		boolean exists = false;
+		
+		String sqlPeriodico = "SELECT * FROM periodico WHERE id_periodico = ? LIMIT 1";
+		
+		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlPeriodico)){
+			
+			stmt.setInt(1, idPeriodico);
+			
+			try (ResultSet rst = stmt.executeQuery()){
+				exists = rst.next();
+			}
+			
+		}catch (SQLException e) {
+			throw new DbException("Erro ao verificar existência do periódico com id, no banco de dados. Causado por: " + e.getMessage());
+		}
+		
+		return exists;
+	}
+
+	@Override
 	public boolean existItem(Periodico periodico) {
 
 		if (periodico == null) {
