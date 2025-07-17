@@ -65,15 +65,15 @@ public class JRealizarEmprestimoPanel extends JPanel {
         JButton btnEmprestar = new JButton("Realizar Empréstimo");
         btnEmprestar.setBackground(new Color(60, 179, 113));
         btnEmprestar.setForeground(Color.WHITE);
-        btnEmprestar.setBounds(150, 290, 200, 40);
+        btnEmprestar.setBounds(370, 290, 200, 40);
         add(btnEmprestar);
         btnEmprestar.addActionListener(e -> executarEmprestimo());
 
         // Botão Voltar
-        JButton btnVoltar = new JButton("Voltar ao Menu");
+        JButton btnVoltar = new JButton("Voltar");
         btnVoltar.setBackground(new Color(255, 140, 0));
         btnVoltar.setForeground(Color.WHITE);
-        btnVoltar.setBounds(370, 290, 200, 40);
+        btnVoltar.setBounds(150, 290, 200, 40);
         add(btnVoltar);
         btnVoltar.addActionListener(e -> {
             clearFields();

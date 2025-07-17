@@ -104,7 +104,7 @@ public class JCadastroProfessor extends JPanel {
 
         // Botão Voltar
         JButton btnVoltar = new JButton("Voltar");
-        btnVoltar.setBackground(new Color(108, 117, 125));
+        btnVoltar.setBackground(new Color(255, 140, 0));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setOpaque(true);
         btnVoltar.setBorderPainted(false);
@@ -113,7 +113,7 @@ public class JCadastroProfessor extends JPanel {
 
         btnVoltar.addActionListener(e -> {
             clearFields();
-            mainFrame.showPanel("TelaPrincipal");
+            mainFrame.showPanel("GerenciarMembrosPanel");
         });
 
 
