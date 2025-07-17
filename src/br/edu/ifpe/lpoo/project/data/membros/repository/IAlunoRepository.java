@@ -13,6 +13,8 @@ public interface IAlunoRepository {
 	void delete(int idMembro);
 	
 	Aluno buscarPorId(int idMembro);
+
+	Aluno buscarPorCPF(String cpf);
 	
 	List<Aluno> buscarTodos();
 	

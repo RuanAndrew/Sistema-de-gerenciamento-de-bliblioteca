@@ -185,11 +185,11 @@ public class PesquisadorRepository implements IPesquisadorRepository {
 
 		Pesquisador pesquisador = null;
 
-		String sql = "SELECT id_membro, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, instituicao "
+		String sqlPesquisador = "SELECT id_membro, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, instituicao "
 				+ "FROM membro INNER JOIN pesquisador ON membro.id_membro = pesquisador.id_pesquisador "
 				+ "WHERE id_membro = ?";
 
-		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlPesquisador)) {
 
 			stmt.setInt(1, idMembro);
 
@@ -208,6 +208,7 @@ public class PesquisadorRepository implements IPesquisadorRepository {
 
 	}
 
+	@Override
 	public Pesquisador buscarPorCPF(String cpf) {
 
 		if (cpf == null) {
@@ -216,10 +217,11 @@ public class PesquisadorRepository implements IPesquisadorRepository {
 
 		Pesquisador pesquisador = null;
 
-		String sql = "SELECT id_pesquisador, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, instituicao " +
-				"FROM pesquisador WHERE cpf = ?";
+		String sqlPesquisador = "SELECT id_membro, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, instituicao " +
+				"FROM membro INNER JOIN pesquisador ON membro.id_membro = pesquisador.id_pesquisador " +
+				"WHERE cpf = ?";
 
-		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlPesquisador)) {
 
 			stmt.setString(1, cpf);
 

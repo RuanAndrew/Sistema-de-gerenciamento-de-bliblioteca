@@ -212,6 +212,7 @@ public class ProfessorRepository implements IProfessorRepository {
 		return professor;
 	}
 
+	@Override
 	public Professor buscarPorCPF(String cpf) {
 
 		if (cpf == null) {
@@ -220,8 +221,9 @@ public class ProfessorRepository implements IProfessorRepository {
 
 		Professor professor = null;
 
-		String sqlProfessor = "SELECT id_professor, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, area_atuacao, departamento " +
-				"FROM professor WHERE cpf = ?";
+		String sqlProfessor = "SELECT id_membro, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, area_atuacao, departamento " +
+				"FROM membro INNER JOIN professor ON membro.id_membro = professor.id_professor " +
+				"WHERE cpf = ?";
 
 
 		try (Connection conn = ConnectionDb.getConnection();

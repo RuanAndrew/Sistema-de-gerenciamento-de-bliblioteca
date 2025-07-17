@@ -81,9 +81,9 @@ public class EmprestimoService {
         StatusEmprestimo statusEmprestimo = StatusEmprestimo.ABERTO;
 
         Emprestimo emprestimo = new Emprestimo(exemplar.getIdExemplar(), membro.getId(), dataEmprestimo, dataParaDevolucao, null, statusEmprestimo);
+        exemplar.setDisponivel(StatusExemplar.EMPRESTADO);
         emprestimoRepository.insert(emprestimo);
 
-        exemplar.setDisponivel(StatusExemplar.EMPRESTADO);
     }
 
     private int getPrazoEmprestimo(Membro membro) {

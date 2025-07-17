@@ -231,6 +231,7 @@ public class AlunoRepository implements IAlunoRepository {
 		return aluno;
 	}
 
+	@Override
 	public Aluno buscarPorCPF(String cpf) {
 
 		if (cpf == null) {
@@ -239,8 +240,9 @@ public class AlunoRepository implements IAlunoRepository {
 
 		Aluno aluno = null;
 
-		String sqlAluno = "SELECT id_aluno, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, curso " +
-				"FROM aluno WHERE cpf = ?";
+		String sqlAluno = "SELECT id_membro, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, curso " +
+				"FROM membro INNER JOIN aluno ON membro.id_membro = aluno.id_aluno " +
+				"WHERE cpf = ?";
 
 		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlAluno)) {
 
