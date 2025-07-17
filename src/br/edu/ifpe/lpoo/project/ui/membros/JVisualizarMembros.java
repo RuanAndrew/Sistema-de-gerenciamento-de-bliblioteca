@@ -2,7 +2,6 @@ package br.edu.ifpe.lpoo.project.ui.membros;
 
 import br.edu.ifpe.lpoo.project.business.MembroService;
 import br.edu.ifpe.lpoo.project.entities.membros.Membro;
-import br.edu.ifpe.lpoo.project.enums.TipoMembro;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessException;
 import br.edu.ifpe.lpoo.project.ui.MainFrame;
 
@@ -63,15 +62,6 @@ public class JVisualizarMembros extends JPanel {
 
         // --- Painel de Botões ---
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        
-        // Botão Excluir
-        JButton btnExcluir = new JButton("Excluir Membro");
-        btnExcluir.setBackground(new Color(220, 53, 69));
-        btnExcluir.setForeground(Color.WHITE);
-        btnExcluir.setOpaque(true);
-        btnExcluir.setBorderPainted(false);
-        btnExcluir.addActionListener(e -> excluirMembroSelecionado());
-        painelBotoes.add(btnExcluir);
 
         // Botão Voltar
         JButton btnVoltar = new JButton("Voltar");
@@ -145,3 +135,4 @@ public class JVisualizarMembros extends JPanel {
         }
     }
 }
+
