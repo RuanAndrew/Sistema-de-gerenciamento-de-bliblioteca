@@ -152,6 +152,21 @@ public class TelaPrincipalPanel extends JPanel {
         });
         buttonPanel.add(btnCadastrarProfessor);
 
+        JButton btnVisualizarMembros = new JButton("Visualizar Membros");
+        btnVisualizarMembros.setPreferredSize(new Dimension(250, 60));
+        btnVisualizarMembros.setFont(new Font("Arial", Font.PLAIN, 18));
+        btnVisualizarMembros.setBackground(new Color(60, 179, 113));
+        btnVisualizarMembros.setForeground(Color.WHITE);
+        btnVisualizarMembros.setFocusPainted(false);
+        btnVisualizarMembros.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainFrame.showPanel("VisualizarMembros");
+            }
+            
+        });
+        buttonPanel.add(btnVisualizarMembros);
+
         JButton btnSair = new JButton("Sair");
         btnSair.setPreferredSize(new Dimension(250, 60));
         btnSair.setFont(new Font("Arial", Font.PLAIN, 18));

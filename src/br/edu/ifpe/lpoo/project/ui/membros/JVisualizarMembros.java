@@ -3,6 +3,7 @@ package br.edu.ifpe.lpoo.project.ui.membros;
 import br.edu.ifpe.lpoo.project.business.MembroService;
 import br.edu.ifpe.lpoo.project.entities.membros.Membro;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.ui.MainFrame;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,55 +11,31 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-/**
- * Tela para visualizar todos os membros cadastrados no sistema,
- * utilizando o MembroService para buscar os dados.
- */
-public class JVisualizarMembros extends JFrame {
+public class JVisualizarMembros extends JPanel {
 
+    private MainFrame mainFrame;
     private JTable tabelaMembros;
     private DefaultTableModel tableModel;
     private final MembroService membroService;
 
-    /**
-     * Construtor da classe.
-     */
-    public JVisualizarMembros() {
-        // Instancia o serviço que será usado para buscar os dados
+    public JVisualizarMembros(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
         this.membroService = new MembroService();
-        
-        // Monta a interface gráfica
         initialize();
-        
-        // Carrega os dados na tabela assim que a janela é criada
         carregarMembros();
     }
 
-    /**
-     * Inicializa o conteúdo da janela (frame).
-     */
     private void initialize() {
-        // --- Configuração da Janela ---
-        setTitle("Visualização de Membros");
-        setSize(800, 600);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        
-        // --- Painel Principal com Layout e Margens ---
-        JPanel painelPrincipal = new JPanel(new BorderLayout(10, 10));
-        painelPrincipal.setBorder(new EmptyBorder(10, 10, 10, 10));
-        setContentPane(painelPrincipal);
+        setLayout(new BorderLayout(10, 10));
+        setBorder(new EmptyBorder(10, 10, 10, 10));
+        setBackground(new Color(248, 248, 255));
 
-        // --- Título da Tela ---
-        JLabel lblTitulo = new JLabel("Membros Cadastrados", SwingConstants.CENTER);
+        JLabel lblTitulo = new JLabel("Gerenciamento de Membros", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 20));
-        painelPrincipal.add(lblTitulo, BorderLayout.NORTH);
+        add(lblTitulo, BorderLayout.NORTH);
 
         // --- Tabela de Membros ---
-        // Define as colunas da tabela
         String[] colunas = {"ID", "Nome", "CPF", "Matrícula", "Tipo", "Status"};
-        
-        // Cria o modelo da tabela, tornando as células não editáveis
         tableModel = new DefaultTableModel(colunas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -72,13 +49,21 @@ public class JVisualizarMembros extends JFrame {
         tabelaMembros.setFont(new Font("SansSerif", Font.PLAIN, 14));
         tabelaMembros.setRowHeight(25);
         
-        // Adiciona a tabela a um painel com barra de rolagem
         JScrollPane scrollPane = new JScrollPane(tabelaMembros);
-        painelPrincipal.add(scrollPane, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.CENTER);
 
         // --- Painel de Botões ---
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         
+        // Botão Excluir
+        JButton btnExcluir = new JButton("Excluir Membro");
+        btnExcluir.setBackground(new Color(220, 53, 69)); // Vermelho
+        btnExcluir.setForeground(Color.WHITE);
+        btnExcluir.setOpaque(true);
+        btnExcluir.setBorderPainted(false);
+        btnExcluir.addActionListener(e -> excluirMembroSelecionado());
+        painelBotoes.add(btnExcluir);
+
         // Botão Atualizar
         JButton btnAtualizar = new JButton("Atualizar Lista");
         btnAtualizar.addActionListener(e -> carregarMembros());
@@ -90,45 +75,69 @@ public class JVisualizarMembros extends JFrame {
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setOpaque(true);
         btnVoltar.setBorderPainted(false);
-        btnVoltar.addActionListener(e -> this.dispose());
+        btnVoltar.addActionListener(e -> mainFrame.showPanel("TelaPrincipal"));
         painelBotoes.add(btnVoltar);
         
-        painelPrincipal.add(painelBotoes, BorderLayout.SOUTH);
+        add(painelBotoes, BorderLayout.SOUTH);
     }
 
-    /**
-     * Busca os dados no MembroService e popula a tabela.
-     */
-    private void carregarMembros() {
-        // Limpa a tabela antes de carregar novos dados para evitar duplicatas
-        tableModel.setRowCount(0);
 
+    private void carregarMembros() {
+        tableModel.setRowCount(0);
         try {
-            // Chama o método do serviço para obter a lista de todos os membros
             List<Membro> membros = membroService.listarTodosItens();
-            
-            if (membros.isEmpty()) {
-                // Informa ao usuário se não houver membros
-                JOptionPane.showMessageDialog(this, "Nenhum membro cadastrado no sistema.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                // Itera sobre a lista e adiciona cada membro como uma nova linha na tabela
-                for (Membro membro : membros) {
-                    Object[] rowData = {
-                        membro.getId(), // Assumindo que a entidade Membro tem um método getId()
-                        membro.getNome(),
-                        membro.getCpf(),
-                        membro.getMatricula(),
-                        membro.getStatusmembro().toString(),
-                        membro.getStatusmembro().toString()
-                    };
-                    tableModel.addRow(rowData);
-                }
+            for (Membro membro : membros) {
+                Object[] rowData = {
+                    membro.getId(),
+                    membro.getNome(),
+                    membro.getCpf(),
+                    membro.getMatricula(),
+                    membro.getTipomembro().toString(),
+                    membro.getStatusmembro().toString()
+                };
+                tableModel.addRow(rowData);
             }
         } catch (BusinessExcepition be) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar membros: " + be.getMessage(), "Erro de Negócio", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(mainFrame, "Erro ao carregar membros: " + be.getMessage(), "Erro de Negócio", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Ocorreu um erro inesperado: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(mainFrame, "Ocorreu um erro inesperado: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
+        }
+    }
+
+
+    private void excluirMembroSelecionado() {
+        int selectedRow = tabelaMembros.getSelectedRow();
+
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(mainFrame, "Por favor, selecione um membro na tabela para excluir.", "Nenhum Membro Selecionado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+
+        Integer idParaExcluir = (Integer) tableModel.getValueAt(selectedRow, 0);
+        String nomeParaExibir = (String) tableModel.getValueAt(selectedRow, 1);
+
+        int resposta = JOptionPane.showConfirmDialog(
+            mainFrame,
+            "Tem a certeza de que deseja excluir o membro '" + nomeParaExibir + "' (ID: " + idParaExcluir + ")?\nEsta ação não pode ser desfeita.",
+            "Confirmação de Exclusão",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+        );
+
+        if (resposta == JOptionPane.YES_OPTION) {
+            try {
+                // Chama o serviço para excluir usando o ID
+                membroService.excluirMembro(idParaExcluir);
+                JOptionPane.showMessageDialog(mainFrame, "Membro excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                carregarMembros(); // Atualiza a tabela para remover a linha
+            } catch (BusinessExcepition be) {
+                JOptionPane.showMessageDialog(mainFrame, "Erro ao excluir membro: " + be.getMessage(), "Erro de Negócio", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(mainFrame, "Ocorreu um erro inesperado: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
         }
     }
 }

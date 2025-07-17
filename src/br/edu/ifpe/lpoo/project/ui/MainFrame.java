@@ -4,6 +4,7 @@ import br.edu.ifpe.lpoo.project.ui.acervo.*;
 import br.edu.ifpe.lpoo.project.ui.membros.JCadastroAluno;
 import br.edu.ifpe.lpoo.project.ui.membros.JCadastroPesquisador;
 import br.edu.ifpe.lpoo.project.ui.membros.JCadastroProfessor;
+import br.edu.ifpe.lpoo.project.ui.membros.JVisualizarMembros;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +24,7 @@ public class MainFrame extends JFrame {
     private JCadastroAluno jCadastroAluno;
     private JCadastroPesquisador jCadastroPesquisador;
     private JCadastroProfessor jCadastroProfessor;
+    private JVisualizarMembros jVisualizarMembros;
 
     public MainFrame() {
         setTitle("Sistema de Gerenciamento de Livros");
@@ -43,6 +45,7 @@ public class MainFrame extends JFrame {
         jCadastroAluno = new JCadastroAluno(this);
         jCadastroPesquisador = new JCadastroPesquisador(this);
         jCadastroProfessor = new JCadastroProfessor(this);
+        jVisualizarMembros = new JVisualizarMembros(this);
 
         cardPanel.add(telaPrincipalPanel, "TelaPrincipal");
         cardPanel.add(jCadastroLivroPanel, "CadastroLivro");
@@ -54,6 +57,7 @@ public class MainFrame extends JFrame {
         cardPanel.add(jCadastroAluno, "CadastroAluno");
         cardPanel.add(jCadastroPesquisador,"CadastroPesquisador");
         cardPanel.add(jCadastroProfessor,"CadastroProfessor");
+        cardPanel.add(jVisualizarMembros,"VisualizarMembros");
 
 
         add(cardPanel);
