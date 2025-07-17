@@ -1,12 +1,12 @@
 package br.edu.ifpe.lpoo.project.business;
 
 import br.edu.ifpe.lpoo.project.entities.funcionarios.Bibliotecario;
-import br.edu.ifpe.lpoo.project.repository.BibliotecarioRepository;
+import br.edu.ifpe.lpoo.project.data.BibliotecarioRepository;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 import br.edu.ifpe.lpoo.project.enums.StatusMembro;
 import br.edu.ifpe.lpoo.project.entities.CredencialAcesso;
-import br.edu.ifpe.lpoo.project.repository.CredencialAcessoRepository;
+import br.edu.ifpe.lpoo.project.data.CredencialAcessoRepository;
 
 public class BibliotecarioService {
 	

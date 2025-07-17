@@ -7,14 +7,12 @@ public abstract class Funcionario extends Pessoa {
     private String matricula;
     private double salario;
     private String cargo;
-    private int idCredencialAcesso;
 
-    public Funcionario(String nome, String email, String cpf, String matricula, double salario, String cargo, int idCredencialAcesso) {
+    public Funcionario(String nome, String email, String cpf, String matricula, double salario, String cargo) {
         super(nome, email, cpf);
         this.matricula = matricula;
         this.salario = salario;
         this.cargo = cargo;
-        this.idCredencialAcesso = idCredencialAcesso;
     }
 
     public String getMatricula() {
@@ -41,11 +39,4 @@ public abstract class Funcionario extends Pessoa {
         this.cargo = cargo;
     }
 
-    public int getIdCredencialAcesso() {
-        return idCredencialAcesso;
-    }
-
-    public void setIdCredencialAcesso(int idCredencialAcesso) {
-        this.idCredencialAcesso = idCredencialAcesso;
-    }
 }
