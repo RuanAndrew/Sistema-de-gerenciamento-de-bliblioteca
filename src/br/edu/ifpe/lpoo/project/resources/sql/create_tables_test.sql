@@ -16,8 +16,7 @@ CREATE TABLE livro(
 
 CREATE TABLE item_acervo(
  id_item INT AUTO_INCREMENT PRIMARY KEY,
-    tipo_item VARCHAR(50) NOT NULL,
-    disponibilidade VARCHAR(50) NOT NULL
+    tipo_item VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE exemplar(
