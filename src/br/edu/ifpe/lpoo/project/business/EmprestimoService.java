@@ -26,20 +26,14 @@ public class EmprestimoService {
     private final PesquisadorRepository pesquisadorRepository;
     private final EmprestimoRepository emprestimoRepository;
 
-    public EmprestimoService(
-            ExemplarRepository exemplarRepository,
-            EbookRepository ebookRepository,
-            PeriodicoRepository periodicoRepository,
-            AlunoRepository alunoRepository,
-            ProfessorRepository professorRepository,
-            PesquisadorRepository pesquisadorRepository,
-            EmprestimoRepository emprestimoRepository) {
-        this.exemplarRepository = exemplarRepository;
-        this.alunoRepository = alunoRepository;
-        this.professorRepository = professorRepository;
-        this.pesquisadorRepository = pesquisadorRepository;
-        this.emprestimoRepository = emprestimoRepository;
+    public EmprestimoService() {
+        this.exemplarRepository = new ExemplarRepository();
+        this.alunoRepository = new AlunoRepository();
+        this.professorRepository = new ProfessorRepository();
+        this.pesquisadorRepository = new PesquisadorRepository();
+        this.emprestimoRepository = new EmprestimoRepository();
     }
+
 
     private void realizarEmprestimo(int idExemplar, String membroCpf, TipoMembro tipoMembro) {
 

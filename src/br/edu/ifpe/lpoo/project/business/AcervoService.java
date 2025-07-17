@@ -6,6 +6,7 @@ import br.edu.ifpe.lpoo.project.data.acervo.implement.PeriodicoRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.*;
 import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
+import br.edu.ifpe.lpoo.project.enums.TipoExemplar;
 import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessException;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
@@ -21,19 +22,20 @@ import java.util.regex.Pattern;
 
 
 public class AcervoService {
-    LivroRepository livroRepository;
-    ExemplarRepository exemplarRepository;
-    EbookRepository ebookRepository;
-    PeriodicoRepository periodicoRepository;
-    CatalogacaoService catalogacaoService;
-    LocalDate currentDate = LocalDate.now();
-    int anoAtual = currentDate.getYear();
+    private final LivroRepository livroRepository;
+    private final ExemplarRepository exemplarRepository;
+    private final EbookRepository ebookRepository;
+    private final PeriodicoRepository periodicoRepository;
+    private final CatalogacaoService catalogacaoService;
+    private final LocalDate currentDate = LocalDate.now();
+    private final int anoAtual = currentDate.getYear();
 
     public AcervoService() {
         this.livroRepository = new LivroRepository();
         this.exemplarRepository = new ExemplarRepository();
         this.ebookRepository = new EbookRepository();
         this.periodicoRepository = new PeriodicoRepository();
+        this.catalogacaoService = new CatalogacaoService();
     }
 
     // Cadastrar itens ao acervo
@@ -118,8 +120,6 @@ public class AcervoService {
         }
 
         Livro livro = new Livro(titulo,autor, parsedAnoPublicacao, editora, idioma, isbn, parsedNumeroPaginas, genero);
-        livroRepository = new LivroRepository();
-        exemplarRepository = new ExemplarRepository();
 
         boolean exist = livroRepository.existItem(livro);
 
@@ -134,8 +134,8 @@ public class AcervoService {
 
                 try {
                     String registro = livro.getId() + "EXP" + i;
-                    ExemplarFisico exemplarFisico = new ExemplarFisico(livro.getId(), TipoItemAcervo.LIVRO, registro, StatusExemplar.DISPONIVEL);
-                    exemplarRepository.insert(exemplarFisico, livro.getId());
+                    Exemplar exemplar = new Exemplar(livro.getId(), TipoItemAcervo.LIVRO, registro, StatusExemplar.DISPONIVEL, TipoExemplar.FISICO);
+                    exemplarRepository.insert(exemplar, livro.getId());
                 }catch (DbException e) {
                     throw new BusinessException(e.getMessage());
                 }
@@ -237,8 +237,8 @@ public class AcervoService {
 
                 try {
                     String registro = ebook.getId() + "EXP" + i;
-                    ExemplarDigital exemplarDigital = new ExemplarDigital(ebook.getId(), TipoItemAcervo.LIVRO, registro, StatusExemplar.DISPONIVEL);
-                    exemplarRepository.insert(exemplarDigital, ebook.getId());
+                    Exemplar exemplar = new Exemplar(ebook.getId(), TipoItemAcervo.LIVRO, registro, StatusExemplar.DISPONIVEL, TipoExemplar.DIGITAL);
+                    exemplarRepository.insert(exemplar, ebook.getId());
                 }catch (DbException e) {
                     throw new BusinessException(e.getMessage());
                 }
@@ -337,8 +337,8 @@ public class AcervoService {
 
                 try {
                     String registro = periodico.getId() + "EXP" + i;
-                    ExemplarFisico exemplarFisico = new ExemplarFisico(periodico.getId(), TipoItemAcervo.LIVRO, registro, StatusExemplar.DISPONIVEL);
-                    exemplarRepository.insert(exemplarFisico, periodico.getId());
+                    Exemplar exemplar = new Exemplar(periodico.getId(), TipoItemAcervo.LIVRO, registro, StatusExemplar.DISPONIVEL, TipoExemplar.FISICO);
+                    exemplarRepository.insert(exemplar, periodico.getId());
                 }catch (DbException e) {
                     throw new BusinessException(e.getMessage());
                 }
@@ -654,28 +654,34 @@ public class AcervoService {
 
         Object itemEncontrado = null;
         TipoItemAcervo tipoItem = null;
+        TipoExemplar tipoExemplar = null;
 
         if (livroRepository.existPorId(idItem)) {
             itemEncontrado = livroRepository.buscarPorId(idItem);
             tipoItem = TipoItemAcervo.LIVRO;
+            tipoExemplar = TipoExemplar.FISICO;
+
         } else if (periodicoRepository.existPorId(idItem)) {
             itemEncontrado = periodicoRepository.buscarPorId(idItem);
             tipoItem = TipoItemAcervo.PERIODICO;
+            tipoExemplar = TipoExemplar.FISICO;
+
         } else if (ebookRepository.existPorId(idItem)) {
             itemEncontrado = ebookRepository.buscarPorId(idItem);
             tipoItem = TipoItemAcervo.EBOOK;
+            tipoExemplar = TipoExemplar.DIGITAL;
         }
 
         if (itemEncontrado == null) {
             throw new BusinessException("Item com ID " + idItem + " não encontrado.");
         }
 
-        int maiorRegistro = exemplarRepository.getMaiorRegistro();
+        int maiorRegistro = exemplarRepository.getMaiorRegistro(idItem, tipoItem);
 
         for (int i = 1; i <= parsedQuantidadeAdicionar; i++) {
             String registro = idItem + "EXP" + (maiorRegistro + i);
 
-            Exemplar exemplar = new Exemplar(idItem, tipoItem, registro, StatusExemplar.DISPONIVEL);
+            Exemplar exemplar = new Exemplar(idItem, tipoItem, registro, StatusExemplar.DISPONIVEL, tipoExemplar);
 
             exemplarRepository.insert(exemplar, idItem);
         }
@@ -695,7 +701,8 @@ public class AcervoService {
         boolean exist = exemplarRepository.existPorId(idExemplar);
 
         if (exist) {
-            exemplarRepository.atualizarStatus(idExemplar, statusExemplar);
+            Exemplar exemplar = exemplarRepository.buscarPorId(idExemplar);
+            exemplarRepository.atualizarStatus(exemplar);
         }else {
             throw new BusinessException("Exemplar com ID " + idExemplar + " não encontrado para atualização de status.");
         }

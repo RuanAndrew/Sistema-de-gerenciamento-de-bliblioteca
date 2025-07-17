@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MembroService {
-	AlunoRepository alunoRepository;
-	ProfessorRepository professorRepository;
-	PesquisadorRepository pesquisadorRepository;
+	private final AlunoRepository alunoRepository;
+	private final ProfessorRepository professorRepository;
+	private final PesquisadorRepository pesquisadorRepository;
 
 	public MembroService() {
 		this.alunoRepository = new AlunoRepository();
@@ -62,8 +62,6 @@ public class MembroService {
 		}
 
 		Aluno aluno = new Aluno(nome, email, cpf, matricula, TipoMembro.ALUNO, 0, StatusMembro.ATIVO, curso);
-
-		alunoRepository = new AlunoRepository();
 
 		boolean exist = alunoRepository.existMembro(aluno);
 
@@ -113,8 +111,6 @@ public class MembroService {
 
 		Professor professor = new Professor(nome, email, cpf, matricula, TipoMembro.PROFESSOR, 0, StatusMembro.ATIVO, areaAtuacao, departamento);
 
-		professorRepository = new ProfessorRepository();
-
 		boolean exist = professorRepository.existMembro(professor);
 
 		if (!exist) {
@@ -160,8 +156,6 @@ public class MembroService {
 
 		Pesquisador pesquisador = new Pesquisador(nome, email, cpf, matricula, TipoMembro.PESQUISADOR, 0, StatusMembro.ATIVO, instituicao);
 
-		pesquisadorRepository = new PesquisadorRepository();
-
 		boolean exist = pesquisadorRepository.existMembro(pesquisador);
 
 		if (!exist) {
@@ -180,8 +174,6 @@ public class MembroService {
 			throw new BusinessException("CPF obrigatório para atualizar o aluno.");
 		}
 
-		alunoRepository = new AlunoRepository();
-
 		boolean existe = alunoRepository.existMembro(alunoAtualizado);
 
 		if (existe) {
@@ -198,8 +190,6 @@ public class MembroService {
 			throw new BusinessException("CPF obrigatório para atualizar o professor.");
 		}
 
-		professorRepository = new ProfessorRepository();
-
 		boolean existeprofessor = professorRepository.existMembro(professorAtualizado);
 
 		if (existeprofessor) {
@@ -215,8 +205,6 @@ public class MembroService {
 		if (pesquisadoratualizado == null || pesquisadoratualizado.getCpf() == null || pesquisadoratualizado.getCpf().isBlank()) {
 			throw new BusinessException("CPF obrigatório para atualizar o professor.");
 		}
-
-		pesquisadorRepository = new PesquisadorRepository();
 
 		boolean existepesquisador = pesquisadorRepository.existMembro(pesquisadoratualizado);
 
@@ -253,38 +241,54 @@ public class MembroService {
 	    }
 
 	 public List<Membro> listarTodosItens () {
-	        List<Membro> todosItens = new ArrayList<>();
-	        try {
-	            for(Aluno aluno : alunoRepository.buscarTodos()) {
-	            	if (aluno.getStatusmembro() != StatusMembro.INATIVO) {
-	            		todosItens.add(aluno);
-	            	}
-	            }
-	            for(Professor professor : professorRepository.buscarTodos()){
-	            	if (professor.getStatusmembro() != StatusMembro.INATIVO) {
-	            		todosItens.add(professor);
-	            	}
-	            }
-	            for(Pesquisador pesquisador : pesquisadorRepository.buscarTodos()){
-	            	if (pesquisador.getStatusmembro() != StatusMembro.INATIVO) {
-	            		todosItens.add(pesquisador);
-	            	}
-	            }
-	        } catch (DbException e) {
-	            throw new BusinessException("Erro ao listar todos os Membros: " + e.getMessage());
-	        }
-	        return todosItens;
-	    }
+		 List<Membro> todosItens = new ArrayList<>();
+		 try {
+			 for (Aluno aluno : alunoRepository.buscarTodos()) {
+				 if (aluno.getStatusmembro() != StatusMembro.INATIVO) {
+					 todosItens.add(aluno);
+				 }
+			 }
+			 for (Professor professor : professorRepository.buscarTodos()) {
+				 if (professor.getStatusmembro() != StatusMembro.INATIVO) {
+					 todosItens.add(professor);
+				 }
+			 }
+			 for (Pesquisador pesquisador : pesquisadorRepository.buscarTodos()) {
+				 if (pesquisador.getStatusmembro() != StatusMembro.INATIVO) {
+					 todosItens.add(pesquisador);
+				 }
+			 }
+		 } catch (DbException e) {
+			 throw new BusinessException("Erro ao listar todos os Membros: " + e.getMessage());
+		 }
+		 return todosItens;
+	 }
+	public void excluirMembro(Integer cpf, TipoMembro tipoMembro) {
+		if (cpf == null) {
+			throw new BusinessException("ID do item não pode ser nulo ou vazio para deleção.");
+		}
+		try {
+			Membro membroParaDeletar = buscarmembroPorcpf(cpf);
 
-	    public List<Membro> buscarItensPorTermo (String termoBusca) {
-	        List<Membro> resultados = new ArrayList<>();
-	        try {
-	            resultados.addAll(alunoRepository.buscarPorTermo(termoBusca));
-	            resultados.addAll(professorRepository.buscarPorTermo(termoBusca));
-	            resultados.addAll(pesquisadorRepository.buscarPorTermo(termoBusca));
-	        } catch (DbException e) {
-	            throw new BusinessException("Erro ao buscar Membros por termo: " + e.getMessage());
-	        }
-	        return resultados;
-	    }
+			if (membroParaDeletar == null) {
+				throw new BusinessException("Item de acervo com ID " + cpf + " não encontrado para deleção");
+			}
+
+			switch (tipoMembro) {
+				case ALUNO ->
+						alunoRepository.delete(membroParaDeletar.getId());
+				case PESQUISADOR ->
+						pesquisadorRepository.delete(membroParaDeletar.getId());
+				case PROFESSOR ->
+						professorRepository.delete(membroParaDeletar.getId());
+				default ->
+						throw new BusinessException("Tipo de membro desconhecido para deleção.");
+			}
+		} catch (NumberFormatException e) {
+			throw new BusinessException("Formato de cpf inválido para deleção: " + cpf);
+		} catch (DbException e) {
+			throw new BusinessException("Erro de banco de dados ao deletar membro: " + e.getMessage());
+		}
+	}
+
 }

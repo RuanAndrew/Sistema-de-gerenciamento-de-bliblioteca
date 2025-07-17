@@ -2,6 +2,7 @@ package br.edu.ifpe.lpoo.project.ui.membros;
 
 import br.edu.ifpe.lpoo.project.business.MembroService;
 import br.edu.ifpe.lpoo.project.entities.membros.Membro;
+import br.edu.ifpe.lpoo.project.enums.TipoMembro;
 import br.edu.ifpe.lpoo.project.exceptions.BusinessException;
 import br.edu.ifpe.lpoo.project.ui.MainFrame;
 
@@ -118,12 +119,13 @@ public class JVisualizarMembros extends JPanel {
         }
 
 
-        Integer idParaExcluir = (Integer) tableModel.getValueAt(selectedRow, 0);
+        Integer cpf = (Integer) tableModel.getValueAt(selectedRow, 2);
         String nomeParaExibir = (String) tableModel.getValueAt(selectedRow, 1);
+        TipoMembro tipoMembro = (TipoMembro) tableModel.getValueAt(selectedRow, 4);
 
         int resposta = JOptionPane.showConfirmDialog(
             mainFrame,
-            "Tem a certeza de que deseja excluir o membro '" + nomeParaExibir + "' (ID: " + idParaExcluir + ")?\nEsta ação não pode ser desfeita.",
+            "Tem a certeza de que deseja excluir o membro '" + nomeParaExibir + "' (CPF: " + cpf + ")?\nEsta ação não pode ser desfeita.",
             "Confirmação de Exclusão",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.WARNING_MESSAGE
@@ -131,13 +133,11 @@ public class JVisualizarMembros extends JPanel {
 
         if (resposta == JOptionPane.YES_OPTION) {
             try {
-                membroService.excluirMembro(idParaExcluir);
+                membroService.excluirMembro(cpf, tipoMembro);
                 JOptionPane.showMessageDialog(mainFrame, "Membro excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 carregarMembros();
             } catch (BusinessException be) {
                 carregarMembros(); // Atualiza a tabela para remover a linha
-            } catch (BusinessException be) {
-                JOptionPane.showMessageDialog(mainFrame, "Erro ao excluir membro: " + be.getMessage(), "Erro de Negócio", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(mainFrame, "Ocorreu um erro inesperado: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
