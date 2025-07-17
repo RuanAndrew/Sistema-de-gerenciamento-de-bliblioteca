@@ -1,6 +1,7 @@
 package br.edu.ifpe.lpoo.project.data;
 
 import br.edu.ifpe.lpoo.project.data.acervo.implement.ExemplarRepository;
+import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
 
 public class Teste {
 
@@ -8,7 +9,7 @@ public class Teste {
 		
 		ExemplarRepository ex = new ExemplarRepository();
 		
-		System.out.println(ex.existePorId(7));
+		System.out.println(ex.getMaiorRegistro(1, TipoItemAcervo.LIVRO));
 
 	}
 }

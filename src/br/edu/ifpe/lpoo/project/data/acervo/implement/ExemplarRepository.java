@@ -320,4 +320,34 @@ public class ExemplarRepository implements IExemplarRepository {
 		}
 		return exemplares;
 	}
+
+	@Override
+	public int getMaiorRegistro(int idItem, TipoItemAcervo tipoItemAcervo) {
+		
+		if (idItem <= 0) {
+			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
+		}
+		
+		int qtdRegistro = 0;
+		
+		String sqlExemplar = "SELECT COUNT(registro) FROM exemplar WHERE id_livro = ? AND tipo_item_acervo = ?";
+		
+		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlExemplar)){
+			
+			stmt.setInt(1, idItem);
+			stmt.setString(2, tipoItemAcervo.name());
+			
+			try (ResultSet rst = stmt.executeQuery()){
+				
+				if(rst.next()) {
+					qtdRegistro = rst.getInt(1);
+				}
+			}
+			
+		} catch (Exception e) {
+			throw new DbException("Erro na busca de contagem de exemplares. Causado por: " + e.getMessage());
+		}
+		
+		return qtdRegistro;
+	}
 }

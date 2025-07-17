@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.List;
 
 import br.edu.ifpe.lpoo.project.entities.acervo.Exemplar;
+import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
 
 public interface IExemplarRepository {
 
@@ -17,7 +18,9 @@ public interface IExemplarRepository {
 
 	void atualizarStatus(Exemplar exemplar);
 
-	public Exemplar buscarPorId(int idItem);
+	Exemplar buscarPorId(int idItem);
 
-	public List<Exemplar> buscarTodosPorIdLivro(int idItem);
+	List<Exemplar> buscarTodosPorIdLivro(int idItem);
+	
+	int getMaiorRegistro(int idExemplar, TipoItemAcervo tipoItemAcervo);
 }
