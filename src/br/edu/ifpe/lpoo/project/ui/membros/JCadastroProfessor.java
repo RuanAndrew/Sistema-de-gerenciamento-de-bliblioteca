@@ -1,7 +1,7 @@
 package br.edu.ifpe.lpoo.project.ui.membros;
 
 import br.edu.ifpe.lpoo.project.business.MembroService;
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessException;
 import br.edu.ifpe.lpoo.project.ui.MainFrame;
 
 import javax.swing.*;
@@ -132,7 +132,7 @@ public class JCadastroProfessor extends JPanel {
                     JOptionPane.showMessageDialog(JCadastroProfessor.this, "O Professor foi cadastrado com sucesso!", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
                     clearFields();
 
-                } catch (BusinessExcepition be) {
+                } catch (BusinessException be) {
                     JOptionPane.showMessageDialog(JCadastroProfessor.this, be.getMessage(), "Erro de Validação", JOptionPane.ERROR_MESSAGE);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(JCadastroProfessor.this, "Ocorreu um erro inesperado: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);

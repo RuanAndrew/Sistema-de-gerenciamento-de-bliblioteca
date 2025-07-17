@@ -1,7 +1,7 @@
 package br.edu.ifpe.lpoo.project.ui.acervo;
 
 import br.edu.ifpe.lpoo.project.business.AcervoService;
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessException;
 import br.edu.ifpe.lpoo.project.ui.MainFrame;
 
 import java.awt.*;
@@ -175,7 +175,7 @@ public class JCadastroPeriodico extends JPanel {
                     clearFields();
                 } catch (NumberFormatException ne) {
                     JOptionPane.showMessageDialog(JCadastroPeriodico.this, ne.getMessage(), "Erro de Formato", JOptionPane.ERROR_MESSAGE);
-                } catch (BusinessExcepition be) {
+                } catch (BusinessException be) {
                     JOptionPane.showMessageDialog(JCadastroPeriodico.this, be.getMessage(), "Erro de Negócio", JOptionPane.ERROR_MESSAGE);
                 }
             }

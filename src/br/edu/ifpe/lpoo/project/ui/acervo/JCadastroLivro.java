@@ -3,7 +3,7 @@ package br.edu.ifpe.lpoo.project.ui.acervo;
 import br.edu.ifpe.lpoo.project.business.AcervoService;
 import br.edu.ifpe.lpoo.project.business.CatalogacaoService;
 import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessException;
 import br.edu.ifpe.lpoo.project.ui.MainFrame;
 
 import javax.swing.*;
@@ -147,7 +147,7 @@ public class JCadastroLivro extends JPanel {
 					} else {
 						JOptionPane.showMessageDialog(JCadastroLivro.this, "Nenhum livro encontrado para este ISBN. Prossiga com o cadastro manual.", "Não Encontrado", JOptionPane.INFORMATION_MESSAGE);
 					}
-				} catch (BusinessExcepition ex) {
+				} catch (BusinessException ex) {
 					JOptionPane.showMessageDialog(JCadastroLivro.this, "Erro ao buscar dados: " + ex.getMessage(), "Erro na API", JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -195,7 +195,7 @@ public class JCadastroLivro extends JPanel {
 					clearFields();
 				} catch (NumberFormatException ne) {
 					JOptionPane.showMessageDialog(JCadastroLivro.this, ne.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-				} catch (BusinessExcepition be) {
+				} catch (BusinessException be) {
 					JOptionPane.showMessageDialog(JCadastroLivro.this, be.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 				}
 			}

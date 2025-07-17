@@ -6,7 +6,7 @@ import br.edu.ifpe.lpoo.project.business.dto.api.AutorApi;
 import br.edu.ifpe.lpoo.project.business.dto.api.DetalhesLivroApi;
 import br.edu.ifpe.lpoo.project.business.dto.api.LivroApi;
 
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,7 +28,7 @@ public class CatalogacaoService {
         this.httpClient = HttpClient.newHttpClient();
     }
 
-    private String sendApiRequest(String isbn) throws BusinessExcepition {
+    private String sendApiRequest(String isbn) throws BusinessException {
         String url = OPEN_LIBRARY_API_URL + "?bibkeys=ISBN:"+ isbn +"&format=json&jscmd=details";
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
 
@@ -37,16 +37,16 @@ public class CatalogacaoService {
             if (response.statusCode() == 200) {
                 return response.body();
             } else {
-                throw new BusinessExcepition("Erro na requisição HTTP para Open Library. Código: " + response.statusCode());
+                throw new BusinessException("Erro na requisição HTTP para Open Library. Código: " + response.statusCode());
             }
         } catch (Exception e) {
-            throw new BusinessExcepition("Erro ao consumir a API Open Library: " + e.getMessage());
+            throw new BusinessException("Erro ao consumir a API Open Library: " + e.getMessage());
         }
     }
 
-    public Livro buscarDadosLivroPorIsbn(String isbn) throws BusinessExcepition {
+    public Livro buscarDadosLivroPorIsbn(String isbn) throws BusinessException {
         if (isbn == null || isbn.trim().isEmpty()) {
-            throw new BusinessExcepition("ISBN não pode ser nulo ou vazio para busca de dados.");
+            throw new BusinessException("ISBN não pode ser nulo ou vazio para busca de dados.");
         }
 
         String jsonResponse = sendApiRequest(isbn);
@@ -57,7 +57,7 @@ public class CatalogacaoService {
         return parseJsonResponseLivro(jsonResponse, isbn);
     }
 
-    private Livro parseJsonResponseLivro(String json, String isbn) throws BusinessExcepition {
+    private Livro parseJsonResponseLivro(String json, String isbn) throws BusinessException {
         try {
             Map<String, LivroApi> livroMap = objectMapper.readValue(json, objectMapper.getTypeFactory().constructMapType(Map.class, String.class, LivroApi.class));
             LivroApi livroApi = livroMap.get("ISBN:" + isbn);
@@ -101,16 +101,16 @@ public class CatalogacaoService {
                 return new Livro(titulo, Arrays.toString(autoresArray), Integer.parseInt(anoPublicacao), Arrays.toString(editorasArray), Arrays.toString(idioma), isbn, numeroPaginas, Arrays.toString(generosArray));
             }
         } catch (JsonProcessingException e) {
-            throw new BusinessExcepition("Erro ao parsear JSON da API de catalogação: " + e.getMessage());
+            throw new BusinessException("Erro ao parsear JSON da API de catalogação: " + e.getMessage());
         } catch (Exception e) {
-            throw new BusinessExcepition("Erro inesperado ao processar dados da API de catalogação: " + e.getMessage());
+            throw new BusinessException("Erro inesperado ao processar dados da API de catalogação: " + e.getMessage());
         }
         return null;
     }
 
-    public Ebook buscarDadosEbookPorIsbn(String isbn) throws BusinessExcepition {
+    public Ebook buscarDadosEbookPorIsbn(String isbn) throws BusinessException {
         if (isbn == null || isbn.trim().isEmpty()) {
-            throw new BusinessExcepition("ISBN não pode ser nulo ou vazio para busca de dados de E-book.");
+            throw new BusinessException("ISBN não pode ser nulo ou vazio para busca de dados de E-book.");
         }
 
         String jsonResponse = sendApiRequest(isbn);
@@ -121,7 +121,7 @@ public class CatalogacaoService {
         return parseJsonResponseEbook(jsonResponse, isbn);
     }
 
-    private Ebook parseJsonResponseEbook(String json, String isbn) throws BusinessExcepition {
+    private Ebook parseJsonResponseEbook(String json, String isbn) throws BusinessException {
         try {
             Map<String, LivroApi> livroMap = objectMapper.readValue(json, objectMapper.getTypeFactory().constructMapType(Map.class, String.class, LivroApi.class));
             LivroApi livroApi = livroMap.get("ISBN:" + isbn);
@@ -166,22 +166,22 @@ public class CatalogacaoService {
             }
 
         } catch (JsonProcessingException e) {
-            throw new BusinessExcepition("Erro ao parsear JSON da API de catalogação para E-book: " + e.getMessage());
+            throw new BusinessException("Erro ao parsear JSON da API de catalogação para E-book: " + e.getMessage());
         } catch (Exception e) {
-            throw new BusinessExcepition("Erro inesperado ao processar dados da API de catalogação para E-book: " + e.getMessage());
+            throw new BusinessException("Erro inesperado ao processar dados da API de catalogação para E-book: " + e.getMessage());
         }
         return null;
     }
 
-    public Livro buscarDadosPeriodicoPorIssn(String issn) throws BusinessExcepition {
+    public Livro buscarDadosPeriodicoPorIssn(String issn) throws BusinessException {
         return null;
     }
 
-    private String sendApiRequestPeriodico(String issn) throws BusinessExcepition {
+    private String sendApiRequestPeriodico(String issn) throws BusinessException {
         return issn;
     }
 
-    private Livro parseJsonResponsePeriodico(String json, String issn) throws BusinessExcepition {
+    private Livro parseJsonResponsePeriodico(String json, String issn) throws BusinessException {
         return null;
     }
 }

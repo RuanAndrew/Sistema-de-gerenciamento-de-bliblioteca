@@ -15,7 +15,7 @@ import br.edu.ifpe.lpoo.project.entities.membros.Membro;
 import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
 import br.edu.ifpe.lpoo.project.entities.membros.Professor;
 import br.edu.ifpe.lpoo.project.enums.*;
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessException;
 
 import java.time.LocalDate;
 
@@ -41,23 +41,15 @@ public class EmprestimoService {
         this.emprestimoRepository = emprestimoRepository;
     }
 
-    public EmprestimoService() {
-        this.exemplarRepository = new ExemplarRepository();
-        this.alunoRepository = new AlunoRepository();
-        this.professorRepository = new ProfessorRepository();
-        this.pesquisadorRepository = new PesquisadorRepository();
-        this.emprestimoRepository = new EmprestimoRepository();
-    }
-
     private void realizarEmprestimo(int idExemplar, String membroCpf, TipoMembro tipoMembro) {
 
         Exemplar exemplar = exemplarRepository.buscarPorId(idExemplar);
         if (exemplar == null) {
-            throw new BusinessExcepition("Exemplar com ID " + idExemplar + " não encontrado para empréstimo.");
+            throw new BusinessException("Exemplar com ID " + idExemplar + " não encontrado para empréstimo.");
         }
 
         if (exemplar.getStatus() != StatusExemplar.DISPONIVEL) {
-            throw new BusinessExcepition("Exemplar com ID " + idExemplar + " não está disponível para empréstimo. Status: " + exemplar.getStatus());
+            throw new BusinessException("Exemplar com ID " + idExemplar + " não está disponível para empréstimo. Status: " + exemplar.getStatus());
         }
 
         Membro membro = switch (tipoMembro) {
@@ -68,11 +60,11 @@ public class EmprestimoService {
         };
 
         if (membro == null) {
-            throw new BusinessExcepition("Membro com CPF " + membroCpf + " não encontrado para empréstimo.");
+            throw new BusinessException("Membro com CPF " + membroCpf + " não encontrado para empréstimo.");
         }
 
         if (membro.getStatusmembro() != StatusMembro.ATIVO) {
-            throw new BusinessExcepition("O status do membro deve ser ATIVO para realizar empréstimos.");
+            throw new BusinessException("O status do membro deve ser ATIVO para realizar empréstimos.");
         }
 
         LocalDate dataEmprestimo = LocalDate.now();

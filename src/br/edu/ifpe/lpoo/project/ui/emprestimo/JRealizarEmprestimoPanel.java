@@ -2,7 +2,7 @@ package br.edu.ifpe.lpoo.project.ui.emprestimo;
 
 import br.edu.ifpe.lpoo.project.business.EmprestimoService;
 import br.edu.ifpe.lpoo.project.enums.TipoMembro;
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessException;
 import br.edu.ifpe.lpoo.project.ui.MainFrame;
 
 import javax.swing.*;
@@ -101,7 +101,7 @@ public class JRealizarEmprestimoPanel extends JPanel {
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "O ID do Exemplar deve ser um número.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
-        } catch (BusinessExcepition | IllegalArgumentException ex) {
+        } catch (BusinessException | IllegalArgumentException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro de Negócio", JOptionPane.ERROR_MESSAGE);
         }
     }

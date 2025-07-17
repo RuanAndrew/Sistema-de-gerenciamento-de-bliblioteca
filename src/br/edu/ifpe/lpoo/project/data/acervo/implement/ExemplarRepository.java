@@ -12,6 +12,8 @@ import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.acervo.repository.IExemplarRepository;
 import br.edu.ifpe.lpoo.project.entities.acervo.Exemplar;
 import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
+import br.edu.ifpe.lpoo.project.enums.TipoExemplar;
+import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class ExemplarRepository implements IExemplarRepository {
@@ -21,10 +23,14 @@ public class ExemplarRepository implements IExemplarRepository {
 		int idExemplar = rst.getInt("id_exemplar");
 		int idLivro = rst.getInt("id_livro");
 		String registro = rst.getString("registro");
-		String status = rst.getString("disponibilidade").toUpperCase();
+		String tipoItem = rst.getString("tipo_item_acervo");
+		TipoItemAcervo tipoItemAcervo = TipoItemAcervo.valueOf(tipoItem);
+		String status = rst.getString("status_exemplar").toUpperCase();
 		StatusExemplar statusExemplar = StatusExemplar.valueOf(status);
+		String tipo = rst.getString("tipo_exemplar").toUpperCase();
+		TipoExemplar tipoExemplar = TipoExemplar.valueOf(tipo);
 
-		Exemplar exemplar = new Exemplar(idLivro, registro, statusExemplar);
+		Exemplar exemplar = new Exemplar(idLivro, tipoItemAcervo, registro, statusExemplar, tipoExemplar);
 		exemplar.setIdExemplar(idExemplar);
 
 		return exemplar;
@@ -38,7 +44,8 @@ public class ExemplarRepository implements IExemplarRepository {
 		}
 
 		String sqlItemAcervo = "INSERT INTO item_acervo (tipo_item, disponibilidade) VALUES (?, ?)";
-		String sqlExemplar = "INSERT INTO exemplar (id_exemplar, id_livro, registro) VALUES (?, ?, ?)";
+		String sqlExemplar = "INSERT INTO exemplar (id_exemplar, id_livro, tipo_item_acervo, registro, status_exemplar, tipo_exemplar) "
+				+ "VALUES (?, ?, ?, ?, ?,?)";
 
 		int idItem = -1;
 
@@ -54,7 +61,7 @@ public class ExemplarRepository implements IExemplarRepository {
 
 			stmt = conn.prepareStatement(sqlItemAcervo, Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, "Exemplar");
-			stmt.setString(2, exemplar.isDisponivel().name());
+			stmt.setString(2, exemplar.getStatus().name());
 
 			stmt.executeUpdate();
 
@@ -69,7 +76,10 @@ public class ExemplarRepository implements IExemplarRepository {
 			stmt1 = conn.prepareStatement(sqlExemplar);
 			stmt1.setInt(1, idItem);
 			stmt1.setInt(2, idLivro);
-			stmt1.setString(3, exemplar.getRegistro());
+			stmt1.setString(3, exemplar.getTipoItemAcervo().name());
+			stmt1.setString(4, exemplar.getRegistro());
+			stmt1.setString(5, exemplar.getStatus().name());
+			stmt1.setString(6, exemplar.getTipoExemplar().name());
 
 			stmt1.executeUpdate();
 
@@ -105,18 +115,21 @@ public class ExemplarRepository implements IExemplarRepository {
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
 
-		String consulta = "SELECT * FROM exemplar WHERE id_livro = ? AND registro = ?";
+		String consulta = "SELECT * FROM exemplar WHERE id_exemplar = ? AND registro = ? AND id_livro = ?";
 
 		try {
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 
-			stmt.setInt(1, exemplar.getIdItem());
+			stmt.setInt(1, exemplar.getIdExemplar());
 			stmt.setString(2, exemplar.getRegistro());
+			stmt.setInt(3, exemplar.getIdItem());
 
 			rst = stmt.executeQuery();
 
-			exists = rst.next();
+			if(rst.next()) {
+				exists = true;
+			}
 
 		} catch (SQLException e) {
 			throw new DbException("Erro na busca a existência do exemplar. Causado por: " + e.getMessage());
@@ -173,12 +186,12 @@ public class ExemplarRepository implements IExemplarRepository {
 			throw new DbException("Objeto tipo Exemplar não pode ser null para atualizar status");
 		}
 
-		String sqlItemAcervo = "UPDATE item_acervo SET disponibilidade = ? WHERE id_item = ?";
+		String sqlItemAcervo = "UPDATE exemplar SET status_exemplar = ? WHERE id_exemplar = ?";
 
 		try (Connection conn = ConnectionDb.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(sqlItemAcervo)) {
 
-			stmt.setString(1, exemplar.isDisponivel().name());
+			stmt.setString(1, exemplar.getStatus().name());
 			stmt.setInt(2, exemplar.getIdExemplar());
 			stmt.executeUpdate();
 
@@ -195,8 +208,7 @@ public class ExemplarRepository implements IExemplarRepository {
 			throw new DbException("Id inválido");
 		}
 
-		String sqlExemplarItemAcervo = "SELECT id_exemplar, id_livro, registro, disponibilidade FROM exemplar "
-				+ "INNER JOIN item_acervo ON exemplar.id_exemplar = item_acervo.id_item " + "WHERE id_exemplar = ?";
+		String sqlExemplarItemAcervo = "SELECT * FROM exemplar WHERE id_exemplar = ?";
 
 		Exemplar exemplar = null;
 
@@ -227,8 +239,8 @@ public class ExemplarRepository implements IExemplarRepository {
 			throw new DbException("Id inválido para busca de todos os livros");
 		}
 
-		String sqlExemplarItemAcervo = "SELECT id_exemplar, id_livro, registro, disponibilidade FROM exemplar "
-				+ "INNER JOIN item_acervo ON exemplar.id_exemplar = item_acervo.id_item " + "WHERE id_livro = ?";
+		String sqlExemplarItemAcervo = "SELECT id_exemplar, id_livro, tipo_item_acervo, registro, status_exemplar, tipo_exemplar FROM exemplar "
+				+"WHERE id_livro = ?";
 
 		List<Exemplar> exemplares = new ArrayList<Exemplar>();
 
@@ -257,8 +269,8 @@ public class ExemplarRepository implements IExemplarRepository {
 			throw new DbException("Id inválido");
 		}
 
-		String sqlExemplarItemAcervo = "SELECT id_exemplar, id_livro, registro, disponibilidade FROM exemplar "
-				+ "INNER JOIN item_acervo ON exemplar.id_exemplar = item_acervo.id_item " + "WHERE id_livro = ?";
+		String sqlExemplarItemAcervo = "SELECT id_exemplar, id_livro, tipo_item_acervo, registro, status_exemplar, tipo_exemplar FROM exemplar "
+				+ "WHERE id_livro = ?";
 
 		PreparedStatement stmt = null;
 		ResultSet rst = null;

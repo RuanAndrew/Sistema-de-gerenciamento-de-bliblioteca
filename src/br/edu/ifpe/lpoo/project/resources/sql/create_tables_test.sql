@@ -1,3 +1,5 @@
+CREATE DATABASE testelivro;
+
 USE testelivro;
 
 CREATE TABLE livro(
@@ -14,14 +16,16 @@ CREATE TABLE livro(
 
 CREATE TABLE item_acervo(
  id_item INT AUTO_INCREMENT PRIMARY KEY,
-    tipo_item VARCHAR(50) NOT NULL,
-    disponibilidade VARCHAR(50) NOT NULL
+    tipo_item VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE exemplar(
  id_exemplar INT PRIMARY KEY,
     id_livro INT,
+    tipo_item_acervo varchar(50) not null,
     registro VARCHAR(20),
+    status_exemplar varchar(50) not null,
+    tipo_exemplar varchar(50) not null,
     FOREIGN KEY (id_exemplar) REFERENCES item_acervo (id_item),
     FOREIGN KEY (id_livro) REFERENCES livro (id_livro)
 );

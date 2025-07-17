@@ -2,7 +2,7 @@ package br.edu.ifpe.lpoo.project.ui.membros;
 
 import br.edu.ifpe.lpoo.project.business.MembroService;
 import br.edu.ifpe.lpoo.project.entities.membros.Membro;
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessException;
 import br.edu.ifpe.lpoo.project.ui.MainFrame;
 
 import javax.swing.*;
@@ -91,7 +91,7 @@ public class JVisualizarMembros extends JPanel {
                 };
                 tableModel.addRow(rowData);
             }
-        } catch (BusinessExcepition be) {
+        } catch (BusinessException be) {
             JOptionPane.showMessageDialog(mainFrame, "Erro ao carregar membros: " + be.getMessage(), "Erro de Negócio", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(mainFrame, "Ocorreu um erro inesperado: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);

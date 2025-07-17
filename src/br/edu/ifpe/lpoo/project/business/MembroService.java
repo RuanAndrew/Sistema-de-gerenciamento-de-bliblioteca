@@ -1,9 +1,5 @@
 package br.edu.ifpe.lpoo.project.business;
 
-import br.edu.ifpe.lpoo.project.data.acervo.implement.EbookRepository;
-import br.edu.ifpe.lpoo.project.data.acervo.implement.ExemplarRepository;
-import br.edu.ifpe.lpoo.project.data.acervo.implement.LivroRepository;
-import br.edu.ifpe.lpoo.project.data.acervo.implement.PeriodicoRepository;
 import br.edu.ifpe.lpoo.project.data.membros.implement.AlunoRepository;
 import br.edu.ifpe.lpoo.project.data.membros.implement.PesquisadorRepository;
 import br.edu.ifpe.lpoo.project.data.membros.implement.ProfessorRepository;
@@ -12,7 +8,7 @@ import br.edu.ifpe.lpoo.project.entities.membros.Membro;
 import br.edu.ifpe.lpoo.project.entities.membros.Professor;
 import br.edu.ifpe.lpoo.project.enums.StatusMembro;
 import br.edu.ifpe.lpoo.project.enums.TipoMembro;
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessException;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
 
@@ -34,35 +30,35 @@ public class MembroService {
 	public void cadastrarAluno(String nome, String cpf, String email, String matricula, String curso) {
 
 		if (nome == null || nome.isBlank()) {
-			throw new BusinessExcepition("O nome é obrigatório");
+			throw new BusinessException("O nome é obrigatório");
 		}
 		if (cpf == null || cpf.isBlank()) {
-			throw new BusinessExcepition("O CPF é obrigatório");
+			throw new BusinessException("O CPF é obrigatório");
 		}
 		if (email == null || email.isBlank()) {
-			throw new BusinessExcepition("O email é obrigatório");
+			throw new BusinessException("O email é obrigatório");
 		}
 		if (matricula == null || matricula.isBlank()) {
-			throw new BusinessExcepition("A matricula é obrigatório");
+			throw new BusinessException("A matricula é obrigatório");
 		}
 		if (curso == null || curso.isBlank()) {
-			throw new BusinessExcepition("O curso é obrigatório");
+			throw new BusinessException("O curso é obrigatório");
 		}
 
 		if (!cpf.matches("\\d{11}")) {
-			throw new BusinessExcepition("O CPF deve conter exatamente 11 números.");
+			throw new BusinessException("O CPF deve conter exatamente 11 números.");
 		}
 		if (email.length() > 255) {
-			throw new BusinessExcepition("O email não pode ter mais de 255 caracteres.");
+			throw new BusinessException("O email não pode ter mais de 255 caracteres.");
 		}
 		if (matricula.length() > 10) {
-			throw new BusinessExcepition("A matrícula não pode ter mais de 10 caracteres.");
+			throw new BusinessException("A matrícula não pode ter mais de 10 caracteres.");
 		}
 		if (nome.length() > 150) {
-			throw new BusinessExcepition("O nome não pode ter mais de 150 caracteres.");
+			throw new BusinessException("O nome não pode ter mais de 150 caracteres.");
 		}
 		if (curso.length() > 100) {
-			throw new BusinessExcepition("O nome do curso não pode ter mais de 100 caracteres.");
+			throw new BusinessException("O nome do curso não pode ter mais de 100 caracteres.");
 		}
 
 		Aluno aluno = new Aluno(nome, email, cpf, matricula, TipoMembro.ALUNO, 0, StatusMembro.ATIVO, curso);
@@ -75,44 +71,44 @@ public class MembroService {
 			try {
 				alunoRepository.insert(aluno);
 			} catch (DbException e) {
-				throw new BusinessExcepition("Erro ao cadastrar aluno: " + e.getMessage());
+				throw new BusinessException("Erro ao cadastrar aluno: " + e.getMessage());
 			}
 		} else {
-			throw new BusinessExcepition("Esse aluno já está cadastrado no sistema.");
+			throw new BusinessException("Esse aluno já está cadastrado no sistema.");
 		}
 	}
 
 	public void cadastrarProfessor(String nome, String cpf, String email, String matricula, String areaAtuacao, String departamento) {
 		if (nome == null || nome.isBlank()) {
-			throw new BusinessExcepition("O nome é obrigatório");
+			throw new BusinessException("O nome é obrigatório");
 		}
 		if (cpf == null || cpf.isBlank()) {
-			throw new BusinessExcepition("O CPF é obrigatório");
+			throw new BusinessException("O CPF é obrigatório");
 		}
 		if (email == null || email.isBlank()) {
-			throw new BusinessExcepition("O email é obrigatório");
+			throw new BusinessException("O email é obrigatório");
 		}
 		if (matricula == null || matricula.isBlank()) {
-			throw new BusinessExcepition("A matricula é obrigatória");
+			throw new BusinessException("A matricula é obrigatória");
 		}
 		if (areaAtuacao == null || areaAtuacao.isBlank()) {
-			throw new BusinessExcepition("A area de atuação é obrigatória");
+			throw new BusinessException("A area de atuação é obrigatória");
 		}
 		if (departamento == null || departamento.isBlank()) {
-			throw new BusinessExcepition("O departamento é obrigatório");
+			throw new BusinessException("O departamento é obrigatório");
 		}
 
 		if (!cpf.matches("\\d{11}")) {
-			throw new BusinessExcepition("O CPF deve conter exatamente 11 números.");
+			throw new BusinessException("O CPF deve conter exatamente 11 números.");
 		}
 		if (email.length() > 255) {
-			throw new BusinessExcepition("O email não pode ter mais de 255 caracteres.");
+			throw new BusinessException("O email não pode ter mais de 255 caracteres.");
 		}
 		if (matricula.length() > 10) {
-			throw new BusinessExcepition("A matrícula não pode ter mais de 10 caracteres.");
+			throw new BusinessException("A matrícula não pode ter mais de 10 caracteres.");
 		}
 		if (nome.length() > 150) {
-			throw new BusinessExcepition("O nome não pode ter mais de 150 caracteres.");
+			throw new BusinessException("O nome não pode ter mais de 150 caracteres.");
 		}
 
 		Professor professor = new Professor(nome, email, cpf, matricula, TipoMembro.PROFESSOR, 0, StatusMembro.ATIVO, areaAtuacao, departamento);
@@ -125,41 +121,41 @@ public class MembroService {
 			try {
 				professorRepository.insert(professor);
 			} catch (DbException e) {
-				throw new BusinessExcepition("Erro ao cadastrar professor: " + e.getMessage());
+				throw new BusinessException("Erro ao cadastrar professor: " + e.getMessage());
 			}
 		} else {
-			throw new BusinessExcepition("Esse professor já está cadastrado no sistema.");
+			throw new BusinessException("Esse professor já está cadastrado no sistema.");
 		}
 	}
 
 	public void cadastrarPesquisador(String nome, String cpf, String email, String matricula, String instituicao) {
 		if (nome == null || nome.isBlank()) {
-			throw new BusinessExcepition("O nome é obrigatório");
+			throw new BusinessException("O nome é obrigatório");
 		}
 		if (cpf == null || cpf.isBlank()) {
-			throw new BusinessExcepition("O CPF é obrigatório");
+			throw new BusinessException("O CPF é obrigatório");
 		}
 		if (email == null || email.isBlank()) {
-			throw new BusinessExcepition("O email é obrigatório");
+			throw new BusinessException("O email é obrigatório");
 		}
 		if (matricula == null || matricula.isBlank()) {
-			throw new BusinessExcepition("A matricula é obrigatória");
+			throw new BusinessException("A matricula é obrigatória");
 		}
 		if (instituicao == null || instituicao.isBlank()) {
-			throw new BusinessExcepition("A instituição é obrigatória");
+			throw new BusinessException("A instituição é obrigatória");
 		}
 
 		if (!cpf.matches("\\d{11}")) {
-			throw new BusinessExcepition("O CPF deve conter exatamente 11 números.");
+			throw new BusinessException("O CPF deve conter exatamente 11 números.");
 		}
 		if (email.length() > 255) {
-			throw new BusinessExcepition("O email não pode ter mais de 255 caracteres.");
+			throw new BusinessException("O email não pode ter mais de 255 caracteres.");
 		}
 		if (matricula.length() > 10) {
-			throw new BusinessExcepition("A matrícula não pode ter mais de 10 caracteres.");
+			throw new BusinessException("A matrícula não pode ter mais de 10 caracteres.");
 		}
 		if (nome.length() > 150) {
-			throw new BusinessExcepition("O nome não pode ter mais de 150 caracteres.");
+			throw new BusinessException("O nome não pode ter mais de 150 caracteres.");
 		}
 
 		Pesquisador pesquisador = new Pesquisador(nome, email, cpf, matricula, TipoMembro.PESQUISADOR, 0, StatusMembro.ATIVO, instituicao);
@@ -172,16 +168,16 @@ public class MembroService {
 			try {
 				pesquisadorRepository.insert(pesquisador);
 			} catch (DbException e) {
-				throw new BusinessExcepition("Erro ao cadastrar Pesquisador: " + e.getMessage());
+				throw new BusinessException("Erro ao cadastrar Pesquisador: " + e.getMessage());
 			}
 		} else {
-			throw new BusinessExcepition("Esse Pesquisador já está cadastrado no sistema.");
+			throw new BusinessException("Esse Pesquisador já está cadastrado no sistema.");
 		}
 	}
-	
+
 	public void atualizarMembro(Aluno alunoAtualizado, Professor professorAtualizado, Pesquisador pesquisadoratualizado, StatusMembro novoStatus) {
 		if (alunoAtualizado == null || alunoAtualizado.getCpf() == null || alunoAtualizado.getCpf().isBlank()) {
-			throw new BusinessExcepition("CPF obrigatório para atualizar o aluno.");
+			throw new BusinessException("CPF obrigatório para atualizar o aluno.");
 		}
 
 		alunoRepository = new AlunoRepository();
@@ -193,13 +189,13 @@ public class MembroService {
 				alunoRepository.atualizar(alunoAtualizado);
 				alunoAtualizado.setStatusmembro(novoStatus);
 			} catch (DbException e) {
-				throw new BusinessExcepition("Erro ao atualizar aluno: " + e.getMessage());
+				throw new BusinessException("Erro ao atualizar aluno: " + e.getMessage());
 			}
 		} else {
-			throw new BusinessExcepition("Aluno não encontrado para atualização.");
+			throw new BusinessException("Aluno não encontrado para atualização.");
 		}
 		if (professorAtualizado == null || professorAtualizado.getCpf() == null || professorAtualizado.getCpf().isBlank()) {
-			throw new BusinessExcepition("CPF obrigatório para atualizar o professor.");
+			throw new BusinessException("CPF obrigatório para atualizar o professor.");
 		}
 
 		professorRepository = new ProfessorRepository();
@@ -209,15 +205,15 @@ public class MembroService {
 		if (existeprofessor) {
 			try {
 				professorRepository.atualizar(professorAtualizado);
-				professorAtualizado.setStatusmembro(novoStatus); 
+				professorAtualizado.setStatusmembro(novoStatus);
 			} catch (DbException e) {
-				throw new BusinessExcepition("Erro ao atualizar professor: " + e.getMessage());
+				throw new BusinessException("Erro ao atualizar professor: " + e.getMessage());
 			}
 		} else {
-			throw new BusinessExcepition("Professor não encontrado para atualização.");
+			throw new BusinessException("Professor não encontrado para atualização.");
 		}
 		if (pesquisadoratualizado == null || pesquisadoratualizado.getCpf() == null || pesquisadoratualizado.getCpf().isBlank()) {
-			throw new BusinessExcepition("CPF obrigatório para atualizar o professor.");
+			throw new BusinessException("CPF obrigatório para atualizar o professor.");
 		}
 
 		pesquisadorRepository = new PesquisadorRepository();
@@ -227,12 +223,12 @@ public class MembroService {
 		if (existepesquisador) {
 			try {
 				pesquisadorRepository.atualizar(pesquisadoratualizado);
-				pesquisadoratualizado.setStatusmembro(novoStatus); 
+				pesquisadoratualizado.setStatusmembro(novoStatus);
 			} catch (DbException e) {
-				throw new BusinessExcepition("Erro ao atualizar pesquisador: " + e.getMessage());
+				throw new BusinessException("Erro ao atualizar pesquisador: " + e.getMessage());
 			}
 		} else {
-			throw new BusinessExcepition("pesquisador não encontrado para atualização.");
+			throw new BusinessException("pesquisador não encontrado para atualização.");
 		}
 	}
 		
@@ -250,9 +246,9 @@ public class MembroService {
 
 	            return null;
 	        }catch (NumberFormatException e) {
-	            throw new BusinessExcepition ("Formato de cpf invalido: " + cpf);
+	            throw new BusinessException("Formato de cpf invalido: " + cpf);
 	        }catch (DbException e) {
-	            throw new BusinessExcepition("Erro ao buscar Membros por cpf: " + e.getMessage());
+	            throw new BusinessException("Erro ao buscar Membros por cpf: " + e.getMessage());
 	        }
 	    }
 
@@ -275,7 +271,7 @@ public class MembroService {
 	            	}
 	            }
 	        } catch (DbException e) {
-	            throw new BusinessExcepition("Erro ao listar todos os Membros: " + e.getMessage());
+	            throw new BusinessException("Erro ao listar todos os Membros: " + e.getMessage());
 	        }
 	        return todosItens;
 	    }
@@ -287,7 +283,7 @@ public class MembroService {
 	            resultados.addAll(professorRepository.buscarPorTermo(termoBusca));
 	            resultados.addAll(pesquisadorRepository.buscarPorTermo(termoBusca));
 	        } catch (DbException e) {
-	            throw new BusinessExcepition("Erro ao buscar Membros por termo: " + e.getMessage());
+	            throw new BusinessException("Erro ao buscar Membros por termo: " + e.getMessage());
 	        }
 	        return resultados;
 	    }
