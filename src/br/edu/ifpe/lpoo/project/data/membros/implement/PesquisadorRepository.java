@@ -10,6 +10,7 @@ import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.membros.repository.IPesquisadorRepository;
+import br.edu.ifpe.lpoo.project.entities.membros.Aluno;
 import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
 import br.edu.ifpe.lpoo.project.enums.StatusMembro;
 import br.edu.ifpe.lpoo.project.enums.TipoMembro;
@@ -184,11 +185,11 @@ public class PesquisadorRepository implements IPesquisadorRepository {
 
 		Pesquisador pesquisador = null;
 
-		String sql = "SELECT id_membro, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, instituicao "
+		String sqlPesquisador = "SELECT id_membro, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, instituicao "
 				+ "FROM membro INNER JOIN pesquisador ON membro.id_membro = pesquisador.id_pesquisador "
 				+ "WHERE id_membro = ?";
 
-		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlPesquisador)) {
 
 			stmt.setInt(1, idMembro);
 
@@ -205,6 +206,37 @@ public class PesquisadorRepository implements IPesquisadorRepository {
 
 		return pesquisador;
 
+	}
+
+	@Override
+	public Pesquisador buscarPorCPF(String cpf) {
+
+		if (cpf == null) {
+			throw new DbException("cpf inválido");
+		}
+
+		Pesquisador pesquisador = null;
+
+		String sqlPesquisador = "SELECT id_membro, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, instituicao " +
+				"FROM membro INNER JOIN pesquisador ON membro.id_membro = pesquisador.id_pesquisador " +
+				"WHERE cpf = ?";
+
+		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlPesquisador)) {
+
+			stmt.setString(1, cpf);
+
+			try (ResultSet rst = stmt.executeQuery()) {
+
+				if (rst.next()) {
+					pesquisador = instanciarPesquisador(rst);
+				}
+			}
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao busca pesquisador por cpf. Causado por: " + e.getMessage());
+		}
+
+		return pesquisador;
 	}
 
 	@Override

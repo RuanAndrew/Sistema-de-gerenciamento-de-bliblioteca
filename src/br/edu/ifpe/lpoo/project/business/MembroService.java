@@ -52,7 +52,18 @@ public class MembroService {
 		if (!cpf.matches("\\d{11}")) {
 			throw new BusinessExcepition("O CPF deve conter exatamente 11 números.");
 		}
-
+		if (email.length() > 255) {
+			throw new BusinessExcepition("O email não pode ter mais de 255 caracteres.");
+		}
+		if (matricula.length() > 10) {
+			throw new BusinessExcepition("A matrícula não pode ter mais de 10 caracteres.");
+		}
+		if (nome.length() > 150) {
+			throw new BusinessExcepition("O nome não pode ter mais de 150 caracteres.");
+		}
+		if (curso.length() > 100) {
+			throw new BusinessExcepition("O nome do curso não pode ter mais de 100 caracteres.");
+		}
 
 		Aluno aluno = new Aluno(nome, email, cpf, matricula, TipoMembro.ALUNO, 0, StatusMembro.ATIVO, curso);
 

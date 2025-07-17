@@ -13,6 +13,8 @@ public interface IProfessorRepository {
 	void delete(int idMembro);
 	
 	Professor buscarPorId(int idMembro);
+
+	Professor buscarPorCPF(String cpf);
 	
 	List<Professor> buscarTodos();
 	

@@ -1,6 +1,7 @@
 package br.edu.ifpe.lpoo.project.ui;
 
 import br.edu.ifpe.lpoo.project.ui.acervo.*;
+import br.edu.ifpe.lpoo.project.ui.emprestimo.JRealizarEmprestimoPanel;
 import br.edu.ifpe.lpoo.project.ui.membros.JCadastroAluno;
 import br.edu.ifpe.lpoo.project.ui.membros.JCadastroPesquisador;
 import br.edu.ifpe.lpoo.project.ui.membros.JCadastroProfessor;
@@ -25,6 +26,7 @@ public class MainFrame extends JFrame {
     private JCadastroPesquisador jCadastroPesquisador;
     private JCadastroProfessor jCadastroProfessor;
     private JVisualizarMembros jVisualizarMembros;
+    private JRealizarEmprestimoPanel jRealizarEmprestimoPanel;
 
     public MainFrame() {
         setTitle("Sistema de Gerenciamento de Livros");
@@ -46,6 +48,7 @@ public class MainFrame extends JFrame {
         jCadastroPesquisador = new JCadastroPesquisador(this);
         jCadastroProfessor = new JCadastroProfessor(this);
         jVisualizarMembros = new JVisualizarMembros(this);
+        jRealizarEmprestimoPanel = new JRealizarEmprestimoPanel(this);
 
         cardPanel.add(telaPrincipalPanel, "TelaPrincipal");
         cardPanel.add(jCadastroLivroPanel, "CadastroLivro");
@@ -58,6 +61,7 @@ public class MainFrame extends JFrame {
         cardPanel.add(jCadastroPesquisador,"CadastroPesquisador");
         cardPanel.add(jCadastroProfessor,"CadastroProfessor");
         cardPanel.add(jVisualizarMembros,"VisualizarMembros");
+        cardPanel.add(jRealizarEmprestimoPanel, "RealizarEmprestimo");
 
 
         add(cardPanel);

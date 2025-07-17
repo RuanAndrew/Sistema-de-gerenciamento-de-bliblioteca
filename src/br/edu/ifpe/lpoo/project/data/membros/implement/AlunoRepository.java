@@ -115,8 +115,34 @@ public class AlunoRepository implements IAlunoRepository {
 		String sqlMembro = "SELECT * FROM membro WHERE cpf = ?";
 
 		try (Connection conn = ConnectionDb.getConnection();
-				PreparedStatement stmt = conn.prepareStatement(sqlMembro)) {
+			 PreparedStatement stmt = conn.prepareStatement(sqlMembro)) {
 			stmt.setString(1, aluno.getCpf());
+
+			try (ResultSet rst = stmt.executeQuery()) {
+
+				exists = rst.next();
+			}
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao verificar existência do membro. Causado por: " + e.getMessage());
+		}
+
+		return exists;
+	}
+
+	public boolean existMembro(String cpf) {
+
+		if (cpf == null) {
+			throw new DbException("cpf não pode ser null");
+		}
+
+		boolean exists = false;
+
+		String sqlMembro = "SELECT 1 FROM membro WHERE cpf = ?";
+
+		try (Connection conn = ConnectionDb.getConnection();
+			 PreparedStatement stmt = conn.prepareStatement(sqlMembro)) {
+			stmt.setString(1, cpf);
 
 			try (ResultSet rst = stmt.executeQuery()) {
 
@@ -200,6 +226,37 @@ public class AlunoRepository implements IAlunoRepository {
 
 		} catch (SQLException e) {
 			throw new DbException("Erro ao busca aluno por id. Causado por: " + e.getMessage());
+		}
+
+		return aluno;
+	}
+
+	@Override
+	public Aluno buscarPorCPF(String cpf) {
+
+		if (cpf == null) {
+			throw new DbException("cpf inválido");
+		}
+
+		Aluno aluno = null;
+
+		String sqlAluno = "SELECT id_membro, nome, email, cpf, matricula, tipo_membro, debito_multas, status_membro, curso " +
+				"FROM membro INNER JOIN aluno ON membro.id_membro = aluno.id_aluno " +
+				"WHERE cpf = ?";
+
+		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlAluno)) {
+
+			stmt.setString(1, cpf);
+
+			try (ResultSet rst = stmt.executeQuery()) {
+
+				if (rst.next()) {
+					aluno = instanciarAluno(rst);
+				}
+			}
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao busca aluno por cpf. Causado por: " + e.getMessage());
 		}
 
 		return aluno;

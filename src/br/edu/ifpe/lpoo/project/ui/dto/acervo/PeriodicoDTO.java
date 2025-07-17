@@ -1,28 +1,30 @@
-package br.edu.ifpe.lpoo.project.ui.dto;
+package br.edu.ifpe.lpoo.project.ui.dto.acervo;
 
 import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
 
-public class LivroDTO {
+public class PeriodicoDTO {
     private int id;
-    private TipoItemAcervo tipoItemAcervo = TipoItemAcervo.LIVRO;
+    private TipoItemAcervo tipoItemAcervo = TipoItemAcervo.PERIODICO;
     private String titulo;
     private String autor;
     private String anoPublicacao;
     private String editora;
-    private String isbn;
-    private String numeroPaginas;
-    private String genero;
     private String idioma;
+    private String issn;
+    private String numeroEdicao;
+    private String volume;
+    private String genero;
 
-    public LivroDTO(String titulo, String autor, String anoPublicacao, String editora, String isbn, String numeroPaginas, String genero, String idioma) {
+    public PeriodicoDTO(String titulo, String autor, String anoPublicacao, String editora, String idioma, String issn, String numeroEdicao, String volume, String genero) {
         this.titulo = titulo;
         this.autor = autor;
         this.anoPublicacao = anoPublicacao;
         this.editora = editora;
-        this.isbn = isbn;
-        this.numeroPaginas = numeroPaginas;
-        this.genero = genero;
         this.idioma = idioma;
+        this.issn = issn;
+        this.numeroEdicao = numeroEdicao;
+        this.volume = volume;
+        this.genero = genero;
     }
 
     public int getId() {
@@ -65,20 +67,36 @@ public class LivroDTO {
         this.editora = editora;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public String getIdioma() {
+        return idioma;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setIdioma(String idioma) {
+        this.idioma = idioma;
     }
 
-    public String getNumeroPaginas() {
-        return numeroPaginas;
+    public String getIssn() {
+        return issn;
     }
 
-    public void setNumeroPaginas(String numeroPaginas) {
-        this.numeroPaginas = numeroPaginas;
+    public void setIssn(String issn) {
+        this.issn = issn;
+    }
+
+    public String getNumeroEdicao() {
+        return numeroEdicao;
+    }
+
+    public void setNumeroEdicao(String numeroEdicao) {
+        this.numeroEdicao = numeroEdicao;
+    }
+
+    public String getVolume() {
+        return volume;
+    }
+
+    public void setVolume(String volume) {
+        this.volume = volume;
     }
 
     public String getGenero() {
@@ -87,14 +105,6 @@ public class LivroDTO {
 
     public void setGenero(String genero) {
         this.genero = genero;
-    }
-
-    public String getIdioma() {
-        return idioma;
-    }
-
-    public void setIdioma(String idioma) {
-        this.idioma = idioma;
     }
 
     public TipoItemAcervo getTipoItemAcervo() {

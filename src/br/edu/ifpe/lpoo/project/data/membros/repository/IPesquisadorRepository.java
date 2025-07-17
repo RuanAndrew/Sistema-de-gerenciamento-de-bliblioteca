@@ -13,6 +13,8 @@ public interface IPesquisadorRepository {
 	void delete(int idMembro);
 	
 	Pesquisador buscarPorId(int idMembro);
+
+	Pesquisador buscarPorCPF(String cpf);
 	
 	List<Pesquisador> buscarTodos();
 	
