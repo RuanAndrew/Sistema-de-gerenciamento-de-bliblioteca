@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.List;
 
 import br.edu.ifpe.lpoo.project.entities.acervo.Exemplar;
+import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
 import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
 
 public interface IExemplarRepository {
@@ -16,7 +17,7 @@ public interface IExemplarRepository {
 	
 	void deleteParaLivros(int idLivro, Connection conn);
 
-	void atualizarStatus(Exemplar exemplar);
+	void atualizarStatus(int idExemplar, StatusExemplar statusExemplar);
 
 	Exemplar buscarPorId(int idItem);
 

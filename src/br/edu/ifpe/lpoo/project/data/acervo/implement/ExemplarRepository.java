@@ -101,28 +101,30 @@ public class ExemplarRepository implements IExemplarRepository {
 			ConnectionDb.closeConnection(conn);
 		}
 	}
-	
+
 	public boolean existPorId(int idExemplar) {
-		
+
 		if (idExemplar <= 0) {
 			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
 		}
-		
+
 		String sqlExemplar = "SELECT * FROM exemplar WHERE id_exemplar = ?";
 		boolean exists = false;
-		
-		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlExemplar)){
-			
+
+		try (Connection conn = ConnectionDb.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(sqlExemplar)) {
+
 			stmt.setInt(1, idExemplar);
-			
-			try (ResultSet rst = stmt.executeQuery()){
+
+			try (ResultSet rst = stmt.executeQuery()) {
 				exists = rst.next();
 			}
-			
+
 		} catch (SQLException e) {
-			throw new DbException("Erro ao verificar existência do exemplar com id, no banco de dados. Causado por: " + e.getMessage());
+			throw new DbException("Erro ao verificar existência do exemplar com id, no banco de dados. Causado por: "
+					+ e.getMessage());
 		}
-		
+
 		return exists;
 	}
 
@@ -151,7 +153,7 @@ public class ExemplarRepository implements IExemplarRepository {
 
 			rst = stmt.executeQuery();
 
-			if(rst.next()) {
+			if (rst.next()) {
 				exists = true;
 			}
 
@@ -204,19 +206,19 @@ public class ExemplarRepository implements IExemplarRepository {
 	}
 
 	@Override
-	public void atualizarStatus(Exemplar exemplar) {
+	public void atualizarStatus(int idExemplar, StatusExemplar statusExemplar) {
 
-		if (exemplar == null) {
-			throw new DbException("Objeto tipo Exemplar não pode ser null para atualizar status");
+		if (idExemplar <= 0) {
+			throw new DbException("Id inválido para atualizar exemplar");
+
 		}
-
 		String sqlItemAcervo = "UPDATE exemplar SET status_exemplar = ? WHERE id_exemplar = ?";
 
 		try (Connection conn = ConnectionDb.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(sqlItemAcervo)) {
 
-			stmt.setString(1, exemplar.getStatus().name());
-			stmt.setInt(2, exemplar.getIdExemplar());
+			stmt.setString(1, statusExemplar.name());
+			stmt.setInt(2, idExemplar);
 			stmt.executeUpdate();
 
 		} catch (SQLException e) {
@@ -264,7 +266,7 @@ public class ExemplarRepository implements IExemplarRepository {
 		}
 
 		String sqlExemplarItemAcervo = "SELECT id_exemplar, id_livro, tipo_item_acervo, registro, status_exemplar, tipo_exemplar FROM exemplar "
-				+"WHERE id_livro = ?";
+				+ "WHERE id_livro = ?";
 
 		List<Exemplar> exemplares = new ArrayList<Exemplar>();
 
@@ -323,31 +325,32 @@ public class ExemplarRepository implements IExemplarRepository {
 
 	@Override
 	public int getMaiorRegistro(int idItem, TipoItemAcervo tipoItemAcervo) {
-		
+
 		if (idItem <= 0) {
 			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
 		}
-		
+
 		int qtdRegistro = 0;
-		
+
 		String sqlExemplar = "SELECT COUNT(registro) FROM exemplar WHERE id_livro = ? AND tipo_item_acervo = ?";
-		
-		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlExemplar)){
-			
+
+		try (Connection conn = ConnectionDb.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(sqlExemplar)) {
+
 			stmt.setInt(1, idItem);
 			stmt.setString(2, tipoItemAcervo.name());
-			
-			try (ResultSet rst = stmt.executeQuery()){
-				
-				if(rst.next()) {
+
+			try (ResultSet rst = stmt.executeQuery()) {
+
+				if (rst.next()) {
 					qtdRegistro = rst.getInt(1);
 				}
 			}
-			
+
 		} catch (Exception e) {
 			throw new DbException("Erro na busca de contagem de exemplares. Causado por: " + e.getMessage());
 		}
-		
+
 		return qtdRegistro;
 	}
 }
