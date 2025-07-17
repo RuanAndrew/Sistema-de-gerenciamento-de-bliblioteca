@@ -1,6 +1,7 @@
 package br.edu.ifpe.lpoo.project.entities.funcionarios;
 
 import br.edu.ifpe.lpoo.project.entities.membros.Pessoa;
+import br.edu.ifpe.lpoo.project.enums.StatusFuncionario;
 
 public abstract class Funcionario extends Pessoa {
 
@@ -8,13 +9,16 @@ public abstract class Funcionario extends Pessoa {
     private double salario;
     private String cargo;
     private int idCredencialAcesso;
+    private StatusFuncionario statusFuncionario;
 
-    public Funcionario(String nome, String email, String cpf, String matricula, double salario, String cargo, int idCredencialAcesso) {
+    public Funcionario(String nome, String email, String cpf, String matricula, double salario,
+                       String cargo, int idCredencialAcesso, StatusFuncionario statusFuncionario) {
         super(nome, email, cpf);
         this.matricula = matricula;
         this.salario = salario;
         this.cargo = cargo;
         this.idCredencialAcesso = idCredencialAcesso;
+        this.statusFuncionario = statusFuncionario;
     }
 
     public String getMatricula() {
@@ -47,5 +51,13 @@ public abstract class Funcionario extends Pessoa {
 
     public void setIdCredencialAcesso(int idCredencialAcesso) {
         this.idCredencialAcesso = idCredencialAcesso;
+    }
+
+    public StatusFuncionario getStatusFuncionario() {
+        return statusFuncionario;
+    }
+
+    public void setStatusFuncionario(StatusFuncionario statusFuncionario) {
+        this.statusFuncionario = statusFuncionario;
     }
 }
