@@ -168,7 +168,7 @@ public class JCadastroEbook extends JPanel {
         btnCadastrar.setBackground(new Color(60, 179, 113));
         btnCadastrar.setForeground(Color.WHITE);
         btnCadastrar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnCadastrar.setBounds(150, 470, 180, 40);
+        btnCadastrar.setBounds(350, 470, 180, 40);
         add(btnCadastrar);
         btnCadastrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -213,16 +213,16 @@ public class JCadastroEbook extends JPanel {
         });
 
         // --- Botão Voltar ---
-        JButton btnVoltar = new JButton("Voltar ao Menu");
+        JButton btnVoltar = new JButton("Voltar");
         btnVoltar.setBackground(new Color(255, 140, 0));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnVoltar.setBounds(350, 470, 180, 40);
+        btnVoltar.setBounds(150, 470, 180, 40);
         add(btnVoltar);
         btnVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainFrame.showPanel("TelaPrincipal");
+                mainFrame.showPanel("GerenciarAcervoPanel");
                 clearFields();
             }
         });

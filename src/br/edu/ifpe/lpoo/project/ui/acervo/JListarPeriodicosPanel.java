@@ -72,10 +72,10 @@ public class JListarPeriodicosPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
         // Botão de Voltar
-        JButton btnVoltar = new JButton("Voltar ao Menu");
+        JButton btnVoltar = new JButton("Voltar");
         btnVoltar.setBackground(new Color(255, 140, 0));
         btnVoltar.setForeground(Color.WHITE);
-        btnVoltar.addActionListener(e -> mainFrame.showPanel("TelaPrincipal"));
+        btnVoltar.addActionListener(e -> mainFrame.showPanel("GerenciarAcervoPanel"));
 
         JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         southPanel.setBackground(new Color(240, 248, 255));

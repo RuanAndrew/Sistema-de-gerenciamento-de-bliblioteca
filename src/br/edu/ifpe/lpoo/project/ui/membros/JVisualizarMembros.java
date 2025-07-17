@@ -71,11 +71,11 @@ public class JVisualizarMembros extends JPanel {
 
         // Botão Voltar
         JButton btnVoltar = new JButton("Voltar");
-        btnVoltar.setBackground(new Color(108, 117, 125));
+        btnVoltar.setBackground(new Color(255, 140, 0));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setOpaque(true);
         btnVoltar.setBorderPainted(false);
-        btnVoltar.addActionListener(e -> mainFrame.showPanel("TelaPrincipal"));
+        btnVoltar.addActionListener(e -> mainFrame.showPanel("GerenciarMembrosPanel"));
         painelBotoes.add(btnVoltar);
         
         add(painelBotoes, BorderLayout.SOUTH);

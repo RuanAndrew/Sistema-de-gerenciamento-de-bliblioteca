@@ -2,10 +2,7 @@ package br.edu.ifpe.lpoo.project.ui;
 
 import br.edu.ifpe.lpoo.project.ui.acervo.*;
 import br.edu.ifpe.lpoo.project.ui.emprestimo.JRealizarEmprestimoPanel;
-import br.edu.ifpe.lpoo.project.ui.membros.JCadastroAluno;
-import br.edu.ifpe.lpoo.project.ui.membros.JCadastroPesquisador;
-import br.edu.ifpe.lpoo.project.ui.membros.JCadastroProfessor;
-import br.edu.ifpe.lpoo.project.ui.membros.JVisualizarMembros;
+import br.edu.ifpe.lpoo.project.ui.membros.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,6 +24,8 @@ public class MainFrame extends JFrame {
     private JCadastroProfessor jCadastroProfessor;
     private JVisualizarMembros jVisualizarMembros;
     private JRealizarEmprestimoPanel jRealizarEmprestimoPanel;
+    private GerenciarAcervoPanel gerenciarAcervoPanel;
+    private GerenciarMembrosPanel gerenciarMembrosPanel;
 
     public MainFrame() {
         setTitle("Sistema de Gerenciamento de Livros");
@@ -49,6 +48,8 @@ public class MainFrame extends JFrame {
         jCadastroProfessor = new JCadastroProfessor(this);
         jVisualizarMembros = new JVisualizarMembros(this);
         jRealizarEmprestimoPanel = new JRealizarEmprestimoPanel(this);
+        gerenciarAcervoPanel = new GerenciarAcervoPanel(this);
+        gerenciarMembrosPanel = new GerenciarMembrosPanel(this);
 
         cardPanel.add(telaPrincipalPanel, "TelaPrincipal");
         cardPanel.add(jCadastroLivroPanel, "CadastroLivro");
@@ -62,6 +63,8 @@ public class MainFrame extends JFrame {
         cardPanel.add(jCadastroProfessor,"CadastroProfessor");
         cardPanel.add(jVisualizarMembros,"VisualizarMembros");
         cardPanel.add(jRealizarEmprestimoPanel, "RealizarEmprestimo");
+        cardPanel.add(gerenciarAcervoPanel,"GerenciarAcervoPanel");
+        cardPanel.add(gerenciarMembrosPanel,"GerenciarMembrosPanel");
 
 
         add(cardPanel);
