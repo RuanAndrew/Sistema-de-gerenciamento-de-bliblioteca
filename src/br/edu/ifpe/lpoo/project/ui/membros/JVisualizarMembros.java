@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.List;
 
 public class JVisualizarMembros extends JPanel {
@@ -23,6 +25,12 @@ public class JVisualizarMembros extends JPanel {
         this.membroService = new MembroService();
         initialize();
         carregarMembros();
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                carregarMembros();
+            }
+        });
     }
 
     private void initialize() {
@@ -57,17 +65,12 @@ public class JVisualizarMembros extends JPanel {
         
         // Botão Excluir
         JButton btnExcluir = new JButton("Excluir Membro");
-        btnExcluir.setBackground(new Color(220, 53, 69)); // Vermelho
+        btnExcluir.setBackground(new Color(220, 53, 69));
         btnExcluir.setForeground(Color.WHITE);
         btnExcluir.setOpaque(true);
         btnExcluir.setBorderPainted(false);
         btnExcluir.addActionListener(e -> excluirMembroSelecionado());
         painelBotoes.add(btnExcluir);
-
-        // Botão Atualizar
-        JButton btnAtualizar = new JButton("Atualizar Lista");
-        btnAtualizar.addActionListener(e -> carregarMembros());
-        painelBotoes.add(btnAtualizar);
 
         // Botão Voltar
         JButton btnVoltar = new JButton("Voltar");
@@ -128,10 +131,9 @@ public class JVisualizarMembros extends JPanel {
 
         if (resposta == JOptionPane.YES_OPTION) {
             try {
-                // Chama o serviço para excluir usando o ID
                 membroService.excluirMembro(idParaExcluir);
                 JOptionPane.showMessageDialog(mainFrame, "Membro excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                carregarMembros(); // Atualiza a tabela para remover a linha
+                carregarMembros();
             } catch (BusinessExcepition be) {
                 JOptionPane.showMessageDialog(mainFrame, "Erro ao excluir membro: " + be.getMessage(), "Erro de Negócio", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {

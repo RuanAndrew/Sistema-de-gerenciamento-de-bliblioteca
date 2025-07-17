@@ -21,6 +21,7 @@ public class JCadastroEbook extends JPanel {
     private JTextField txtIsbn;
     private JTextField txtNumeroPaginas;
     private JTextField txtGenero;
+    private JTextField txtQuantidadeLicenca;
     private JComboBox<String> comboIdioma;
     private JComboBox<String> comboFormatoDigital;
     private JTextField txtUrl;
@@ -140,6 +141,15 @@ public class JCadastroEbook extends JPanel {
         txtUrl.setBounds(250, 410, 300, 30);
         add(txtUrl);
 
+        // --- Quantidade Licenca ---
+        JLabel quantidadeLicencaLabel = new JLabel("Quantidade Licenca:");
+        quantidadeLicencaLabel.setBounds(50, 445, 150, 25);
+        quantidadeLicencaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        add(quantidadeLicencaLabel);
+        txtQuantidadeLicenca = new JTextField();
+        txtQuantidadeLicenca.setBounds(250, 445, 300, 30);
+        add(txtQuantidadeLicenca);
+
         // --- Botão Buscar ---
         btnBuscarIsbn.addActionListener(new ActionListener() {
             @Override
@@ -168,7 +178,7 @@ public class JCadastroEbook extends JPanel {
         btnCadastrar.setBackground(new Color(60, 179, 113));
         btnCadastrar.setForeground(Color.WHITE);
         btnCadastrar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnCadastrar.setBounds(350, 470, 180, 40);
+        btnCadastrar.setBounds(350, 500, 180, 40);
         add(btnCadastrar);
         btnCadastrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -179,7 +189,8 @@ public class JCadastroEbook extends JPanel {
                         txtIsbn.getText().trim().isEmpty() ||
                         txtNumeroPaginas.getText().trim().isEmpty() ||
                         txtGenero.getText().trim().isEmpty() ||
-                        txtUrl.getText().trim().isEmpty()) {
+                        txtUrl.getText().trim().isEmpty() ||
+                        txtQuantidadeLicenca.getText().trim().isEmpty()) {
 
                     JOptionPane.showMessageDialog(JCadastroEbook.this,
                             "Por favor, preencha todos os campos antes de cadastrar.",
@@ -198,10 +209,11 @@ public class JCadastroEbook extends JPanel {
                 String idioma = (String) comboIdioma.getSelectedItem();
                 String formatoDigital = (String) comboFormatoDigital.getSelectedItem();
                 String url = txtUrl.getText();
+                String quantidadeLicenca = txtQuantidadeLicenca.getText();
 
                 try {
                     AcervoService controller = new AcervoService();
-                    controller.cadastrarEbook(titulo, autores, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma, formatoDigital, url);
+                    controller.cadastrarEbook(titulo, autores, anoPublicacao, editora, isbn, numeroPaginas, genero, idioma, formatoDigital, url,quantidadeLicenca);
                     JOptionPane.showMessageDialog(JCadastroEbook.this, "O e-book foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
                     clearFields();
                 } catch (NumberFormatException ne) {
@@ -217,7 +229,7 @@ public class JCadastroEbook extends JPanel {
         btnVoltar.setBackground(new Color(255, 140, 0));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnVoltar.setBounds(150, 470, 180, 40);
+        btnVoltar.setBounds(150, 500, 180, 40);
         add(btnVoltar);
         btnVoltar.addActionListener(new ActionListener() {
             @Override
@@ -255,5 +267,6 @@ public class JCadastroEbook extends JPanel {
         comboIdioma.setSelectedIndex(0);
         comboFormatoDigital.setSelectedIndex(0);
         txtUrl.setText("");
+        txtQuantidadeLicenca.setText("");
     }
 }
