@@ -101,6 +101,15 @@ public class MembroService {
 		if (!cpf.matches("\\d{11}")) {
 			throw new BusinessException("O CPF deve conter exatamente 11 números.");
 		}
+		if (email.length() > 255) {
+			throw new BusinessException("O email não pode ter mais de 255 caracteres.");
+		}
+		if (matricula.length() > 10) {
+			throw new BusinessException("A matrícula não pode ter mais de 10 caracteres.");
+		}
+		if (nome.length() > 150) {
+			throw new BusinessException("O nome não pode ter mais de 150 caracteres.");
+		}
 
 		Professor professor = new Professor(nome, email, cpf, matricula, TipoMembro.PROFESSOR, 0, StatusMembro.ATIVO, areaAtuacao, departamento);
 
@@ -139,6 +148,15 @@ public class MembroService {
 		if (!cpf.matches("\\d{11}")) {
 			throw new BusinessException("O CPF deve conter exatamente 11 números.");
 		}
+		if (email.length() > 255) {
+			throw new BusinessException("O email não pode ter mais de 255 caracteres.");
+		}
+		if (matricula.length() > 10) {
+			throw new BusinessException("A matrícula não pode ter mais de 10 caracteres.");
+		}
+		if (nome.length() > 150) {
+			throw new BusinessException("O nome não pode ter mais de 150 caracteres.");
+		}
 
 		Pesquisador pesquisador = new Pesquisador(nome, email, cpf, matricula, TipoMembro.PESQUISADOR, 0, StatusMembro.ATIVO, instituicao);
 
@@ -157,19 +175,7 @@ public class MembroService {
 		}
 	}
 
-	public void excluirMembro(Integer cpf) {
-		if (cpf != null) {
-			try {
-				alunoRepository.delete(cpf);
-				professorRepository.delete(cpf);
-				pesquisadorRepository.delete(cpf);
-			} catch (DbException e) {
-				throw new BusinessException("Erro ao deletar item de acervo: " + e.getMessage());
-			}
-		}
-	}
-
-	public void atualizarMembro(Aluno alunoAtualizado, Professor professorAtualizado, Pesquisador pesquisadoratualizado) {
+	public void atualizarMembro(Aluno alunoAtualizado, Professor professorAtualizado, Pesquisador pesquisadoratualizado, StatusMembro novoStatus) {
 		if (alunoAtualizado == null || alunoAtualizado.getCpf() == null || alunoAtualizado.getCpf().isBlank()) {
 			throw new BusinessException("CPF obrigatório para atualizar o aluno.");
 		}
@@ -181,6 +187,7 @@ public class MembroService {
 		if (existe) {
 			try {
 				alunoRepository.atualizar(alunoAtualizado);
+				alunoAtualizado.setStatusmembro(novoStatus);
 			} catch (DbException e) {
 				throw new BusinessException("Erro ao atualizar aluno: " + e.getMessage());
 			}
@@ -198,6 +205,7 @@ public class MembroService {
 		if (existeprofessor) {
 			try {
 				professorRepository.atualizar(professorAtualizado);
+				professorAtualizado.setStatusmembro(novoStatus);
 			} catch (DbException e) {
 				throw new BusinessException("Erro ao atualizar professor: " + e.getMessage());
 			}
@@ -215,6 +223,7 @@ public class MembroService {
 		if (existepesquisador) {
 			try {
 				pesquisadorRepository.atualizar(pesquisadoratualizado);
+				pesquisadoratualizado.setStatusmembro(novoStatus);
 			} catch (DbException e) {
 				throw new BusinessException("Erro ao atualizar pesquisador: " + e.getMessage());
 			}
@@ -246,9 +255,21 @@ public class MembroService {
 	 public List<Membro> listarTodosItens () {
 	        List<Membro> todosItens = new ArrayList<>();
 	        try {
-	            todosItens.addAll(alunoRepository.buscarTodos());
-	            todosItens.addAll(professorRepository.buscarTodos());
-	            todosItens.addAll(pesquisadorRepository.buscarTodos());
+	            for(Aluno aluno : alunoRepository.buscarTodos()) {
+	            	if (aluno.getStatusmembro() != StatusMembro.INATIVO) {
+	            		todosItens.add(aluno);
+	            	}
+	            }
+	            for(Professor professor : professorRepository.buscarTodos()){
+	            	if (professor.getStatusmembro() != StatusMembro.INATIVO) {
+	            		todosItens.add(professor);
+	            	}
+	            }
+	            for(Pesquisador pesquisador : pesquisadorRepository.buscarTodos()){
+	            	if (pesquisador.getStatusmembro() != StatusMembro.INATIVO) {
+	            		todosItens.add(pesquisador);
+	            	}
+	            }
 	        } catch (DbException e) {
 	            throw new BusinessException("Erro ao listar todos os Membros: " + e.getMessage());
 	        }
