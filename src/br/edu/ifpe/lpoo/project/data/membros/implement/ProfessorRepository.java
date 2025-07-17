@@ -10,11 +10,10 @@ import java.util.List;
 
 import br.edu.ifpe.lpoo.project.data.ConnectionDb;
 import br.edu.ifpe.lpoo.project.data.membros.repository.IProfessorRepository;
-import br.edu.ifpe.lpoo.project.entities.membros.Pesquisador;
 import br.edu.ifpe.lpoo.project.entities.membros.Professor;
 import br.edu.ifpe.lpoo.project.enums.StatusMembro;
 import br.edu.ifpe.lpoo.project.enums.TipoMembro;
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessException;
 import br.edu.ifpe.lpoo.project.exceptions.DbException;
 
 public class ProfessorRepository implements IProfessorRepository {
@@ -142,7 +141,7 @@ public class ProfessorRepository implements IProfessorRepository {
 	public void delete(int idMembro) {
 
 		if (idMembro <= 0) {
-			throw new BusinessExcepition("Id inválido");
+			throw new BusinessException("Id inválido");
 		}
 
 		Connection conn = null;

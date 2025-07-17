@@ -3,7 +3,7 @@ package br.edu.ifpe.lpoo.project.ui.acervo;
 import br.edu.ifpe.lpoo.project.business.AcervoService;
 import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
 import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
-import br.edu.ifpe.lpoo.project.exceptions.BusinessExcepition;
+import br.edu.ifpe.lpoo.project.exceptions.BusinessException;
 import br.edu.ifpe.lpoo.project.ui.MainFrame;
 
 import javax.swing.*;
@@ -99,7 +99,7 @@ public class JListarLivrosPanel extends JPanel {
                     tableModel.addRow(rowData);
                 }
             }
-        } catch (BusinessExcepition e) {
+        } catch (BusinessException e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar livros: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }

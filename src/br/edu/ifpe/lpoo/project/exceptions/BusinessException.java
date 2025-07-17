@@ -2,12 +2,12 @@ package br.edu.ifpe.lpoo.project.exceptions;
 
 import java.io.Serial;
 
-public class BusinessExcepition extends RuntimeException {
+public class BusinessException extends RuntimeException {
 
 	@Serial
     private static final long serialVersionUID = 1L;
 
-	public BusinessExcepition(String message) {
+	public BusinessException(String message) {
         super(message);
     }
 }
