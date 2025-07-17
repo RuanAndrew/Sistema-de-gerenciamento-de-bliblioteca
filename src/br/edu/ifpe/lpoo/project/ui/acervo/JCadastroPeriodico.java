@@ -20,6 +20,7 @@ public class JCadastroPeriodico extends JPanel {
     private JTextField txtVolume;
     private JTextField txtAnoPublicacao;
     private JTextField txtGenero;
+    private JTextField txtQuantidadeExemplares;
     private JComboBox<String> comboIdioma;
 
     public JCadastroPeriodico(MainFrame mainFrame) {
@@ -110,15 +111,24 @@ public class JCadastroPeriodico extends JPanel {
         txtGenero.setBounds(250, 340, 300, 30);
         add(txtGenero);
 
+        // --- Quantidade Exemplares ---
+        JLabel quantidadeExemplaresLabel = new JLabel("Quantidade Exemplares:");
+        quantidadeExemplaresLabel.setBounds(70, 375, 150, 25);
+        quantidadeExemplaresLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        add(quantidadeExemplaresLabel);
+        txtQuantidadeExemplares = new JTextField();
+        txtQuantidadeExemplares.setBounds(250, 375, 300, 30);
+        add(txtQuantidadeExemplares);
+
         // --- Idioma ---
         JLabel idiomaLabel = new JLabel("Idioma:");
-        idiomaLabel.setBounds(80, 375, 140, 25);
+        idiomaLabel.setBounds(80, 410, 140, 25);
         idiomaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(idiomaLabel);
 
         String[] idiomas = {"Português", "Inglês", "Espanhol", "Francês", "Alemão"};
         comboIdioma = new JComboBox<>(idiomas);
-        comboIdioma.setBounds(250, 375, 300, 30);
+        comboIdioma.setBounds(250, 410, 300, 30);
         add(comboIdioma);
 
         // --- Botão Cadastrar ---
@@ -137,7 +147,8 @@ public class JCadastroPeriodico extends JPanel {
                         txtNumeroEdicao.getText().trim().isEmpty() ||
                         txtVolume.getText().trim().isEmpty() ||
                         txtAnoPublicacao.getText().trim().isEmpty() ||
-                        txtGenero.getText().trim().isEmpty()) {
+                        txtGenero.getText().trim().isEmpty() ||
+                        txtQuantidadeExemplares.getText().trim().isEmpty()) {
 
                     JOptionPane.showMessageDialog(JCadastroPeriodico.this,
                             "Por favor, preencha todos os campos antes de cadastrar.",
@@ -155,10 +166,11 @@ public class JCadastroPeriodico extends JPanel {
                 String anoPublicacao = txtAnoPublicacao.getText();
                 String genero = txtGenero.getText();
                 String idioma = (String) comboIdioma.getSelectedItem();
+                String quantidadeExemplares = txtQuantidadeExemplares.getText();
 
                 try {
                     AcervoService controller = new AcervoService();
-                    controller.cadastrarPeriodico(titulo, autor, anoPublicacao, issn, editora, numeroEdicao, volume, genero, idioma);
+                    controller.cadastrarPeriodico(titulo, autor, anoPublicacao, issn, editora, numeroEdicao, volume, genero, idioma,quantidadeExemplares);
                     JOptionPane.showMessageDialog(JCadastroPeriodico.this, "O periódico foi cadastrado com sucesso em nosso sistema.", "Cadastro Concluído", JOptionPane.INFORMATION_MESSAGE);
                     clearFields();
                 } catch (NumberFormatException ne) {
@@ -194,6 +206,7 @@ public class JCadastroPeriodico extends JPanel {
         txtVolume.setText("");
         txtAnoPublicacao.setText("");
         txtGenero.setText("");
+        txtQuantidadeExemplares.setText("");
         comboIdioma.setSelectedIndex(0);
     }
 }
