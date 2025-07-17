@@ -1,5 +1,9 @@
 package br.edu.ifpe.lpoo.project.business;
 
+import br.edu.ifpe.lpoo.project.data.acervo.implement.EbookRepository;
+import br.edu.ifpe.lpoo.project.data.acervo.implement.ExemplarRepository;
+import br.edu.ifpe.lpoo.project.data.acervo.implement.LivroRepository;
+import br.edu.ifpe.lpoo.project.data.acervo.implement.PeriodicoRepository;
 import br.edu.ifpe.lpoo.project.data.membros.implement.AlunoRepository;
 import br.edu.ifpe.lpoo.project.data.membros.implement.PesquisadorRepository;
 import br.edu.ifpe.lpoo.project.data.membros.implement.ProfessorRepository;
@@ -20,6 +24,12 @@ public class MembroService {
 	AlunoRepository alunoRepository;
 	ProfessorRepository professorRepository;
 	PesquisadorRepository pesquisadorRepository;
+
+	public MembroService() {
+		this.alunoRepository = new AlunoRepository();
+		this.professorRepository = new ProfessorRepository();
+		this.pesquisadorRepository = new PesquisadorRepository();
+	}
 
 	public void cadastrarAluno(String nome, String cpf, String email, String matricula, String curso) {
 
