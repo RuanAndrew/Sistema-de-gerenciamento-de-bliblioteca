@@ -111,7 +111,7 @@ public class ExemplarRepository implements IExemplarRepository {
 			conn = ConnectionDb.getConnection();
 			stmt = conn.prepareStatement(consulta);
 
-			stmt.setInt(1, exemplar.getIdLivro());
+			stmt.setInt(1, exemplar.getIdItem());
 			stmt.setString(2, exemplar.getRegistro());
 
 			rst = stmt.executeQuery();

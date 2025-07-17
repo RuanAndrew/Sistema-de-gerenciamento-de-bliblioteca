@@ -56,8 +56,8 @@ public class EmprestimoService {
             throw new BusinessExcepition("Exemplar com ID " + idExemplar + " não encontrado para empréstimo.");
         }
 
-        if (exemplar.isDisponivel() != StatusExemplar.DISPONIVEL) {
-            throw new BusinessExcepition("Exemplar com ID " + idExemplar + " não está disponível para empréstimo. Status: " + exemplar.isDisponivel());
+        if (exemplar.getStatus() != StatusExemplar.DISPONIVEL) {
+            throw new BusinessExcepition("Exemplar com ID " + idExemplar + " não está disponível para empréstimo. Status: " + exemplar.getStatus());
         }
 
         Membro membro = switch (tipoMembro) {
@@ -80,8 +80,9 @@ public class EmprestimoService {
         LocalDate dataParaDevolucao = dataEmprestimo.plusDays(prazoEmDias);
         StatusEmprestimo statusEmprestimo = StatusEmprestimo.ABERTO;
 
+        exemplar.setStatus(StatusExemplar.EMPRESTADO);
+
         Emprestimo emprestimo = new Emprestimo(exemplar.getIdExemplar(), membro.getId(), dataEmprestimo, dataParaDevolucao, null, statusEmprestimo);
-        exemplar.setDisponivel(StatusExemplar.EMPRESTADO);
         emprestimoRepository.insert(emprestimo);
 
     }

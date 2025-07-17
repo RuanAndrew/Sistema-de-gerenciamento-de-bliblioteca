@@ -1,28 +1,30 @@
 package br.edu.ifpe.lpoo.project.entities.acervo;
 
 import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
+import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
 
-public class Exemplar {
+public abstract class Exemplar {
 	
 	private int idExemplar;
-	private int idLivro;
+	private int idItem;
+	private TipoItemAcervo tipoItemAcervo;
 	private String registro;
 	private StatusExemplar status;
 
-	
-	public Exemplar(int idLivro, String registro, StatusExemplar status) {
+	public Exemplar(int idItem, TipoItemAcervo tipoItemAcervo, String registro, StatusExemplar status) {
 		super();
-		this.idLivro = idLivro;
+		this.idItem = idItem;
+		this.tipoItemAcervo = tipoItemAcervo;
 		this.registro = registro;
 		this.status = status;
 	}
 
-	public int getIdLivro() {
-		return idLivro;
+	public int getIdItem() {
+		return idItem;
 	}
 
-	public void setIdLivro(int idLivro) {
-		this.idLivro = idLivro;
+	public void setIdItem(int idItem) {
+		this.idItem = idItem;
 	}
 
 	public String getRegistro() {
@@ -33,14 +35,6 @@ public class Exemplar {
 		this.registro = registro;
 	}
 
-	public StatusExemplar isDisponivel() {
-		return status;
-	}
-
-	public void setDisponivel(StatusExemplar status) {
-		this.status = status;
-	}
-
 	public int getIdExemplar() {
 		return idExemplar;
 	}
@@ -48,7 +42,20 @@ public class Exemplar {
 	public void setIdExemplar(int idExemplar) {
 		this.idExemplar = idExemplar;
 	}
-	
-	
-	
+
+	public TipoItemAcervo getTipoItemAcervo() {
+		return tipoItemAcervo;
+	}
+
+	public void setTipoItemAcervo(TipoItemAcervo tipoItemAcervo) {
+		this.tipoItemAcervo = tipoItemAcervo;
+	}
+
+	public StatusExemplar getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusExemplar status) {
+		this.status = status;
+	}
 }

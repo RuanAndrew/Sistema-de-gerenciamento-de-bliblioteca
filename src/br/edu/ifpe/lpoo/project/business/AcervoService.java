@@ -3,12 +3,7 @@ import br.edu.ifpe.lpoo.project.data.acervo.implement.EbookRepository;
 import br.edu.ifpe.lpoo.project.data.acervo.implement.ExemplarRepository;
 import br.edu.ifpe.lpoo.project.data.acervo.implement.LivroRepository;
 import br.edu.ifpe.lpoo.project.data.acervo.implement.PeriodicoRepository;
-import br.edu.ifpe.lpoo.project.data.acervo.repository.IPeriodicoRepository;
-import br.edu.ifpe.lpoo.project.entities.acervo.ItemAcervo;
-import br.edu.ifpe.lpoo.project.entities.acervo.Livro;
-import br.edu.ifpe.lpoo.project.entities.acervo.Ebook;
-import br.edu.ifpe.lpoo.project.entities.acervo.Periodico;
-import br.edu.ifpe.lpoo.project.entities.acervo.Exemplar;
+import br.edu.ifpe.lpoo.project.entities.acervo.*;
 import br.edu.ifpe.lpoo.project.enums.FormatoDigital;
 import br.edu.ifpe.lpoo.project.enums.StatusExemplar;
 import br.edu.ifpe.lpoo.project.enums.TipoItemAcervo;
@@ -139,8 +134,8 @@ public class AcervoService {
 
                 try {
                     String registro = livro.getId() + "EXP" + i;
-                    Exemplar exemplar = new Exemplar(livro.getId(), registro, StatusExemplar.DISPONIVEL);
-                    exemplarRepository.insert(exemplar, livro.getId());
+                    ExemplarFisico exemplarFisico = new ExemplarFisico(livro.getId(), TipoItemAcervo.LIVRO, registro, StatusExemplar.DISPONIVEL);
+                    exemplarRepository.insert(exemplarFisico, livro.getId());
                 }catch (DbException e) {
                     throw new BusinessExcepition(e.getMessage());
                 }
@@ -150,7 +145,7 @@ public class AcervoService {
         }
     }
 
-    public void cadastrarEbook (String titulo,String autor, String anoPublicacao, String editora, String isbn, String numeroPaginas, String genero, String idioma, String formatoDigital, String url) {
+    public void cadastrarEbook (String titulo,String autor, String anoPublicacao, String editora, String isbn, String numeroPaginas, String genero, String idioma, String formatoDigital, String url, String quantidadeLicenca) {
         if (titulo.isBlank()) {
             throw new BusinessExcepition("O título é obrigatório.");
         }
@@ -192,6 +187,12 @@ public class AcervoService {
         } catch (NumberFormatException e) {
             throw new BusinessExcepition("Ano de publicação inválido: deve ser um valor numérico.");
         }
+        int parsedQuantidadeLiceca;
+        try {
+            parsedQuantidadeLiceca = Integer.parseInt(quantidadeLicenca);
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Quantidade de liceças inválida: deve ser um valor numérico.");
+        }
 
         if (parsedNumeroPaginas < 0) {
             throw new BusinessExcepition("O número de páginas não pode ser menor que zero.");
@@ -199,6 +200,9 @@ public class AcervoService {
 
         if (parsedAnoPublicacao > anoAtual) {
             throw new BusinessExcepition("O ano de publicação não pode ser futuro.");
+        }
+        if (parsedQuantidadeLiceca < 0) {
+            throw new BusinessExcepition("A quantidade de liceças não pode ser negativa.");
         }
 
         Pattern anoPublicacaoPattern = Pattern.compile("-?\\d{1,4}");
@@ -219,7 +223,6 @@ public class AcervoService {
         }
 
         Ebook ebook = new Ebook(titulo,autor,parsedAnoPublicacao,editora,idioma,isbn,parsedNumeroPaginas,genero, formatoDigitalNovo,url);
-        ebookRepository = new EbookRepository();
 
         boolean exist = ebookRepository.existItem(ebook);
 
@@ -230,12 +233,22 @@ public class AcervoService {
                 throw new BusinessExcepition(e.getMessage());
             }
 
+            for (int i = 1; i <= parsedQuantidadeLiceca; i++) {
+
+                try {
+                    String registro = ebook.getId() + "EXP" + i;
+                    ExemplarDigital exemplarDigital = new ExemplarDigital(ebook.getId(), TipoItemAcervo.LIVRO, registro, StatusExemplar.DISPONIVEL);
+                    exemplarRepository.insert(exemplarDigital, ebook.getId());
+                }catch (DbException e) {
+                    throw new BusinessExcepition(e.getMessage());
+                }
+            }
         }else {
             throw new BusinessExcepition("Esse ebook ja esta cadastrado no sistema");
         }
     }
 
-    public void cadastrarPeriodico (String titulo,String autor, String anoPublicacao, String issn, String editora, String numeroEdicao, String volume, String genero, String idioma) {
+    public void cadastrarPeriodico (String titulo,String autor, String anoPublicacao, String issn, String editora, String numeroEdicao, String volume, String genero, String idioma, String quantidadeExemplares) {
         if (titulo.isBlank()) {
             throw new BusinessExcepition("O titulo e obrigatório");
         }
@@ -276,6 +289,12 @@ public class AcervoService {
         } catch (NumberFormatException e) {
             throw new BusinessExcepition("Volume inválido: deve ser um valor numérico.");
         }
+        int parsedQuantidadeExemplares;
+        try {
+            parsedQuantidadeExemplares = Integer.parseInt(quantidadeExemplares);
+        } catch (NumberFormatException e) {
+            throw new BusinessExcepition("Quantidade de exemplares inválida: deve ser um valor numérico.");
+        }
 
         if (parsedAnoPublicacao > anoAtual) {
             throw new BusinessExcepition("O ano de publicação não pode ser futuro.");
@@ -286,7 +305,9 @@ public class AcervoService {
         if (parsedVolume < 0) {
             throw new BusinessExcepition("O volume não pode ser menor que zero");
         }
-
+        if (parsedQuantidadeExemplares < 0) {
+            throw new BusinessExcepition("A quantidade de exemplares não pode ser negativa.");
+        }
 
         Pattern issnPattern = Pattern.compile("^\\d{4}[ -]?\\d{3}[\\dxX]$");
         Matcher issnMatcher = issnPattern.matcher(issn);
@@ -302,7 +323,6 @@ public class AcervoService {
       
 
         Periodico periodico = new Periodico (titulo, autor, parsedAnoPublicacao, editora, idioma, issn, parsedNumeroEdicao, parsedVolume, genero);
-        IPeriodicoRepository periodicoRepository = new PeriodicoRepository();
 
         boolean exist = periodicoRepository.existItem(periodico);
 
@@ -313,6 +333,16 @@ public class AcervoService {
                 throw new BusinessExcepition(e.getMessage());
             }
 
+            for (int i = 1; i <= parsedQuantidadeExemplares; i++) {
+
+                try {
+                    String registro = periodico.getId() + "EXP" + i;
+                    ExemplarFisico exemplarFisico = new ExemplarFisico(periodico.getId(), TipoItemAcervo.LIVRO, registro, StatusExemplar.DISPONIVEL);
+                    exemplarRepository.insert(exemplarFisico, periodico.getId());
+                }catch (DbException e) {
+                    throw new BusinessExcepition(e.getMessage());
+                }
+            }
         }else {
             throw new BusinessExcepition("Esse periodico ja esta cadastrado no sistema");
         }
@@ -605,10 +635,10 @@ public class AcervoService {
 
     // Gerenciar exemplares de itens do acervo
 
-    public void adicionarExemplares () {}
-    public void deletarExemplares () {}
-    public void atualizarStatusExemplar () {}
-    public List<Exemplar> listarExemplaresPorLivro () {
+    public void adicionarExemplares (int idItem, String quantidadeAdicionar) {}
+    public void deletarExemplares (int idExemplar) {}
+    public void atualizarStatusExemplar (int idExemplar, StatusExemplar statusExemplar) {}
+    public List<Exemplar> listarExemplaresPorItem (int idItem, TipoItemAcervo tipoItemAcervo) {
         return null;
     }
 
