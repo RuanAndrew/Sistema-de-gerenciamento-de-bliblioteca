@@ -45,64 +45,38 @@ public class EbookRepository implements IEbookRepository {
 			throw new DbException("Objeto tipo Ebook não pode ser null");
 		}
 
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		PreparedStatement stmt1 = null;
-		ResultSet rst = null;
 
-		String sqlItemAcervo = "INSERT INTO item_acervo (tipo_item, disponibilidade) VALUES (?, ?)";
-
-		String sqlEbook = "INSERT INTO ebook (id_ebook, isbn, numero_paginas, genero, titulo, autor, ano_publicacao, editora, idioma, formato_digital, url_ebook)"
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sqlEbook = "INSERT INTO ebook (isbn, numero_paginas, genero, titulo, autor, ano_publicacao, editora, idioma, formato_digital, url_ebook)"
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		int idEbook = -1;
 
-		try {
-			conn = ConnectionDb.getConnection();
-			conn.setAutoCommit(false);
-
-			stmt = conn.prepareStatement(sqlItemAcervo, Statement.RETURN_GENERATED_KEYS);
-			stmt.setString(1, "Ebook");
-			stmt.setString(2, "Disponível");
+		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlEbook, Statement.RETURN_GENERATED_KEYS)) {
+			
+			stmt.setString(1, ebook.getIsbn());
+			stmt.setInt(2, ebook.getNumeroPaginas());
+			stmt.setString(3, ebook.getGenero());
+			stmt.setString(4, ebook.getTitulo());
+			stmt.setString(5, ebook.getAutor());
+			stmt.setInt(6, ebook.getAnoPublicacao());
+			stmt.setString(7, ebook.getEditora());
+			stmt.setString(8, ebook.getIdioma());
+			stmt.setString(9, ebook.getFormatoDigital().name());
+			stmt.setString(10, ebook.getUrl());
 			stmt.executeUpdate();
+			
+			try (ResultSet rst = stmt.getGeneratedKeys()){
 
-			rst = stmt.getGeneratedKeys();
-
-			if (rst.next()) {
-				idEbook = rst.getInt(1);
-				ebook.setId(idEbook);
-			} else {
-				throw new DbException("Erro ao gerar id para o ebook inserido");
+				if (rst.next()) {
+					idEbook = rst.getInt(1);
+					ebook.setId(idEbook);
+				} else {
+					throw new DbException("Erro ao gerar id para o ebook inserido");
+				}
 			}
-
-			stmt1 = conn.prepareStatement(sqlEbook);
-			stmt1.setInt(1, idEbook);
-			stmt1.setString(2, ebook.getIsbn());
-			stmt1.setInt(3, ebook.getNumeroPaginas());
-			stmt1.setString(4, ebook.getGenero());
-			stmt1.setString(5, ebook.getTitulo());
-			stmt1.setString(6, ebook.getAutor());
-			stmt1.setInt(7, ebook.getAnoPublicacao());
-			stmt1.setString(8, ebook.getEditora());
-			stmt1.setString(9, ebook.getIdioma());
-			stmt1.setString(10, ebook.getFormatoDigital().name());
-			stmt1.setString(11, ebook.getUrl());
-			stmt1.executeUpdate();
-
-			conn.commit();
 
 		} catch (SQLException e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				throw new DbException("Erro no rollback ao inserir ebook no banco. Causado por: " + e1.getMessage());
-			}
 			throw new DbException("Erro ao inserir ebook no banco. Causado por: " + e.getMessage());
-		} finally {
-			ConnectionDb.closeStatement(stmt1);
-			ConnectionDb.closeStatement(stmt);
-			ConnectionDb.closeResultSet(rst);
-			ConnectionDb.closeConnection(conn);
 		}
 	}
 	
@@ -171,7 +145,7 @@ public class EbookRepository implements IEbookRepository {
 		Ebook ebook = null;
 
 		String sqlEbook = "SELECT id_ebook, isbn, numero_paginas, genero, titulo, autor, ano_publicacao, editora, idioma, formato_digital, url_ebook "
-				+ "FROM ebook INNER JOIN item_acervo ON ebook.id_ebook = item_acervo.id_item " + "WHERE id_ebook = ?";
+				+ "FROM ebook WHERE id_ebook = ?";
 
 		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlEbook)) {
 
@@ -196,7 +170,7 @@ public class EbookRepository implements IEbookRepository {
 		List<Ebook> ebooks = new ArrayList<>();
 
 		String sqlEbook = "SELECT id_ebook, isbn, numero_paginas, genero, titulo, autor, ano_publicacao, editora, idioma, formato_digital, url_ebook "
-				+ "FROM ebook INNER JOIN item_acervo ON ebook.id_ebook = item_acervo.id_item " + "ORDER BY titulo";
+				+ "FROM ebook ORDER BY titulo";
 
 		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlEbook)) {
 

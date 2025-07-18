@@ -42,65 +42,40 @@ public class PeriodicoRepository implements IPeriodicoRepository {
 			throw new DbException("Objeto tipo Periodico não pode ser null");
 		}
 
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		PreparedStatement stmt1 = null;
-		ResultSet rst = null;
-
-		String sqlItemAcervo = "INSERT INTO item_acervo (tipo_item, disponibilidade) VALUES (?, ?)";
-
-		String sqlPeriodico = "INSERT INTO periodico (id_periodico, issn, titulo, autor, numero_edicao, volume, editora, idioma, ano_publicacao, genero) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sqlPeriodico = "INSERT INTO periodico (issn, titulo, autor, numero_edicao, volume, editora, idioma, ano_publicacao, genero) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		int idPeriodico = -1;
 
-		try {
-			conn = ConnectionDb.getConnection();
-			conn.setAutoCommit(false);
+		try (Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlPeriodico, Statement.RETURN_GENERATED_KEYS)){
 
-			stmt = conn.prepareStatement(sqlItemAcervo, Statement.RETURN_GENERATED_KEYS);
-			stmt.setString(1, "Periodico");
-			stmt.setString(2, "Disponível");
+			stmt.setString(1, periodico.getIssn());
+			stmt.setString(2, periodico.getTitulo());
+			stmt.setString(3, periodico.getAutor());
+			stmt.setInt(4, periodico.getNumeroEdicao());
+			stmt.setInt(5, periodico.getVolume());
+			stmt.setString(6, periodico.getEditora());
+			stmt.setString(7, periodico.getIdioma());
+			stmt.setInt(8, periodico.getAnoPublicacao());
+			stmt.setString(9, periodico.getGenero());
+			
 			stmt.executeUpdate();
-
-			rst = stmt.getGeneratedKeys();
-
-			if (rst.next()) {
-				idPeriodico = rst.getInt(1);
-				periodico.setId(idPeriodico);
-			} else {
-				throw new DbException("Erro ao gerar id para o periodico inserido");
+			
+			try (ResultSet rst = stmt.getGeneratedKeys()){
+				
+				if(rst.next()) {
+					idPeriodico = rst.getInt(1);
+					periodico.setId(idPeriodico);
+				} else {
+					throw new DbException("Não foi gerado id do periódico.");
+				}
+				
 			}
-
-			stmt1 = conn.prepareStatement(sqlPeriodico);
-
-			stmt1.setInt(1, idPeriodico);
-			stmt1.setString(2, periodico.getIssn());
-			stmt1.setString(3, periodico.getTitulo());
-			stmt1.setString(4, periodico.getAutor());
-			stmt1.setInt(5, periodico.getNumeroEdicao());
-			stmt1.setInt(6, periodico.getVolume());
-			stmt1.setString(7, periodico.getEditora());
-			stmt1.setString(8, periodico.getIdioma());
-			stmt1.setInt(9, periodico.getAnoPublicacao());
-			stmt1.setString(10, periodico.getGenero());
-			stmt1.executeUpdate();
-
-			conn.commit();
-
+			
 		} catch (SQLException e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				throw new DbException(
-						"Erro no rollback ao inserir periódico no banco. Causado por: " + e1.getMessage());
-			}
+			
 			throw new DbException("Erro ao inserir periódico no banco. Causado por: " + e.getMessage());
-		} finally {
-			ConnectionDb.closeStatement(stmt);
-			ConnectionDb.closeStatement(stmt1);
-			ConnectionDb.closeConnection(conn);
-		}
+		} 
 	}
 
 	@Override
@@ -171,8 +146,7 @@ public class PeriodicoRepository implements IPeriodicoRepository {
 
 		Periodico periodico = null;
 
-		String sqlPeriodico = "SELECT id_periodico, issn, titulo, autor, numero_edicao, volume, editora, idioma, ano_publicacao, genero, disponibilidade "
-				+ "FROM periodico INNER JOIN item_acervo ON periodico.id_periodico = item_acervo.id_item "
+		String sqlPeriodico = "SELECT id_periodico, issn, titulo, autor, numero_edicao, volume, editora, idioma, ano_publicacao, genero "
 				+ "WHERE id_periodico = ?";
 
 		try (Connection conn = ConnectionDb.getConnection();
@@ -198,9 +172,8 @@ public class PeriodicoRepository implements IPeriodicoRepository {
 
 		List<Periodico> periodicos = new ArrayList<>();
 
-		String sqlPeriodico = "SELECT id_periodico, issn, titulo, autor, numero_edicao, volume, editora, idioma, ano_publicacao, genero, disponibilidade "
-				+ "FROM periodico INNER JOIN item_acervo ON periodico.id_periodico = item_acervo.id_item "
-				+ "ORDER BY titulo";
+		String sqlPeriodico = "SELECT id_periodico, issn, titulo, autor, numero_edicao, volume, editora, idioma, ano_publicacao, genero "
+				+ "FROM periodico ORDER BY titulo";
 
 		try (Connection conn = ConnectionDb.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(sqlPeriodico)) {
@@ -230,9 +203,8 @@ public class PeriodicoRepository implements IPeriodicoRepository {
 
 		String buscaTermo = "%" + termo.toLowerCase() + "%";
 
-		String sqlPeriodico = "SELECT id_periodico, issn, titulo, autor, numero_edicao, volume, editora, idioma, ano_publicacao, genero, disponibilidade "
-				+ "FROM periodico INNER JOIN item_acervo ON periodico.id_periodico = item_acervo.id_item "
-				+ "WHERE LOWER(issn) LIKE ? OR LOWER(titulo) LIKE ? OR LOWER(autor) LIKE ? ORDER BY titulo";
+		String sqlPeriodico = "SELECT id_periodico, issn, titulo, autor, numero_edicao, volume, editora, idioma, ano_publicacao, genero "
+				+ "FROM periodico WHERE LOWER(issn) LIKE ? OR LOWER(titulo) LIKE ? OR LOWER(autor) LIKE ? ORDER BY titulo";
 
 		try (Connection conn = ConnectionDb.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(sqlPeriodico)) {
@@ -309,15 +281,11 @@ public class PeriodicoRepository implements IPeriodicoRepository {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 
-		// Se inserir status(disponibilidade) na classe Periodico
-//		PreparedStatement stmt1 = null;
 
 		String sqlPeriodico = "UPDATE periodico "
 				+ "SET issn = ?, titulo = ?, autor = ?, numero_edicao = ?, volume = ?, editora = ?, idioma = ?, ano_publicacao = ?, genero = ? "
 				+ "WHERE id_periodico = ?";
 
-		// Se inserir status(disponibilidade) na classe Periodico
-//		String sqlItemAcervo = "UPDATE item_acervo SET disponibilidade = ? WHERE id_item = ?";
 
 		try {
 			conn = ConnectionDb.getConnection();
@@ -336,12 +304,6 @@ public class PeriodicoRepository implements IPeriodicoRepository {
 			stmt.setInt(10, periodico.getId());
 			stmt.executeUpdate();
 
-			// Se inserir status(disponibilidade) na classe Periodico
-//			stmt1 = conn.prepareStatement(sqlItemAcervo);
-//			stmt1.setString(1, "Disponível");
-//			stmt.setInt(2, periodico.getId());
-//			stmt1.executeUpdate();
-
 			conn.commit();
 
 		} catch (SQLException e) {
@@ -352,8 +314,6 @@ public class PeriodicoRepository implements IPeriodicoRepository {
 			}
 			throw new DbException("Erro ao atualizar periódico. Causado por: " + e.getMessage());
 		} finally {
-			// Se inserir status(disponibilidade) na classe Periodico
-//			ConnectionDb.closeStatement(stmt1);
 			ConnectionDb.closeStatement(stmt);
 			ConnectionDb.closeConnection(conn);
 		}
