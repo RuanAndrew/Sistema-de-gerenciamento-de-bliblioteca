@@ -218,7 +218,7 @@ public class JCadastroLivro extends JPanel {
 	}
 
 	private void preencherFormulario(Livro livro) {
-		txtTitulo.setText(livro.getTitulo() != null ? cleanString(livro.getTitulo()) : "");
+		txtTitulo.setText(livro.getTitulo() != null ? livro.getTitulo() : "");
 		txtAutor.setText(livro.getAutor() != null ? cleanString(livro.getAutor()) : "");
 		txtAnoPublicacao.setText(String.valueOf(livro.getAnoPublicacao()));
 		txtEditora.setText(livro.getEditora() != null ? cleanString(livro.getEditora()) : "");
