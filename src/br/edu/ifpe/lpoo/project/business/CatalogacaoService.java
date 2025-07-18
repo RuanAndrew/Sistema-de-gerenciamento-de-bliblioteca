@@ -21,11 +21,14 @@ public class CatalogacaoService {
     private static final String OPEN_LIBRARY_API_URL  = "https://openlibrary.org/api/books";
     private final ObjectMapper objectMapper;
     private final HttpClient httpClient;
+    private final ArmazenarImagemService armazenarImagemService;
 
 
     public CatalogacaoService() {
         this.objectMapper = new ObjectMapper();
         this.httpClient = HttpClient.newHttpClient();
+        this.armazenarImagemService = new ArmazenarImagemService();
+
     }
 
     private String sendApiRequest(String isbn) throws BusinessException {
@@ -65,6 +68,8 @@ public class CatalogacaoService {
             if (livroApi != null && livroApi.getDetails() != null) {
                 DetalhesLivroApi detalhesLivro = livroApi.getDetails();
 
+
+
                 String titulo = detalhesLivro.getTitle();
 
                 List<String> nomeAutoresList = new ArrayList<>();
@@ -80,6 +85,10 @@ public class CatalogacaoService {
 
                 List<String> editorasList = detalhesLivro.getPublishers() != null ? detalhesLivro.getPublishers() : new ArrayList<>();
                 String[] editorasArray = editorasList.toArray(new String[0]);
+
+                String urlCapaApi = null;
+                String localCapaPath = null;
+
 
                 int numeroPaginas = detalhesLivro.getNumber_of_pages() != null ? detalhesLivro.getNumber_of_pages() : 0;
                 String anoPublicacao = null;

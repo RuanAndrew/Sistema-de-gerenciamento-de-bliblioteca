@@ -7,14 +7,16 @@ public abstract class ItemAcervo {
 	private int anoPublicacao;
 	private String editora;
 	private String idioma;
+	private String localCapaPath;
 	private int id;
 
-	public ItemAcervo(String titulo, String autor, int anoPublicacao, String editora, String idioma) {
+	public ItemAcervo(String titulo, String autor, int anoPublicacao, String editora, String idioma, String localCapaPath) {
 		this.titulo = titulo;
 		this.autor = autor;
 		this.anoPublicacao = anoPublicacao;
 		this.editora = editora;
 		this.idioma = idioma;
+		this.localCapaPath = localCapaPath;
 	}
 
 	public String getTitulo() {
@@ -63,5 +65,13 @@ public abstract class ItemAcervo {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getLocalCapaPath() {
+		return localCapaPath;
+	}
+
+	public void setLocalCapaPath(String localCapaPath) {
+		this.localCapaPath = localCapaPath;
 	}
 }

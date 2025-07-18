@@ -200,7 +200,7 @@ public class JEditarMembro extends JFrame {
                 pesquisadorAtualizado.setId(membroAtual.getId());
             }
             
-            membroService.atualizarMembro(alunoAtualizado, professorAtualizado, pesquisadorAtualizado, novoStatus);
+            membroService.atualizarMembro(membroAtual, novoStatus);
 
             JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
