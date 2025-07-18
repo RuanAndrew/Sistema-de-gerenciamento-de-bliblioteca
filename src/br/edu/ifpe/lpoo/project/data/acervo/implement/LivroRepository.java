@@ -74,7 +74,34 @@ public class LivroRepository implements ILivroRepository {
 			throw new DbException("Erro ao inserir livro no banco de dados. Causado por: " + e.getMessage());
 		}
 	}
-
+	
+	@Override
+	public boolean existPorId(int idLivro) {
+		
+		if (idLivro <= 0) {
+			throw new DbException("O id tem que ser tipo inteiro e maior que zero");
+		}
+		
+		String sqlLivro = "SELECT * FROM livro WHERE id_livro = ? LIMIT 1";
+		
+		boolean exists = false;
+		
+		try(Connection conn = ConnectionDb.getConnection(); PreparedStatement stmt = conn.prepareStatement(sqlLivro)){
+			
+			stmt.setInt(1, idLivro);
+			
+			try (ResultSet rst = stmt.executeQuery()){
+				
+				exists = rst.next();
+			}
+			
+		}catch (SQLException e) {
+			throw new DbException("Erro ao verificar existência do livro com id, no banco de dados. Causado por: " + e.getMessage());
+		}
+		
+		return exists;
+	}
+	
 	@Override
 	public boolean existItem(Livro livro) {
 

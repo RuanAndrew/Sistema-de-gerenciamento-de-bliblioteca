@@ -16,6 +16,7 @@ import br.edu.ifpe.lpoo.project.ui.dto.acervo.PeriodicoDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -237,7 +238,7 @@ public class AcervoService {
 
                 try {
                     String registro = ebook.getId() + "EXP" + i;
-                    Exemplar exemplar = new Exemplar(ebook.getId(), TipoItemAcervo.LIVRO, registro, StatusExemplar.DISPONIVEL, TipoExemplar.DIGITAL);
+                    Exemplar exemplar = new Exemplar(ebook.getId(), TipoItemAcervo.EBOOK, registro, StatusExemplar.DISPONIVEL, TipoExemplar.DIGITAL);
                     exemplarRepository.insert(exemplar, ebook.getId());
                 }catch (DbException e) {
                     throw new BusinessException(e.getMessage());
@@ -337,7 +338,7 @@ public class AcervoService {
 
                 try {
                     String registro = periodico.getId() + "EXP" + i;
-                    Exemplar exemplar = new Exemplar(periodico.getId(), TipoItemAcervo.LIVRO, registro, StatusExemplar.DISPONIVEL, TipoExemplar.FISICO);
+                    Exemplar exemplar = new Exemplar(periodico.getId(), TipoItemAcervo.PERIODICO, registro, StatusExemplar.DISPONIVEL, TipoExemplar.FISICO);
                     exemplarRepository.insert(exemplar, periodico.getId());
                 }catch (DbException e) {
                     throw new BusinessException(e.getMessage());
@@ -691,7 +692,7 @@ public class AcervoService {
         boolean exist = exemplarRepository.existPorId(idExemplar);
 
         if (exist) {
-            exemplarRepository.delete(idExemplar);
+            exemplarRepository.atualizarStatus(idExemplar, StatusExemplar.DANIFICADO);
         }else {
             throw new BusinessException("Exemplar com ID " + idExemplar + " não encontrado para exclusão.");
         }
@@ -701,8 +702,7 @@ public class AcervoService {
         boolean exist = exemplarRepository.existPorId(idExemplar);
 
         if (exist) {
-            Exemplar exemplar = exemplarRepository.buscarPorId(idExemplar);
-            exemplarRepository.atualizarStatus(exemplar);
+            exemplarRepository.atualizarStatus(idExemplar, statusExemplar);
         }else {
             throw new BusinessException("Exemplar com ID " + idExemplar + " não encontrado para atualização de status.");
         }
@@ -729,7 +729,26 @@ public class AcervoService {
             throw new BusinessException("O termo de pesquisa não pode ser vazio");
         }
 
-        return exemplarRepository.buscarPorTermo(termoBusca);
+        List<ItemAcervo> itensEncontrados  = new ArrayList<>();
+        try {
+            itensEncontrados .addAll(livroRepository.buscarPorTermo(termoBusca));
+            itensEncontrados .addAll(ebookRepository.buscarPorTermo(termoBusca));
+            itensEncontrados .addAll(periodicoRepository.buscarPorTermo(termoBusca));
+        } catch (DbException e) {
+            throw new BusinessException("Erro ao buscar itens de acervo por termo: " + e.getMessage());
+        }
+
+        if (itensEncontrados.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<Exemplar> exemplaresEncontrados = new ArrayList<>();
+
+        for (ItemAcervo item : itensEncontrados) {
+            exemplaresEncontrados.addAll(exemplarRepository.buscarTodosPorIdLivro(item.getId()));
+        }
+
+        return exemplaresEncontrados;
     }
 
     // metodos auxiliares

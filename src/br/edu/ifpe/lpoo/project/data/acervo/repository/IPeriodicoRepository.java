@@ -11,6 +11,8 @@ public interface IPeriodicoRepository {
 	
 	boolean existItem(Periodico periodico);	
 	
+	boolean existPorId(int idPeriodico);
+	
 	Periodico buscarPorId(int idItem);
 	
 	void delete(int idItem);

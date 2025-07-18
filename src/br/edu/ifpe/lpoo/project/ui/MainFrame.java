@@ -26,6 +26,7 @@ public class MainFrame extends JFrame {
     private JRealizarEmprestimoPanel jRealizarEmprestimoPanel;
     private GerenciarAcervoPanel gerenciarAcervoPanel;
     private GerenciarMembrosPanel gerenciarMembrosPanel;
+    private JDetalhesLivroPanel jDetalhesLivroPanel;
 
     public MainFrame() {
         setTitle("Sistema de Gerenciamento de Livros");
@@ -50,6 +51,7 @@ public class MainFrame extends JFrame {
         jRealizarEmprestimoPanel = new JRealizarEmprestimoPanel(this);
         gerenciarAcervoPanel = new GerenciarAcervoPanel(this);
         gerenciarMembrosPanel = new GerenciarMembrosPanel(this);
+        jDetalhesLivroPanel = new JDetalhesLivroPanel(this);
 
         cardPanel.add(telaPrincipalPanel, "TelaPrincipal");
         cardPanel.add(jCadastroLivroPanel, "CadastroLivro");
@@ -65,12 +67,19 @@ public class MainFrame extends JFrame {
         cardPanel.add(jRealizarEmprestimoPanel, "RealizarEmprestimo");
         cardPanel.add(gerenciarAcervoPanel,"GerenciarAcervoPanel");
         cardPanel.add(gerenciarMembrosPanel,"GerenciarMembrosPanel");
+        cardPanel.add(jDetalhesLivroPanel, "DetalhesLivro");
 
 
         add(cardPanel);
 
         showPanel("TelaPrincipal");
     }
+
+    public void mostrarDetalhesLivro(int idLivro) {
+        jDetalhesLivroPanel.carregarDados(idLivro);
+        showPanel("DetalhesLivro");
+    }
+
 
 
     public void showPanel(String panelName) {
