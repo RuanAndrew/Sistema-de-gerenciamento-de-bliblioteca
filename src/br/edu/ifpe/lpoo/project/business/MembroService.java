@@ -205,21 +205,21 @@ public class MembroService {
 		}
 	}
 		
-	 public Membro buscarmembroPorcpf (int cpf) {
+	 public Membro buscarmembroPorcpf (String cpfTexto) {
 	        try {
 
-	            Aluno aluno = alunoRepository.buscarPorId(cpf);
+	            Aluno aluno = alunoRepository.buscarPorCPF(cpfTexto);
 	            if (aluno != null) {return aluno;}
 
-	            Professor professor = professorRepository.buscarPorId(cpf);
+	            Professor professor = professorRepository.buscarPorCPF(cpfTexto);
 	            if (professor != null) {return professor;}
 
-	            Pesquisador pesquisador = pesquisadorRepository.buscarPorId(cpf);
+	            Pesquisador pesquisador = pesquisadorRepository.buscarPorCPF(cpfTexto);
 	            if (pesquisador != null) {return pesquisador;}
 
 	            return null;
 	        }catch (NumberFormatException e) {
-	            throw new BusinessException("Formato de cpf invalido: " + cpf);
+	            throw new BusinessException("Formato de cpf invalido: " + cpfTexto);
 	        }catch (DbException e) {
 	            throw new BusinessException("Erro ao buscar Membros por cpf: " + e.getMessage());
 	        }
@@ -248,7 +248,7 @@ public class MembroService {
 		 }
 		 return todosItens;
 	 }
-	public void excluirMembro(Integer cpf, TipoMembro tipoMembro) {
+	public void excluirMembro(String cpf, TipoMembro tipoMembro) {
 		if (cpf == null) {
 			throw new BusinessException("ID do item não pode ser nulo ou vazio para deleção.");
 		}

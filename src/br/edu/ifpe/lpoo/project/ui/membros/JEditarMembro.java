@@ -15,7 +15,7 @@ public class JEditarMembro extends JFrame {
     private MembroService membroService;
     private Membro membroAtual;
 
-    private JTextField txtIdBusca;
+    private JTextField txtCpfBusca;
     private JButton btnBuscar;
 
     private JTextField txtNome, txtCpf, txtEmail, txtMatricula;
@@ -31,7 +31,7 @@ public class JEditarMembro extends JFrame {
     }
 
     private void initialize() {
-        setTitle("Editar Membro por ID");
+        setTitle("Editar Membro por CPF");
         setSize(650, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -43,13 +43,13 @@ public class JEditarMembro extends JFrame {
         painelBusca.setBounds(20, 20, 590, 80);
         add(painelBusca);
 
-        JLabel lblIdBusca = new JLabel("Digite o ID do Membro:");
-        lblIdBusca.setBounds(20, 30, 150, 25);
-        painelBusca.add(lblIdBusca);
+        JLabel lblCpfBusca = new JLabel("Digite o CPF do Membro:");
+        lblCpfBusca.setBounds(20, 30, 150, 25);
+        painelBusca.add(lblCpfBusca);
 
-        txtIdBusca = new JTextField();
-        txtIdBusca.setBounds(180, 30, 200, 25);
-        painelBusca.add(txtIdBusca);
+        txtCpfBusca = new JTextField();
+        txtCpfBusca.setBounds(180, 30, 200, 25);
+        painelBusca.add(txtCpfBusca);
 
         btnBuscar = new JButton("Buscar");
         btnBuscar.setBounds(400, 30, 150, 25);
@@ -109,15 +109,14 @@ public class JEditarMembro extends JFrame {
     }
 
     private void buscarMembro() {
-        String idTexto = txtIdBusca.getText();
-        if (idTexto.isBlank()) {
-            JOptionPane.showMessageDialog(this, "Por favor, digite um ID para buscar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+        String cpfTexto = txtCpfBusca.getText();
+        if (cpfTexto.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Por favor, digite um CPF para buscar.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try {
-            int id = Integer.parseInt(idTexto);
-            this.membroAtual = membroService.buscarmembroPorcpf(id);
+            this.membroAtual = membroService.buscarmembroPorcpf(cpfTexto);
 
             if (membroAtual != null) {
                 preencherCampos(membroAtual);
@@ -125,10 +124,8 @@ public class JEditarMembro extends JFrame {
             } else {
                 habilitarCampos(false);
                 limparCampos();
-                JOptionPane.showMessageDialog(this, "Nenhum membro encontrado com o ID " + id, "Não Encontrado", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Nenhum membro encontrado com o CPF " + cpfTexto, "Não Encontrado", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "O ID deve ser um número.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
         } catch (BusinessException be) {
             JOptionPane.showMessageDialog(this, "Erro ao buscar: " + be.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -200,13 +197,13 @@ public class JEditarMembro extends JFrame {
                 pesquisadorAtualizado.setId(membroAtual.getId());
             }
             
-            membroService.atualizarMembro(membroAtual, novoStatus);
+            membroService.atualizarMembro(alunoAtualizado, novoStatus);
 
             JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
             habilitarCampos(false);
             limparCampos();
-            txtIdBusca.setText("");
+            txtCpfBusca.setText("");
             this.membroAtual = null;
 
         } catch (BusinessException be) {

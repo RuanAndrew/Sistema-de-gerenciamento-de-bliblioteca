@@ -77,7 +77,7 @@ public class JRealizarEmprestimoPanel extends JPanel {
         add(btnVoltar);
         btnVoltar.addActionListener(e -> {
             clearFields();
-            mainFrame.showPanel("TelaPrincipal");
+            mainFrame.showPanel("TelaBusca");
         });
     }
 
