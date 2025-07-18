@@ -238,7 +238,7 @@ public class AcervoService {
 
                 try {
                     String registro = ebook.getId() + "EXP" + i;
-                    Exemplar exemplar = new Exemplar(ebook.getId(), TipoItemAcervo.LIVRO, registro, StatusExemplar.DISPONIVEL, TipoExemplar.DIGITAL);
+                    Exemplar exemplar = new Exemplar(ebook.getId(), TipoItemAcervo.EBOOK, registro, StatusExemplar.DISPONIVEL, TipoExemplar.DIGITAL);
                     exemplarRepository.insert(exemplar, ebook.getId());
                 }catch (DbException e) {
                     throw new BusinessException(e.getMessage());
@@ -338,7 +338,7 @@ public class AcervoService {
 
                 try {
                     String registro = periodico.getId() + "EXP" + i;
-                    Exemplar exemplar = new Exemplar(periodico.getId(), TipoItemAcervo.LIVRO, registro, StatusExemplar.DISPONIVEL, TipoExemplar.FISICO);
+                    Exemplar exemplar = new Exemplar(periodico.getId(), TipoItemAcervo.PERIODICO, registro, StatusExemplar.DISPONIVEL, TipoExemplar.FISICO);
                     exemplarRepository.insert(exemplar, periodico.getId());
                 }catch (DbException e) {
                     throw new BusinessException(e.getMessage());
