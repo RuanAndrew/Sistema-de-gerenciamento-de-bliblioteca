@@ -10,7 +10,7 @@ public class Ebook extends ItemAcervo{
     private String url;
 
     public Ebook(String titulo, String autor, int anoPublicacao, String editora, String idioma, String isbn, int numeroPaginas, String genero, FormatoDigital formatoDigital, String url) {
-        super(titulo, autor, anoPublicacao, editora, idioma);
+        super(titulo, autor, anoPublicacao, editora, idioma, null);
         this.isbn = isbn;
         this.numeroPaginas = numeroPaginas;
         this.genero = genero;

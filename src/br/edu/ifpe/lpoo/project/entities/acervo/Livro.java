@@ -7,7 +7,7 @@ public class Livro extends ItemAcervo {
 	private String genero;
 
 	public Livro(String titulo, String autor, int anoPublicacao, String editora, String idioma, String isbn, int numeroPaginas, String genero) {
-		super(titulo, autor, anoPublicacao, editora, idioma);
+		super(titulo, autor, anoPublicacao, editora, idioma, null);
 		this.isbn = isbn;
 		this.numeroPaginas = numeroPaginas;
 		this.genero = genero;

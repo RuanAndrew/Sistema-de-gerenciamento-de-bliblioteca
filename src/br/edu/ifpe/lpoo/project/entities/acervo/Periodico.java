@@ -9,7 +9,7 @@ public class Periodico extends ItemAcervo{
     private String genero;
 
     public Periodico(String titulo, String autor, int anoPublicacao, String editora, String idioma, String issn, int numeroEdicao, int volume, String genero) {
-        super(titulo, autor, anoPublicacao, editora, idioma);
+        super(titulo, autor, anoPublicacao, editora, idioma, null);
         this.issn = issn;
         this.numeroEdicao = numeroEdicao;
         this.volume = volume;
