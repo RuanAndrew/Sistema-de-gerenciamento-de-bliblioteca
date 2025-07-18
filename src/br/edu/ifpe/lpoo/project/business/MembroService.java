@@ -169,54 +169,39 @@ public class MembroService {
 		}
 	}
 
-	public void atualizarMembro(Aluno alunoAtualizado, Professor professorAtualizado, Pesquisador pesquisadoratualizado, StatusMembro novoStatus) {
-		if (alunoAtualizado == null || alunoAtualizado.getCpf() == null || alunoAtualizado.getCpf().isBlank()) {
-			throw new BusinessException("CPF obrigatório para atualizar o aluno.");
+	public void atualizarMembro(Membro membro, StatusMembro novoStatus) {
+		if (membro == null || membro.getCpf() == null || membro.getCpf().isBlank()) {
+			throw new BusinessException("CPF obrigatório para atualizar membro.");
 		}
 
-		boolean existe = alunoRepository.existMembro(alunoAtualizado);
+		boolean existe = false;
 
-		if (existe) {
-			try {
-				alunoRepository.atualizar(alunoAtualizado);
-				alunoAtualizado.setStatusmembro(novoStatus);
-			} catch (DbException e) {
-				throw new BusinessException("Erro ao atualizar aluno: " + e.getMessage());
+		try {
+			switch (membro.getTipomembro()) {
+				case ALUNO -> {
+					existe = alunoRepository.existMembro(membro.getCpf());
+					if (existe) {
+						alunoRepository.atualizar((Aluno) membro);
+					}
+				}
+				case PROFESSOR -> {
+					existe = professorRepository.existMembro(membro.getCpf());
+					if (existe) {
+						professorRepository.atualizar((Professor) membro);
+					}
+				}
+				case PESQUISADOR -> {
+					existe = pesquisadorRepository.existMembro(membro.getCpf());
+					if (existe) {
+						pesquisadorRepository.atualizar((Pesquisador) membro);
+					}
+				}
+				default -> throw new BusinessException("membro não encontrado para a atualização");
 			}
-		} else {
-			throw new BusinessException("Aluno não encontrado para atualização.");
-		}
-		if (professorAtualizado == null || professorAtualizado.getCpf() == null || professorAtualizado.getCpf().isBlank()) {
-			throw new BusinessException("CPF obrigatório para atualizar o professor.");
-		}
-
-		boolean existeprofessor = professorRepository.existMembro(professorAtualizado);
-
-		if (existeprofessor) {
-			try {
-				professorRepository.atualizar(professorAtualizado);
-				professorAtualizado.setStatusmembro(novoStatus);
-			} catch (DbException e) {
-				throw new BusinessException("Erro ao atualizar professor: " + e.getMessage());
-			}
-		} else {
-			throw new BusinessException("Professor não encontrado para atualização.");
-		}
-		if (pesquisadoratualizado == null || pesquisadoratualizado.getCpf() == null || pesquisadoratualizado.getCpf().isBlank()) {
-			throw new BusinessException("CPF obrigatório para atualizar o professor.");
-		}
-
-		boolean existepesquisador = pesquisadorRepository.existMembro(pesquisadoratualizado);
-
-		if (existepesquisador) {
-			try {
-				pesquisadorRepository.atualizar(pesquisadoratualizado);
-				pesquisadoratualizado.setStatusmembro(novoStatus);
-			} catch (DbException e) {
-				throw new BusinessException("Erro ao atualizar pesquisador: " + e.getMessage());
-			}
-		} else {
-			throw new BusinessException("pesquisador não encontrado para atualização.");
+		}catch (NumberFormatException e) {
+			throw new BusinessException("Formato de cpf inválido para deleção: " + membro.getCpf());
+		}catch (DbException e) {
+			throw new BusinessException("Erro de banco de dados ao deletar item de acervo: " + e.getMessage());
 		}
 	}
 		
