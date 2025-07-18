@@ -98,41 +98,5 @@ public class JVisualizarMembros extends JPanel {
             ex.printStackTrace();
         }
     }
-
-
-    private void excluirMembroSelecionado() {
-        int selectedRow = tabelaMembros.getSelectedRow();
-
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(mainFrame, "Por favor, selecione um membro na tabela para excluir.", "Nenhum Membro Selecionado", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-
-        Integer cpf = (Integer) tableModel.getValueAt(selectedRow, 2);
-        String nomeParaExibir = (String) tableModel.getValueAt(selectedRow, 1);
-        TipoMembro tipoMembro = (TipoMembro) tableModel.getValueAt(selectedRow, 4);
-
-        int resposta = JOptionPane.showConfirmDialog(
-            mainFrame,
-            "Tem a certeza de que deseja excluir o membro '" + nomeParaExibir + "' (CPF: " + cpf + ")?\nEsta ação não pode ser desfeita.",
-            "Confirmação de Exclusão",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE
-        );
-
-        if (resposta == JOptionPane.YES_OPTION) {
-            try {
-                membroService.excluirMembro(cpf, tipoMembro);
-                JOptionPane.showMessageDialog(mainFrame, "Membro excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                carregarMembros();
-            } catch (BusinessException be) {
-                carregarMembros(); // Atualiza a tabela para remover a linha
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(mainFrame, "Ocorreu um erro inesperado: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                ex.printStackTrace();
-            }
-        }
-    }
 }
 
