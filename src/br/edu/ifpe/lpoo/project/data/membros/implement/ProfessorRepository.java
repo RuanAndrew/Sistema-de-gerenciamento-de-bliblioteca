@@ -137,6 +137,32 @@ public class ProfessorRepository implements IProfessorRepository {
 		return exists;
 	}
 
+	public boolean existMembro(String cpf) {
+
+		if (cpf == null) {
+			throw new DbException("cpf não pode ser null");
+		}
+
+		boolean exists = false;
+
+		String sqlMembro = "SELECT 1 FROM membro WHERE cpf = ?";
+
+		try (Connection conn = ConnectionDb.getConnection();
+			 PreparedStatement stmt = conn.prepareStatement(sqlMembro)) {
+			stmt.setString(1, cpf);
+
+			try (ResultSet rst = stmt.executeQuery()) {
+
+				exists = rst.next();
+			}
+
+		} catch (SQLException e) {
+			throw new DbException("Erro ao verificar existência do membro. Causado por: " + e.getMessage());
+		}
+
+		return exists;
+	}
+
 	@Override
 	public void delete(int idMembro) {
 
