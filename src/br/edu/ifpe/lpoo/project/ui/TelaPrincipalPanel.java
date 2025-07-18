@@ -63,7 +63,7 @@ public class TelaPrincipalPanel extends JPanel {
         btnRealizarEmprestimo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainFrame.showPanel("RealizarEmprestimo");
+                mainFrame.showPanel("TelaBusca");
             }
         });
         buttonPanel.add(btnRealizarEmprestimo);

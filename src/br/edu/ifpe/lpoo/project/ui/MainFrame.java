@@ -1,6 +1,7 @@
 package br.edu.ifpe.lpoo.project.ui;
 
 import br.edu.ifpe.lpoo.project.ui.acervo.*;
+import br.edu.ifpe.lpoo.project.ui.emprestimo.JBuscaPanel;
 import br.edu.ifpe.lpoo.project.ui.emprestimo.JRealizarEmprestimoPanel;
 import br.edu.ifpe.lpoo.project.ui.membros.*;
 
@@ -27,6 +28,7 @@ public class MainFrame extends JFrame {
     private GerenciarAcervoPanel gerenciarAcervoPanel;
     private GerenciarMembrosPanel gerenciarMembrosPanel;
     private JDetalhesLivroPanel jDetalhesLivroPanel;
+    private JBuscaPanel jBuscaPanel;
 
     public MainFrame() {
         setTitle("Sistema de Gerenciamento de Livros");
@@ -52,6 +54,7 @@ public class MainFrame extends JFrame {
         gerenciarAcervoPanel = new GerenciarAcervoPanel(this);
         gerenciarMembrosPanel = new GerenciarMembrosPanel(this);
         jDetalhesLivroPanel = new JDetalhesLivroPanel(this);
+        jBuscaPanel = new JBuscaPanel(this);
 
         cardPanel.add(telaPrincipalPanel, "TelaPrincipal");
         cardPanel.add(jCadastroLivroPanel, "CadastroLivro");
@@ -68,6 +71,7 @@ public class MainFrame extends JFrame {
         cardPanel.add(gerenciarAcervoPanel,"GerenciarAcervoPanel");
         cardPanel.add(gerenciarMembrosPanel,"GerenciarMembrosPanel");
         cardPanel.add(jDetalhesLivroPanel, "DetalhesLivro");
+        cardPanel.add(jBuscaPanel, "TelaBusca");
 
 
         add(cardPanel);
