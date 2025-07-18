@@ -54,6 +54,17 @@ public class JListarLivrosPanel extends JPanel {
         };
 
         table = new JTable(tableModel);
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (evt.getClickCount() == 2) {
+                    int linhaSelecionada = table.getSelectedRow();
+                    if (linhaSelecionada != -1) {
+                        int idLivro = (int) tableModel.getValueAt(linhaSelecionada, 0);
+                        mainFrame.mostrarDetalhesLivro(idLivro);
+                    }
+                }
+            }
+        });
         table.setFont(new Font("Arial", Font.PLAIN, 14));
         table.setRowHeight(30);
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
