@@ -1,62 +1,61 @@
-CREATE DATABASE testelivro;
+create database testelivro;
 
 USE testelivro;
 
 CREATE TABLE livro(
     id_livro INT AUTO_INCREMENT PRIMARY KEY,
     isbn VARCHAR(20),
-    numero_paginas INT,
-    genero VARCHAR(255),
-    titulo VARCHAR(200),
-    autor VARCHAR(255),
-    ano_publicacao INT,
-    editora VARCHAR(255),
-    idioma VARCHAR(255)
+    numero_paginas INT NOT NULL,
+    genero VARCHAR(255) NOT NULL,
+    titulo VARCHAR(200) NOT NULL,
+    autor VARCHAR(255) NOT NULL,
+    ano_publicacao INT NOT NULL,
+    editora VARCHAR(255) NOT NULL,
+    idioma VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE item_acervo(
  id_item INT AUTO_INCREMENT PRIMARY KEY,
-    tipo_item VARCHAR(50) NOT NULL
+    tipo_item VARCHAR(50) NOT NULL,
+    disponibilidade VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE exemplar(
- id_exemplar INT PRIMARY KEY,
-    id_livro INT,
-    tipo_item_acervo varchar(50) not null,
+	id_exemplar INT PRIMARY KEY,
+    id_livro INT NOT NULL,
+    tipo_item_acervo VARCHAR(50) NOT NULL,
     registro VARCHAR(20),
-    status_exemplar varchar(50) not null,
-    tipo_exemplar varchar(50) not null,
+    status_exemplar VARCHAR(50) NOT NULL,
+    tipo_exemplar VARCHAR(50) NOT NULL,
     FOREIGN KEY (id_exemplar) REFERENCES item_acervo (id_item),
     FOREIGN KEY (id_livro) REFERENCES livro (id_livro)
 );
 
 CREATE TABLE periodico(
- id_periodico INT PRIMARY KEY,
+ id_periodico INT AUTO_INCREMENT PRIMARY KEY,
     issn VARCHAR(255) UNIQUE,
-    titulo VARCHAR(255),
-    autor VARCHAR(255),
-    numero_edicao INT,
-    volume INT,
-    editora VARCHAR(255),
-    idioma VARCHAR(255),
-    ano_publicacao INT,
-    genero VARCHAR(255),
-    FOREIGN KEY (id_periodico) REFERENCES item_acervo (id_item)
+    titulo VARCHAR(255) NOT NULL,
+    autor VARCHAR(255) NOT NULL,
+    numero_edicao INT NOT NULL,
+    volume INT NOT NULL,
+    editora VARCHAR(255) NOT NULL,
+    idioma VARCHAR(255) NOT NULL,
+    ano_publicacao INT NOT NULL,
+    genero VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE ebook(
- id_ebook INT PRIMARY KEY,
+ id_ebook INT AUTO_INCREMENT PRIMARY KEY,
     isbn VARCHAR(20) UNIQUE,
-    numero_paginas INT,
-    genero VARCHAR(255),
-    titulo VARCHAR(255),
-    autor VARCHAR(255),
-    ano_publicacao INT,
-    editora VARCHAR(255),
-    idioma VARCHAR(255),
-    formato_digital VARCHAR(255),
-    url_ebook VARCHAR(255),
-    FOREIGN KEY (id_ebook) REFERENCES item_acervo (id_item)
+    numero_paginas INT NOT NULL,
+    genero VARCHAR(255) NOT NULL,
+    titulo VARCHAR(255) NOT NULL,
+    autor VARCHAR(255) NOT NULL,
+    ano_publicacao INT NOT NULL,
+    editora VARCHAR(255) NOT NULL,
+    idioma VARCHAR(255) NOT NULL,
+    formato_digital VARCHAR(255) NOT NULL,
+    url_ebook VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE membro(
